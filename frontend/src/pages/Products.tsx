@@ -15,7 +15,6 @@ export default function Products() {
 
   if (loading) return <div style={{ padding: '20px', color: '#666' }}>Loading products...</div>;
 
-  // Безпечна перевірка: якщо продуктів немає взагалі
   if (!products || products.length === 0) {
     return (
       <div style={{ padding: '30px', textAlign: 'center', color: '#666', backgroundColor: '#fff', borderRadius: '6px', border: '1px solid #e0e0e0' }}>
@@ -25,7 +24,6 @@ export default function Products() {
     );
   }
 
-  // Тепер .map() ніколи не зламає додаток
   const productTypes = ['All', ...new Set(products.map((p) => p.type))];
 
   const filteredProducts = selectedType === 'All' 
