@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { deleteOrder } from './ordersSlice';
 
 export interface Price {
   value: number;
@@ -60,6 +61,9 @@ const productsSlice = createSlice({
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch products';
+      })
+      .addCase(deleteOrder, (state, action) => {
+        state.items = state.items.filter((product) => product.order !== action.payload);
       });
   },
 });

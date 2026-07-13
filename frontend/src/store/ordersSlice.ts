@@ -25,6 +25,19 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
   return response.data;
 });
 
+export const removeOrderServer = createAsyncThunk('orders/removeOrderServer', async (id: number) => {
+  await axios.delete(`http://localhost:5000/api/orders/${id}`);
+  return id;
+});
+
+export const addOrderServer = createAsyncThunk(
+  'orders/addOrderServer',
+  async (payload: { title: string; description: string }) => {
+    const response = await axios.post('http://localhost:5000/api/orders', payload);
+    return response.data;
+  }
+);
+
 const ordersSlice = createSlice({
   name: 'orders',
   initialState,
@@ -46,6 +59,20 @@ const ordersSlice = createSlice({
       .addCase(fetchOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch orders';
+      })
+      .addCase(removeOrderServer.pending, (state, action) => {
+        const deletedId = action.meta.arg;
+        state.items = state.items.filter((item) => item.id !== deletedId);
+      })
+      .addCase(removeOrderServer.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(removeOrderServer.rejected, (state, action) => {
+        state.loading = false;
+        console.error('Server failed to delete:', action.error.message);
+      })
+      .addCase(addOrderServer.fulfilled, (state, action) => {
+        state.items.push(action.payload);
       });
   },
 });

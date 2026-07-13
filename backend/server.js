@@ -2,6 +2,8 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 app.use(cors());
@@ -12,49 +14,66 @@ const io = new Server(server, {
   cors: { origin: '*' }
 });
 
-const products = [
-  {
-    id: 1,
-    serialNumber: 1234,
-    isNew: 1,
-    photo: 'pathToFile.jpg',
-    title: 'Product 1',
-    type: 'Monitors',
-    specification: 'Specification 1',
-    guarantee: { start: '2017-06-29 12:09:33', end: '2017-06-29 12:09:33' },
-    price: [
-      {value: 100, symbol: 'USD', isDefault: 0},
-      {value: 2600, symbol: 'UAH', isDefault: 1}
-    ],
-    order: 1,
-    date: '2017-06-29 12:09:33'
-  },
-  {
-    id: 2,
-    serialNumber: 1234,
-    isNew: 1,
-    photo: 'pathToFile.jpg',
-    title: 'Product 2',
-    type: 'Monitors',
-    specification: 'Specification 1',
-    guarantee: { start: '2017-06-29 12:09:33', end: '2017-06-29 12:09:33' },
-    price: [
-      {value: 100, symbol: 'USD', isDefault: 0},
-      {value: 2600, symbol: 'UAH', isDefault: 1}
-    ],
-    order: 2,
-    date: '2017-06-29 12:09:33'
+const DATA_FILE = path.join(__dirname, 'data.json');
+
+function readData() {
+  try {
+    const fileData = fs.readFileSync(DATA_FILE, 'utf8');
+    return JSON.parse(fileData);
+  } catch (error) {
+    console.error('Error reading data.json:', error);
+    return { products: [], orders: [] };
   }
-];
+}
 
-const orders = [
-  { id: 1, title: 'Order 1', date: '2017-06-29 12:09:33', description: 'desc' },
-  { id: 2, title: 'Order 2', date: '2017-06-29 12:09:33', description: 'desc' },
-  { id: 3, title: 'Order 3', date: '2017-06-29 12:09:33', description: 'desc' }
-];
+function writeData(data) {
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
+  } catch (error) {
+    console.error('Error writing to data.json:', error);
+  }
+}
 
-app.get('/api/orders', (req, res) => res.json(orders));
-app.get('/api/products', (req, res) => res.json(products));
+app.get('/api/orders', (req, res) => {
+  const data = readData();
+  res.json(data.orders);
+});
+
+app.get('/api/products', (req, res) => {
+  const data = readData();
+  res.json(data.products);
+});
+
+app.delete('/api/orders/:id', (req, res) => {
+  const orderId = parseInt(req.params.id);
+  const data = readData();
+
+  data.orders = data.orders.filter((o) => o.id !== orderId);
+  data.products = data.products.filter((p) => p.order !== orderId);
+
+  writeData(data);
+
+  res.status(200).json({ success: true, id: orderId });
+});
+
+app.post('/api/orders', (req, res) => {
+  const { title, description } = req.body;
+  const data = readData();
+
+  const newId = data.orders.length > 0 ? Math.max(...data.orders.map(o => o.id)) + 1 : 1;
+
+  const newOrder = {
+    id: newId,
+    title: title || `Order ${newId}`,
+    date: new Date().toISOString().replace('T', ' ').substring(0, 19), // Формат 'YYYY-MM-DD HH:mm:ss'
+    description: description || 'No description'
+  };
+
+  data.orders.push(newOrder);
+  writeData(data);
+
+  res.status(201).json(newOrder);
+});
 
 let activeSessions = 0;
 
@@ -69,4 +88,6 @@ io.on('connection', (socket) => {
 });
 
 const PORT = 5000;
-server.listen(PORT);
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

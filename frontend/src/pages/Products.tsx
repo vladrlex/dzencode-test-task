@@ -13,8 +13,19 @@ export default function Products() {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  if (loading) return <div style={{ padding: '20px' }}>Loading...</div>;
+  if (loading) return <div style={{ padding: '20px', color: '#666' }}>Loading products...</div>;
 
+  // Безпечна перевірка: якщо продуктів немає взагалі
+  if (!products || products.length === 0) {
+    return (
+      <div style={{ padding: '30px', textAlign: 'center', color: '#666', backgroundColor: '#fff', borderRadius: '6px', border: '1px solid #e0e0e0' }}>
+        <h3 style={{ margin: '0 0 10px 0' }}>No products found</h3>
+        <p style={{ margin: 0, fontSize: '14px', color: '#999' }}>The products list is currently empty.</p>
+      </div>
+    );
+  }
+
+  // Тепер .map() ніколи не зламає додаток
   const productTypes = ['All', ...new Set(products.map((p) => p.type))];
 
   const filteredProducts = selectedType === 'All' 
@@ -50,8 +61,8 @@ export default function Products() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
         {filteredProducts.map((product) => {
-          const uahPrice = product.price.find((p) => p.symbol === 'UAH')?.value;
-          const usdPrice = product.price.find((p) => p.symbol === 'USD')?.value;
+          const uahPrice = product.price?.find((p) => p.symbol === 'UAH')?.value;
+          const usdPrice = product.price?.find((p) => p.symbol === 'USD')?.value;
 
           return (
             <div
