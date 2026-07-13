@@ -3,6 +3,23 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchOrders, removeOrderServer, addOrderServer } from '../store/ordersSlice';
 import { fetchProducts } from '../store/productsSlice';
 
+const formatDateNumeric = (dateStr: string) => {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  return `${day} / ${month}`;
+};
+
+const formatDateFull = (dateStr: string) => {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  const day = String(date.getDate()).padStart(2, '0');
+  const monthStr = date.toLocaleDateString('uk-UA', { month: 'short' }).replace('.', '');
+  const year = date.getFullYear();
+  return `${day} / ${monthStr} / ${year}`;
+};
+
 export default function Orders() {
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orders.items);
@@ -134,8 +151,13 @@ export default function Orders() {
                     </div>
                   </div>
 
-                  <div style={{ textTransform: 'lowercase', color: '#666' }}>
-                    {new Date(order.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: '100px' }}>
+                    <div style={{ color: '#aaa', fontSize: '12px', marginBottom: '2px' }}>
+                      {formatDateNumeric(order.date)}
+                    </div>
+                    <div style={{ color: '#555', fontSize: '14px', fontWeight: '500', textTransform: 'capitalize' }}>
+                      {formatDateFull(order.date)}
+                    </div>
                   </div>
 
                   <div style={{ textAlign: 'right', minWidth: '100px' }}>
