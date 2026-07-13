@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export interface Order {
@@ -28,7 +28,11 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
 const ordersSlice = createSlice({
   name: 'orders',
   initialState,
-  reducers: {},
+  reducers: {
+    deleteOrder: (state, action: PayloadAction<number>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchOrders.pending, (state) => {
@@ -46,4 +50,5 @@ const ordersSlice = createSlice({
   },
 });
 
+export const { deleteOrder } = ordersSlice.actions;
 export default ordersSlice.reducer;

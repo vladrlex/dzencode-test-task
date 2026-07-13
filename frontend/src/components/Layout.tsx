@@ -27,8 +27,8 @@ export default function Layout() {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'sans-serif', backgroundColor: '#f0f3f5' }}>
-      <aside style={{ width: '250px', backgroundColor: '#fff', boxShadow: '2px 0 5px rgba(0,0,0,0.05)', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', width: '100%', fontFamily: 'sans-serif', backgroundColor: '#f4f6f8' }}>
+      <aside style={{ width: '250px', minWidth: '250px', backgroundColor: '#fff', boxShadow: '2px 0 5px rgba(0,0,0,0.05)', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
         <div style={{ textAlign: 'center', marginBottom: '40px', marginTop: '20px' }}>
           <img src="https://via.placeholder.com/100" alt="User" style={{ borderRadius: '50%', width: '80px', height: '80px', objectFit: 'cover' }} />
         </div>
@@ -38,7 +38,7 @@ export default function Layout() {
         </nav>
       </aside>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%' }}>
         <header style={{ height: '70px', backgroundColor: '#fff', borderBottom: '1px solid #e0e0e0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 30px' }}>
           <div style={{ color: '#689f38', fontWeight: 'bold', fontSize: '18px', letterSpacing: '1px' }}>INVENTORY</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '30px', color: '#555', fontSize: '14px' }}>
@@ -49,7 +49,9 @@ export default function Layout() {
             </div>
           </div>
         </header>
-        <main style={{ flex: 1, padding: '30px' }}><Outlet /></main>
+        <main style={{ flex: 1, padding: '30px', backgroundColor: '#f4f6f8', width: '100%' }}>
+          <Outlet />
+        </main>
       </div>
     </div>
   );
