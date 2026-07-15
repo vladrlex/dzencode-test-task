@@ -9,7 +9,7 @@ export default function Layout() {
 
   useEffect(() => {
     const socket = io('http://localhost:5000');
-    socket.on('activeSessions', (count: number) => {
+    socket.on('sessions_count', (count: number) => {
       setActiveSessions(count);
     });
 

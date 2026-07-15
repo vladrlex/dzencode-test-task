@@ -2,83 +2,143 @@
   "products": [
     {
       "id": 1,
-      "serialNumber": 1234,
+      "serialNumber": 123456789,
       "isNew": 1,
       "photo": "pathToFile.jpg",
-      "title": "Product 1",
-      "type": "Monitors",
-      "specification": "Specification 1",
+      "title": "Gigabyte Technology X58-USB3 (Socket 1366) 6 X58-USB3",
+      "type": "Motherboards",
+      "specification": "Intel X58, ATX",
       "guarantee": {
-        "start": "2017-06-29 12:09:33",
-        "end": "2017-06-29 12:09:33"
+        "start": "2017-04-06 00:00:00",
+        "end": "2025-08-06 00:00:00"
       },
       "price": [
-        {
-          "value": 100,
-          "symbol": "USD",
-          "isDefault": 0
-        },
-        {
-          "value": 2600,
-          "symbol": "UAH",
-          "isDefault": 1
-        }
+        { "value": 2500, "symbol": "USD", "isDefault": 0 },
+        { "value": 250000.50, "symbol": "UAH", "isDefault": 1 }
       ],
       "order": 1,
-      "date": "2017-06-29 12:09:33"
+      "date": "2017-04-06 12:09:33"
     },
     {
       "id": 2,
-      "serialNumber": 1234,
-      "isNew": 1,
+      "serialNumber": 987654321,
+      "isNew": 0,
       "photo": "pathToFile.jpg",
-      "title": "Product 2",
-      "type": "Monitors",
-      "specification": "Specification 1",
+      "title": "Gigabyte Technology X58-USB3 (Socket 1366) 6 X58-USB3",
+      "type": "Motherboards",
+      "specification": "Intel X58, ATX",
       "guarantee": {
-        "start": "2017-06-29 12:09:33",
-        "end": "2017-06-29 12:09:33"
+        "start": "2017-04-06 00:00:00",
+        "end": "2025-08-06 00:00:00"
       },
       "price": [
-        {
-          "value": 100,
-          "symbol": "USD",
-          "isDefault": 0
-        },
-        {
-          "value": 2600,
-          "symbol": "UAH",
-          "isDefault": 1
-        }
+        { "value": 2500, "symbol": "USD", "isDefault": 0 },
+        { "value": 250000.50, "symbol": "UAH", "isDefault": 1 }
+      ],
+      "order": 1,
+      "date": "2017-04-06 12:09:33"
+    },
+    {
+      "id": 3,
+      "serialNumber": 555444333,
+      "isNew": 1,
+      "photo": "pathToFile.jpg",
+      "title": "Dell UltraSharp U2720Q 27-inch 4K UHD",
+      "type": "Monitors",
+      "specification": "27 inch, 4K, IPS",
+      "guarantee": {
+        "start": "2020-01-15 00:00:00",
+        "end": "2023-01-15 00:00:00"
+      },
+      "price": [
+        { "value": 600, "symbol": "USD", "isDefault": 0 },
+        { "value": 24000, "symbol": "UAH", "isDefault": 1 }
       ],
       "order": 2,
-      "date": "2017-06-29 12:09:33"
+      "date": "2020-01-15 10:00:00"
+    },
+    {
+      "id": 4,
+      "serialNumber": 111222333,
+      "isNew": 1,
+      "photo": "pathToFile.jpg",
+      "title": "AMD Ryzen 5 5600 6-Core 12-Thread",
+      "type": "Processors",
+      "specification": "Socket AM4, 65W",
+      "guarantee": {
+        "start": "2023-05-10 00:00:00",
+        "end": "2026-05-10 00:00:00"
+      },
+      "price": [
+        { "value": 150, "symbol": "USD", "isDefault": 0 },
+        { "value": 6000, "symbol": "UAH", "isDefault": 1 }
+      ],
+      "order": 4,
+      "date": "2023-05-10 14:30:00"
+    },
+    {
+      "id": 5,
+      "serialNumber": 777888999,
+      "isNew": 1,
+      "photo": "pathToFile.jpg",
+      "title": "NVIDIA GeForce RTX 3070 8GB GDDR6",
+      "type": "Graphics Cards",
+      "specification": "PCIe 4.0, 8GB",
+      "guarantee": {
+        "start": "2024-02-20 00:00:00",
+        "end": "2027-02-20 00:00:00"
+      },
+      "price": [
+        { "value": 450, "symbol": "USD", "isDefault": 0 },
+        { "value": 18000, "symbol": "UAH", "isDefault": 1 }
+      ],
+      "order": 4,
+      "date": "2024-02-20 09:15:00"
+    },
+    {
+      "id": 6,
+      "serialNumber": 444555666,
+      "isNew": 0,
+      "photo": "pathToFile.jpg",
+      "title": "Samsung QE65QN800D 65\" Neo QLED 8K",
+      "type": "Televisions",
+      "specification": "65 inch, 8K Resolution",
+      "guarantee": {
+        "start": "2025-11-01 00:00:00",
+        "end": "2027-11-01 00:00:00"
+      },
+      "price": [
+        { "value": 2100, "symbol": "USD", "isDefault": 0 },
+        { "value": 85000, "symbol": "UAH", "isDefault": 1 }
+      ],
+      "order": 4,
+      "date": "2025-11-01 16:45:00"
     }
   ],
   "orders": [
     {
       "id": 1,
-      "title": "Order 1",
-      "date": "2017-06-29 12:09:33",
-      "description": "desc"
+      "title": "Длинное предлинное длиннючее название прихода",
+      "date": "2017-04-06 17:20:00",
+      "description": "Main batch of motherboards"
     },
     {
       "id": 2,
-      "title": "Order 2",
-      "date": "2017-06-29 12:09:33",
-      "description": "desc"
+      "title": "Длинное название прихода",
+      "date": "2017-09-06 17:20:00",
+      "description": "Monitors shipment"
     },
     {
       "id": 3,
-      "title": "Order 3",
-      "date": "2017-06-29 12:09:33",
-      "description": "desc"
+      "title": "Приход пустой",
+      "date": "2017-06-06 17:20:00",
+      "description": "Empty order for testing"
     },
     {
       "id": 4,
-      "title": "AMD Ryzen 5 5600",
+      "title": "Техника ",
       "date": "2026-07-13 20:40:53",
-      "description": "Processor"
+      "description": "PC components and TV"
     }
   ]
 }
