@@ -140,7 +140,6 @@
   background-color: #558b2f;
 }
 
-/* Анімація появи карток приходів */
 @keyframes slideInUpOrders {
   from {
     opacity: 0;
