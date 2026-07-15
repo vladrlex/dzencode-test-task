@@ -75,6 +75,49 @@ app.post('/api/orders', (req, res) => {
   res.status(201).json(newOrder);
 });
 
+app.post('/api/products', (req, res) => {
+  const newProductData = req.body;
+  const data = readData();
+
+  const newId = data.products.length > 0 ? Math.max(...data.products.map(p => p.id)) + 1 : 1;
+
+  const newProduct = {
+    ...newProductData,
+    id: newId
+  };
+
+  data.products.push(newProduct);
+  writeData(data);
+
+  res.status(201).json(newProduct);
+});
+
+app.delete('/api/products/:id', (req, res) => {
+  const productId = parseInt(req.params.id);
+  const data = readData();
+
+  data.products = data.products.filter((p) => p.id !== productId);
+  writeData(data);
+
+  res.status(200).json({ id: productId });
+});
+
+app.put('/api/products/:id', (req, res) => {
+  const productId = parseInt(req.params.id);
+  const updatedData = req.body;
+  const data = readData();
+
+  const index = data.products.findIndex((p) => p.id === productId);
+
+  if (index !== -1) {
+    data.products[index] = { ...data.products[index], ...updatedData, id: productId };
+    writeData(data);
+    res.status(200).json(data.products[index]);
+  } else {
+    res.status(404).json({ error: 'Product not found' });
+  }
+});
+
 let activeSessions = 0;
 
 io.on('connection', (socket) => {

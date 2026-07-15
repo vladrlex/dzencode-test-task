@@ -119,3 +119,23 @@
   padding: 25px;
   min-height: 500px;
 }
+.order-detail__actions {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.btn-add-product {
+  background-color: #689f38;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-add-product:hover {
+  background-color: #558b2f;
+}

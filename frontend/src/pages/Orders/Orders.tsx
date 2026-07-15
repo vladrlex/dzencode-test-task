@@ -6,6 +6,8 @@ import { formatDateNumeric, formatDateFull } from '../../utils/dateFormatter';
 import OrderForm from '../../components/OrderForm/OrderForm';
 import OrderDetail from '../../components/OrderDetail/OrderDetail';
 import DeleteOrderModal from '../../components/DeleteOrderModal/DeleteOrderModal';
+import Modal from '../../components/Modal/Modal';
+import AddProductForm from '../../components/AddProductForm/AddProductForm';
 import './Orders.css';
 
 export default function Orders() {
@@ -17,6 +19,7 @@ export default function Orders() {
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isProductFormOpen, setIsProductFormOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchOrders());
@@ -59,7 +62,11 @@ export default function Orders() {
         </button>
       </div>
 
-      {isFormOpen && <OrderForm onSubmit={handleAddOrder} />}
+      {isFormOpen && (
+        <Modal title="Add New Order" onClose={() => setIsFormOpen(false)}>
+          <OrderForm onSubmit={handleAddOrder} />
+        </Modal>
+      )}
 
       <div className="orders__content">
         <div className={`orders__list ${selectedOrderId ? 'orders__list--shrink' : ''}`}>
@@ -103,16 +110,34 @@ export default function Orders() {
           })}
         </div>
 
-        {selectedOrderId && selectedOrder && (
-          <div className="order-detail">
-            <OrderDetail
-              orderTitle={selectedOrder.title}
-              products={selectedOrderProducts}
-              onClose={() => setSelectedOrderId(null)}
-            />
-          </div>
-        )}
+{selectedOrderId && selectedOrder && (
+  <div className="order-detail">
+    <div className="order-detail__actions">
+      <button 
+        className="btn-add-product" 
+        onClick={() => setIsProductFormOpen(true)}
+      >
+        + Add Product
+      </button>
+    </div>
+    
+    <OrderDetail
+      orderTitle={selectedOrder.title}
+      products={selectedOrderProducts}
+      onClose={() => setSelectedOrderId(null)}
+    />
+  </div>
+)}
       </div>
+
+      {isProductFormOpen && selectedOrderId && (
+        <Modal title="Add New Product" onClose={() => setIsProductFormOpen(false)}>
+          <AddProductForm 
+            orderId={selectedOrderId} 
+            onClose={() => setIsProductFormOpen(false)} 
+          />
+        </Modal>
+      )}
 
       {deleteTargetId && (
         <DeleteOrderModal

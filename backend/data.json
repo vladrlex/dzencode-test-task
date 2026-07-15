@@ -13,8 +13,16 @@
         "end": "2025-08-06 00:00:00"
       },
       "price": [
-        { "value": 2500, "symbol": "USD", "isDefault": 0 },
-        { "value": 250000.50, "symbol": "UAH", "isDefault": 1 }
+        {
+          "value": 2500,
+          "symbol": "USD",
+          "isDefault": 0
+        },
+        {
+          "value": 250000.5,
+          "symbol": "UAH",
+          "isDefault": 1
+        }
       ],
       "order": 1,
       "date": "2017-04-06 12:09:33"
@@ -32,8 +40,16 @@
         "end": "2025-08-06 00:00:00"
       },
       "price": [
-        { "value": 2500, "symbol": "USD", "isDefault": 0 },
-        { "value": 250000.50, "symbol": "UAH", "isDefault": 1 }
+        {
+          "value": 2500,
+          "symbol": "USD",
+          "isDefault": 0
+        },
+        {
+          "value": 250000.5,
+          "symbol": "UAH",
+          "isDefault": 1
+        }
       ],
       "order": 1,
       "date": "2017-04-06 12:09:33"
@@ -51,8 +67,16 @@
         "end": "2023-01-15 00:00:00"
       },
       "price": [
-        { "value": 600, "symbol": "USD", "isDefault": 0 },
-        { "value": 24000, "symbol": "UAH", "isDefault": 1 }
+        {
+          "value": 600,
+          "symbol": "USD",
+          "isDefault": 0
+        },
+        {
+          "value": 24000,
+          "symbol": "UAH",
+          "isDefault": 1
+        }
       ],
       "order": 2,
       "date": "2020-01-15 10:00:00"
@@ -70,8 +94,16 @@
         "end": "2026-05-10 00:00:00"
       },
       "price": [
-        { "value": 150, "symbol": "USD", "isDefault": 0 },
-        { "value": 6000, "symbol": "UAH", "isDefault": 1 }
+        {
+          "value": 150,
+          "symbol": "USD",
+          "isDefault": 0
+        },
+        {
+          "value": 6000,
+          "symbol": "UAH",
+          "isDefault": 1
+        }
       ],
       "order": 4,
       "date": "2023-05-10 14:30:00"
@@ -89,8 +121,16 @@
         "end": "2027-02-20 00:00:00"
       },
       "price": [
-        { "value": 450, "symbol": "USD", "isDefault": 0 },
-        { "value": 18000, "symbol": "UAH", "isDefault": 1 }
+        {
+          "value": 450,
+          "symbol": "USD",
+          "isDefault": 0
+        },
+        {
+          "value": 18000,
+          "symbol": "UAH",
+          "isDefault": 1
+        }
       ],
       "order": 4,
       "date": "2024-02-20 09:15:00"
@@ -108,11 +148,73 @@
         "end": "2027-11-01 00:00:00"
       },
       "price": [
-        { "value": 2100, "symbol": "USD", "isDefault": 0 },
-        { "value": 85000, "symbol": "UAH", "isDefault": 1 }
+        {
+          "value": 2100,
+          "symbol": "USD",
+          "isDefault": 0
+        },
+        {
+          "value": 85000,
+          "symbol": "UAH",
+          "isDefault": 1
+        }
       ],
       "order": 4,
       "date": "2025-11-01 16:45:00"
+    },
+    {
+      "title": "фівфів",
+      "type": "фівфів",
+      "serialNumber": 123123,
+      "order": 1,
+      "price": [
+        {
+          "value": 11111,
+          "symbol": "USD",
+          "isDefault": 0
+        },
+        {
+          "value": 25555,
+          "symbol": "UAH",
+          "isDefault": 1
+        }
+      ],
+      "isNew": 1,
+      "date": "2026-07-15T16:59:08.471Z",
+      "photo": "pathToFile.jpg",
+      "specification": "Standard",
+      "guarantee": {
+        "start": "2026-07-15T16:59:08.471Z",
+        "end": "2026-07-15T16:59:08.471Z"
+      },
+      "id": 7
+    },
+    {
+      "title": "Monitor",
+      "type": "MSI G240",
+      "serialNumber": 123334,
+      "order": 3,
+      "price": [
+        {
+          "value": 250,
+          "symbol": "USD",
+          "isDefault": 0
+        },
+        {
+          "value": 8500,
+          "symbol": "UAH",
+          "isDefault": 1
+        }
+      ],
+      "isNew": 1,
+      "date": "2026-07-15T19:21:26.239Z",
+      "photo": "pathToFile.jpg",
+      "specification": "Standard",
+      "guarantee": {
+        "start": "2026-07-15T19:21:26.239Z",
+        "end": "2026-07-15T19:21:26.239Z"
+      },
+      "id": 8
     }
   ],
   "orders": [
