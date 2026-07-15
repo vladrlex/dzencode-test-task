@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './OrderForm.css';
 
 interface OrderFormProps {
@@ -6,6 +7,7 @@ interface OrderFormProps {
 }
 
 export default function OrderForm({ onSubmit }: OrderFormProps) {
+  const { t } = useTranslation();
   const [newTitle, setNewTitle] = useState('');
   const [newDesc, setNewDesc] = useState('');
 
@@ -21,28 +23,28 @@ export default function OrderForm({ onSubmit }: OrderFormProps) {
   return (
     <form className="order-form" onSubmit={handleSubmit}>
       <div className="order-form__field">
-        <label className="order-form__label">Title</label>
+        <label className="order-form__label">{t('forms.titleLabel')}</label>
         <input
           type="text"
           className="order-form__input"
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
-          placeholder="e.g. New Shipment"
+          placeholder={t('forms.placeholderTitle')}
           required
         />
       </div>
       <div className="order-form__field order-form__field--large">
-        <label className="order-form__label">Description</label>
+        <label className="order-form__label">{t('forms.descLabel')}</label>
         <input
           type="text"
           className="order-form__input"
           value={newDesc}
           onChange={(e) => setNewDesc(e.target.value)}
-          placeholder="e.g. Dell Monitors"
+          placeholder={t('forms.placeholderDesc')}
         />
       </div>
       <button type="submit" className="order-form__submit">
-        Save
+        {t('forms.save')}
       </button>
     </form>
   );

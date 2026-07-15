@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchProducts } from '../../store/productsSlice';
 import { fetchOrders } from '../../store/ordersSlice';
@@ -6,6 +7,7 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import './Products.css';
 
 export default function Products() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const products = useAppSelector((state) => state.products.items);
   const orders = useAppSelector((state) => state.orders.items);
@@ -18,13 +20,13 @@ export default function Products() {
     dispatch(fetchOrders());
   }, [dispatch]);
 
-  if (loading) return <div className="products__loading">Loading products...</div>;
+  if (loading) return <div className="products__loading">{t('products.loading')}</div>;
 
   if (!products || products.length === 0) {
     return (
       <div className="products__empty">
-        <h3 className="products__empty-title">No products found</h3>
-        <p className="products__empty-text">The products list is currently empty.</p>
+        <h3 className="products__empty-title">{t('products.noProducts')}</h3>
+        <p className="products__empty-text">{t('products.emptyText')}</p>
       </div>
     );
   }
@@ -38,17 +40,19 @@ export default function Products() {
   return (
     <div className="products">
       <div className="products__header">
-        <h2 className="products__title">Products / {filteredProducts.length}</h2>
+        <h2 className="products__title">{t('products.title')} / {filteredProducts.length}</h2>
         
         <div className="products__filter">
-          <span className="products__filter-label">Filter by type:</span>
+          <span className="products__filter-label">{t('products.filterLabel')}</span>
           <select
             className="products__filter-select"
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
           >
             {productTypes.map((type) => (
-              <option key={type} value={type}>{type}</option>
+              <option key={type} value={type}>
+                {type === 'All' ? t('products.allTypes') : type}
+              </option>
             ))}
           </select>
         </div>
@@ -57,7 +61,7 @@ export default function Products() {
       <div className="products__list">
         {filteredProducts.map((product) => {
           const parentOrder = orders.find((o) => o.id === product.order);
-          const orderTitle = parentOrder ? parentOrder.title : 'Unknown Order';
+          const orderTitle = parentOrder ? parentOrder.title : t('products.unknownOrder');
 
           return (
             <ProductCard 

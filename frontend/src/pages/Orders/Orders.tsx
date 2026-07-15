@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchOrders, removeOrderServer, addOrderServer } from '../../store/ordersSlice';
 import { fetchProducts, type Product } from '../../store/productsSlice';
@@ -11,6 +12,7 @@ import AddProductForm from '../../components/AddProductForm/AddProductForm';
 import './Orders.css';
 
 export default function Orders() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orders.items);
   const products = useAppSelector((state) => state.products.items);
@@ -54,7 +56,7 @@ export default function Orders() {
     setProductToEdit(null);
   };
 
-  if (loading) return <div className="orders__loading">Loading data...</div>;
+  if (loading) return <div className="orders__loading">{t('orders.loading')}</div>;
 
   const selectedOrder = orders.find((o) => o.id === selectedOrderId);
   const selectedOrderProducts = products.filter((p) => p.order === selectedOrderId);
@@ -62,14 +64,14 @@ export default function Orders() {
   return (
     <div className="orders">
       <div className="orders__header">
-        <h2 className="orders__title">Orders / {orders.length}</h2>
+        <h2 className="orders__title">{t('orders.title')} / {orders.length}</h2>
         <button className="orders__add-btn" onClick={() => setIsFormOpen(!isFormOpen)}>
-          {isFormOpen ? 'Cancel' : '+ Add Order'}
+          {isFormOpen ? t('orders.cancelBtn') : t('orders.addOrderBtn')}
         </button>
       </div>
 
       {isFormOpen && (
-        <Modal title="Add New Order" onClose={() => setIsFormOpen(false)}>
+        <Modal title={t('orders.modalAddTitle')} onClose={() => setIsFormOpen(false)}>
           <OrderForm onSubmit={handleAddOrder} />
         </Modal>
       )}
@@ -92,7 +94,7 @@ export default function Orders() {
                 <div className="order-card__title">{order.title}</div>
                 <div className="order-card__products">
                   <div>{count}</div>
-                  <div style={{ fontSize: '10px', color: '#999' }}>Products</div>
+                  <div style={{ fontSize: '10px', color: '#999' }}>{t('orders.productsCountLabel')}</div>
                 </div>
                 <div className="order-card__date">
                   <div>{formatDateNumeric(order.date)}</div>
@@ -126,7 +128,7 @@ export default function Orders() {
                   setIsProductFormOpen(true);
                 }}
               >
-                + Add Product
+                {t('orders.addProductBtn')}
               </button>
             </div>
             
@@ -144,7 +146,10 @@ export default function Orders() {
       </div>
 
       {isProductFormOpen && selectedOrderId && (
-        <Modal title={productToEdit ? "Edit Product" : "Add New Product"} onClose={handleCloseProductModal}>
+        <Modal 
+          title={productToEdit ? t('orders.modalProductEditTitle') : t('orders.modalProductAddTitle')} 
+          onClose={handleCloseProductModal}
+        >
           <AddProductForm 
             orderId={selectedOrderId} 
             onClose={handleCloseProductModal} 

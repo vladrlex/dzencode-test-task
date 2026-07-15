@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { Product } from '../../store/productsSlice';
 import { formatDateNumeric, formatDateFull } from '../../utils/dateFormatter';
 import './ProductCard.css';
@@ -8,6 +9,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, orderTitle }: ProductCardProps) {
+  const { t } = useTranslation();
   const uahPrice = product.price?.find((p) => p.symbol === 'UAH')?.value;
   const usdPrice = product.price?.find((p) => p.symbol === 'USD')?.value;
 
@@ -28,12 +30,12 @@ export default function ProductCard({ product, orderTitle }: ProductCardProps) {
       </div>
 
       <div className="product-card__condition" style={{ color: product.isNew ? '#689f38' : '#333' }}>
-        {product.isNew ? 'New' : 'Used'}
+        {product.isNew ? t('productCard.new') : t('productCard.used')}
       </div>
 
       <div className="product-card__guarantee">
-        <div>from: {formatDateNumeric(product.guarantee.start)}</div>
-        <div>to: {formatDateFull(product.guarantee.end)}</div>
+        <div>{t('productCard.from')}: {formatDateNumeric(product.guarantee.start)}</div>
+        <div>{t('productCard.to')}: {formatDateFull(product.guarantee.end)}</div>
       </div>
 
       <div className="product-card__price">

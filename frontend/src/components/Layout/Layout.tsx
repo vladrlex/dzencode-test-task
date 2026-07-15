@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { io } from 'socket.io-client';
 import './Layout.css';
 
 export default function Layout() {
+  const { t, i18n } = useTranslation();
   const [activeSessions, setActiveSessions] = useState(1);
   const [time, setTime] = useState(new Date());
 
@@ -21,6 +23,12 @@ export default function Layout() {
     };
   }, []);
 
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
+
+  const currentLang = i18n.language === 'ru' ? 'ru-RU' : 'en-US';
+
   const getLinkClass = ({ isActive }: { isActive: boolean }) =>
     `layout__nav-link ${isActive ? 'layout__nav-link--active' : ''}`;
 
@@ -33,19 +41,51 @@ export default function Layout() {
         
         <div className="layout__top-info">
           <div className="layout__sessions">
-            Active sessions: <strong className="layout__sessions-count">{activeSessions}</strong>
+            {t('layout.activeSessions')} <strong className="layout__sessions-count">{activeSessions}</strong>
           </div>
+          
           <div className="layout__time-wrapper">
             <div className="layout__date">
-              <div className="layout__date-weekday">{time.toLocaleDateString('en-US', { weekday: 'long' })}</div>
+              <div className="layout__date-weekday">
+                {time.toLocaleDateString(currentLang, { weekday: 'long' })}
+              </div>
               <div className="layout__date-full">
-                {time.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })}
+                {time.toLocaleDateString(currentLang, { day: '2-digit', month: 'short', year: 'numeric' })}
               </div>
             </div>
+            
             <div className="layout__clock">
               <span>🕒</span>
-              {time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+              {time.toLocaleTimeString(currentLang, { hour: '2-digit', minute: '2-digit', hour12: false })}
             </div>
+          </div>
+
+          <div className="layout__lang-switcher" style={{ display: 'flex', gap: '5px', marginLeft: '15px' }}>
+            <button 
+              onClick={() => changeLanguage('en')} 
+              style={{ 
+                fontWeight: i18n.language === 'en' ? 'bold' : 'normal',
+                cursor: 'pointer',
+                border: 'none',
+                background: 'none',
+                color: i18n.language === 'en' ? '#689f38' : '#666'
+              }}
+            >
+              EN
+            </button>
+            <span style={{ color: '#ccc' }}>|</span>
+            <button 
+              onClick={() => changeLanguage('ru')} 
+              style={{ 
+                fontWeight: i18n.language === 'ru' ? 'bold' : 'normal',
+                cursor: 'pointer',
+                border: 'none',
+                background: 'none',
+                color: i18n.language === 'ru' ? '#689f38' : '#666'
+              }}
+            >
+              RU
+            </button>
           </div>
         </div>
       </header>
@@ -54,14 +94,14 @@ export default function Layout() {
         <nav className="layout__sidebar">
           <div className="layout__user">
             <div className="layout__user-avatar">👤</div>
-            <div className="layout__user-name">Active User</div>
+            <div className="layout__user-name">{t('layout.activeUser')}</div>
           </div>
 
           <NavLink to="/orders" className={getLinkClass}>
-            ORDERS
+            {t('navigation.orders').toUpperCase()}
           </NavLink>
           <NavLink to="/products" className={getLinkClass}>
-            PRODUCTS
+            {t('navigation.products').toUpperCase()}
           </NavLink>
         </nav>
 

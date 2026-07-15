@@ -1,0 +1,63 @@
+{
+  "navigation": {
+    "orders": "Приходы",
+    "products": "Продукты"
+  },
+  "orders": {
+    "title": "Приходы",
+    "loading": "Загрузка данных...",
+    "addOrderBtn": "Новый приход",
+    "cancelBtn": "Отмена",
+    "addProductBtn": "+ Добавить продукт",
+    "productsCountLabel": "Продукты",
+    "modalAddTitle": "Добавить новый приход",
+    "modalProductAddTitle": "Добавить новый продукт",
+    "modalProductEditTitle": "Редактировать продукт"
+  },
+  "products": {
+    "title": "Продукты",
+    "loading": "Загрузка продуктов...",
+    "noProducts": "Продукты не найдены",
+    "emptyText": "Список продуктов в данный момент пуст.",
+    "filterLabel": "Фильтр по типу:",
+    "allTypes": "Все",
+    "unknownOrder": "Неизвестный приход"
+  },
+  "forms": {
+    "titleLabel": "Название",
+    "descLabel": "Описание",
+    "productTitleLabel": "Название продукта",
+    "typeLabel": "Тип",
+    "serialNumberLabel": "Серийный номер",
+    "priceUsdLabel": "Цена USD",
+    "priceUahLabel": "Цена UAH",
+    "placeholderTitle": "например, Новая поставка",
+    "placeholderDesc": "например, Мониторы Dell",
+    "placeholderProductTitle": "например, Монитор",
+    "placeholderType": "например, Мониторы",
+    "placeholderSerialNumber": "например, 12345",
+    "placeholderPriceUsd": "например, 100",
+    "placeholderPriceUah": "например, 2600",
+    "save": "Сохранить",
+    "saveProduct": "Сохранить продукт",
+    "updateProduct": "Обновить продукт"
+  },
+  "modals": {
+    "deleteTitle": "Вы уверены, что хотите удалить этот приход?",
+    "deleteText": "Это действие нельзя будет отменить.",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "confirmDeleteProduct": "Вы уверены, что хотите удалить этот товар?"
+  },
+  "layout": {
+    "activeSessions": "Активные сессии:",
+    "activeUser": "Активный пользователь"
+  },
+  "productCard": {
+    "new": "Новый",
+    "used": "Б/У",
+    "from": "с",
+    "to": "по",
+    "noProductsInOrder": "В этом приходе нет продуктов."
+  }
+}

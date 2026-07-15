@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../store/hooks';
 import { type Product, removeProductServer } from '../../store/productsSlice';
 import './OrderDetail.css';
@@ -10,10 +11,11 @@ interface OrderDetailProps {
 }
 
 export default function OrderDetail({ orderTitle, products, onClose, onEditProduct }: OrderDetailProps) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const handleDeleteProduct = async (productId: number) => {
-    if (window.confirm('Ви впевнені, що хочете видалити цей товар?')) {
+    if (window.confirm(t('modals.confirmDeleteProduct'))) {
       try {
         await dispatch(removeProductServer(productId)).unwrap();
       } catch (error) {
@@ -30,7 +32,7 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
       <h3 className="order-detail__title">{orderTitle}</h3>
       <div className="order-detail__list">
         {products.length === 0 ? (
-          <div className="order-detail__empty">No products in this order.</div>
+          <div className="order-detail__empty">{t('productCard.noProductsInOrder')}</div>
         ) : (
           products.map((product) => (
             <div key={product.id} className="order-detail__item">
@@ -43,13 +45,13 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
               </div>
               
               <div className={`order-detail__item-condition ${product.isNew ? 'order-detail__item-condition--new' : ''}`}>
-                {product.isNew ? 'New' : 'Used'}
+                {product.isNew ? t('productCard.new') : t('productCard.used')}
               </div>
 
               <div className="order-detail__item-actions">
                 <button 
                   className="btn-action btn-edit" 
-                  title="Edit Product"
+                  title={t('orders.modalProductEditTitle')}
                   onClick={() => onEditProduct(product)}
                 >
                   ✏️
