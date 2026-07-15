@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './components/Layout';
-import Orders from './pages/Orders';
-import Products from './pages/Products';
+import Layout from './components/Layout/Layout';
+import Orders from './pages/Orders/Orders';
+import Products from './pages/Products/Products';
 
 export default function App() {
   return (

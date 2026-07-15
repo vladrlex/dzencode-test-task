@@ -1,0 +1,136 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f4f6f8;
+  font-family: Arial, sans-serif;
+}
+
+.layout__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  height: 60px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.layout__logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.layout__logo {
+  font-weight: bold;
+  color: #689f38;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.layout__top-info {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  font-size: 14px;
+  color: #555;
+}
+
+.layout__sessions-count {
+  color: #333;
+}
+
+.layout__time-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.layout__date-weekday {
+  font-size: 12px;
+  color: #999;
+}
+
+.layout__date-full {
+  font-weight: bold;
+  color: #333;
+}
+
+.layout__clock {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+  color: #689f38;
+}
+
+.layout__body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.layout__sidebar {
+  width: 220px;
+  background-color: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.02);
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-sizing: border-box;
+  z-index: 5;
+}
+
+.layout__user {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.layout__user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #eaeaea;
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.layout__user-name {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.layout__nav-link {
+  display: block;
+  padding: 12px 20px;
+  color: #333;
+  font-weight: normal;
+  text-decoration: none;
+  border-left: 4px solid transparent;
+  background-color: transparent;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.layout__nav-link--active {
+  color: #689f38;
+  font-weight: bold;
+  border-left-color: #689f38;
+  background-color: #f4f6f8;
+}
+
+.layout__content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
