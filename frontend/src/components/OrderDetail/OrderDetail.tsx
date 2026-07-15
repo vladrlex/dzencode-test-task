@@ -1,13 +1,27 @@
-import { type Product } from '../../store/productsSlice';
+import { useAppDispatch } from '../../store/hooks';
+import { type Product, removeProductServer } from '../../store/productsSlice';
 import './OrderDetail.css';
 
 interface OrderDetailProps {
   orderTitle: string;
   products: Product[];
   onClose: () => void;
+  onEditProduct: (product: Product) => void;
 }
 
-export default function OrderDetail({ orderTitle, products, onClose }: OrderDetailProps) {
+export default function OrderDetail({ orderTitle, products, onClose, onEditProduct }: OrderDetailProps) {
+  const dispatch = useAppDispatch();
+
+  const handleDeleteProduct = async (productId: number) => {
+    if (window.confirm('Ви впевнені, що хочете видалити цей товар?')) {
+      try {
+        await dispatch(removeProductServer(productId)).unwrap();
+      } catch (error) {
+        console.error('Failed to delete product:', error);
+      }
+    }
+  };
+
   return (
     <div className="order-detail">
       <button className="order-detail__close" onClick={onClose}>
@@ -27,8 +41,26 @@ export default function OrderDetail({ orderTitle, products, onClose }: OrderDeta
                   <div className="order-detail__item-sn">SN: {product.serialNumber}</div>
                 </div>
               </div>
+              
               <div className={`order-detail__item-condition ${product.isNew ? 'order-detail__item-condition--new' : ''}`}>
                 {product.isNew ? 'New' : 'Used'}
+              </div>
+
+              <div className="order-detail__item-actions">
+                <button 
+                  className="btn-action btn-edit" 
+                  title="Edit Product"
+                  onClick={() => onEditProduct(product)}
+                >
+                  ✏️
+                </button>
+                <button 
+                  className="btn-action btn-delete" 
+                  title="Delete Product"
+                  onClick={() => handleDeleteProduct(product.id)}
+                >
+                  🗑️
+                </button>
               </div>
             </div>
           ))

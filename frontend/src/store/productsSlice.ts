@@ -52,6 +52,22 @@ export const addProductServer = createAsyncThunk(
   }
 );
 
+export const removeProductServer = createAsyncThunk(
+  'products/removeProductServer',
+  async (id: number) => {
+    await axios.delete(`http://localhost:5000/api/products/${id}`);
+    return id;
+  }
+);
+
+export const updateProductServer = createAsyncThunk(
+  'products/updateProductServer',
+  async (product: Product) => {
+    const response = await axios.put(`http://localhost:5000/api/products/${product.id}`, product);
+    return response.data;
+  }
+);
+
 const productsSlice = createSlice({
   name: 'products',
   initialState,
@@ -72,6 +88,15 @@ const productsSlice = createSlice({
       })
       .addCase(addProductServer.fulfilled, (state, action) => {
         state.items.push(action.payload);
+      })
+      .addCase(removeProductServer.fulfilled, (state, action) => {
+        state.items = state.items.filter((product) => product.id !== action.payload);
+      })
+      .addCase(updateProductServer.fulfilled, (state, action) => {
+        const index = state.items.findIndex((p) => p.id === action.payload.id);
+        if (index !== -1) {
+          state.items[index] = action.payload;
+        }
       })
       .addCase(deleteOrder, (state, action) => {
         state.items = state.items.filter((product) => product.order !== action.payload);

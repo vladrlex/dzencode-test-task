@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchOrders, removeOrderServer, addOrderServer } from '../../store/ordersSlice';
-import { fetchProducts } from '../../store/productsSlice';
+import { fetchProducts, type Product } from '../../store/productsSlice';
 import { formatDateNumeric, formatDateFull } from '../../utils/dateFormatter';
 import OrderForm from '../../components/OrderForm/OrderForm';
 import OrderDetail from '../../components/OrderDetail/OrderDetail';
@@ -20,6 +20,7 @@ export default function Orders() {
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState<Product | null>(null);
 
   useEffect(() => {
     dispatch(fetchOrders());
@@ -46,6 +47,11 @@ export default function Orders() {
         setDeleteTargetId(null);
       }
     }
+  };
+
+  const handleCloseProductModal = () => {
+    setIsProductFormOpen(false);
+    setProductToEdit(null);
   };
 
   if (loading) return <div className="orders__loading">Loading data...</div>;
@@ -110,31 +116,39 @@ export default function Orders() {
           })}
         </div>
 
-{selectedOrderId && selectedOrder && (
-  <div className="order-detail">
-    <div className="order-detail__actions">
-      <button 
-        className="btn-add-product" 
-        onClick={() => setIsProductFormOpen(true)}
-      >
-        + Add Product
-      </button>
-    </div>
-    
-    <OrderDetail
-      orderTitle={selectedOrder.title}
-      products={selectedOrderProducts}
-      onClose={() => setSelectedOrderId(null)}
-    />
-  </div>
-)}
+        {selectedOrderId && selectedOrder && (
+          <div className="order-detail">
+            <div className="order-detail__actions">
+              <button 
+                className="btn-add-product" 
+                onClick={() => {
+                  setProductToEdit(null);
+                  setIsProductFormOpen(true);
+                }}
+              >
+                + Add Product
+              </button>
+            </div>
+            
+            <OrderDetail
+              orderTitle={selectedOrder.title}
+              products={selectedOrderProducts}
+              onClose={() => setSelectedOrderId(null)}
+              onEditProduct={(product) => {
+                setProductToEdit(product);
+                setIsProductFormOpen(true);
+              }}
+            />
+          </div>
+        )}
       </div>
 
       {isProductFormOpen && selectedOrderId && (
-        <Modal title="Add New Product" onClose={() => setIsProductFormOpen(false)}>
+        <Modal title={productToEdit ? "Edit Product" : "Add New Product"} onClose={handleCloseProductModal}>
           <AddProductForm 
             orderId={selectedOrderId} 
-            onClose={() => setIsProductFormOpen(false)} 
+            onClose={handleCloseProductModal} 
+            productToEdit={productToEdit}
           />
         </Modal>
       )}
