@@ -57,9 +57,9 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
         {productToEdit ? 'Edit Product' : 'Add New Product'}
       </h2>
 
-      <div className="add-product-form__group">
+     <div className="add-product-form__group">
         <label>Product Title</label>
-        <input type="text" value={formData.title} placeholder="e.g. Monitor" required onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
+        <input type="text" minLength={3} value={formData.title} placeholder="e.g. Monitor" required onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
       </div>
       
       <div className="add-product-form__group">
@@ -69,17 +69,17 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
       
       <div className="add-product-form__group">
         <label>Serial Number</label>
-        <input type="number" value={formData.serialNumber} placeholder="e.g. 12345" required onChange={(e) => setFormData({ ...formData, serialNumber: e.target.value })} />
+        <input type="number" min="1" value={formData.serialNumber} placeholder="e.g. 12345" required onChange={(e) => setFormData({ ...formData, serialNumber: e.target.value })} />
       </div>
       
       <div className="add-product-form__group">
         <label>Price USD</label>
-        <input type="number" value={formData.priceUsd} placeholder="e.g. 100" required onChange={(e) => setFormData({ ...formData, priceUsd: e.target.value })} />
+        <input type="number" min="0" step="0.01" value={formData.priceUsd} placeholder="e.g. 100" required onChange={(e) => setFormData({ ...formData, priceUsd: e.target.value })} />
       </div>
       
       <div className="add-product-form__group">
         <label>Price UAH</label>
-        <input type="number" value={formData.priceUah} placeholder="e.g. 2600" required onChange={(e) => setFormData({ ...formData, priceUah: e.target.value })} />
+        <input type="number" min="0" step="0.01" value={formData.priceUah} placeholder="e.g. 2600" required onChange={(e) => setFormData({ ...formData, priceUah: e.target.value })} />
       </div>
 
       <button type="submit" className="add-product-form__submit">

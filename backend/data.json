@@ -161,60 +161,6 @@
       ],
       "order": 4,
       "date": "2025-11-01 16:45:00"
-    },
-    {
-      "title": "фівфів",
-      "type": "фівфів",
-      "serialNumber": 123123,
-      "order": 1,
-      "price": [
-        {
-          "value": 11111,
-          "symbol": "USD",
-          "isDefault": 0
-        },
-        {
-          "value": 25555,
-          "symbol": "UAH",
-          "isDefault": 1
-        }
-      ],
-      "isNew": 1,
-      "date": "2026-07-15T16:59:08.471Z",
-      "photo": "pathToFile.jpg",
-      "specification": "Standard",
-      "guarantee": {
-        "start": "2026-07-15T16:59:08.471Z",
-        "end": "2026-07-15T16:59:08.471Z"
-      },
-      "id": 7
-    },
-    {
-      "title": "12",
-      "type": "12",
-      "serialNumber": 12,
-      "order": 5,
-      "price": [
-        {
-          "value": 12,
-          "symbol": "USD",
-          "isDefault": 0
-        },
-        {
-          "value": 12,
-          "symbol": "UAH",
-          "isDefault": 1
-        }
-      ],
-      "isNew": 1,
-      "date": "2026-07-15T19:36:56.289Z",
-      "photo": "pathToFile.jpg",
-      "specification": "Standard",
-      "guarantee": {
-        "start": "2026-07-15T19:36:56.289Z",
-        "end": "2026-07-15T19:36:56.289Z"
-      },
-      "id": 8
     }
   ],
   "orders": [
@@ -238,9 +184,9 @@
     },
     {
       "id": 5,
-      "title": "12",
-      "date": "2026-07-15 19:36:50",
-      "description": "12"
+      "title": "1",
+      "date": "2026-07-15 19:41:59",
+      "description": "1"
     }
   ]
 }
