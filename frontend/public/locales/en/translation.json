@@ -54,10 +54,11 @@
     "delete": "Delete",
     "confirmDeleteProduct": "Are you sure you want to delete this product?"
   },
-  "layout": {
-    "activeSessions": "Active sessions:",
-    "activeUser": "Active User"
-  },
+"layout": {
+  "activeSessions": "Active sessions:",
+  "activeUser": "Active User",
+  "searchPlaceholder": "Search"
+},
   "productCard": {
     "new": "New",
     "used": "Used",

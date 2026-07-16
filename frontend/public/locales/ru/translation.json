@@ -54,10 +54,11 @@
     "delete": "Удалить",
     "confirmDeleteProduct": "Вы уверены, что хотите удалить этот товар?"
   },
-  "layout": {
-    "activeSessions": "Активные сессии:",
-    "activeUser": "Активный пользователь"
-  },
+"layout": {
+  "activeSessions": "Активные сессии:",
+  "activeUser": "Активный пользователь",
+  "searchPlaceholder": "Поиск"
+},
   "productCard": {
     "new": "Новый",
     "used": "Б/У",

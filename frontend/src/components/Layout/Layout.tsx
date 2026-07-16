@@ -16,6 +16,7 @@ export default function Layout() {
 
   useEffect(() => {
     const socket = io('http://localhost:5000');
+    
     socket.on('sessions_count', (count: number) => {
       setActiveSessions(count);
     });
@@ -23,6 +24,7 @@ export default function Layout() {
     const timer = setInterval(() => setTime(new Date()), 1000);
 
     return () => {
+      socket.off('sessions_count'); // Чистимо слухач подій сокету
       socket.disconnect();
       clearInterval(timer);
     };
@@ -32,7 +34,8 @@ export default function Layout() {
     i18n.changeLanguage(lng);
   };
 
-  const currentLang = i18n.language === 'ru' ? 'ru-RU' : 'en-US';
+  // Використовуємо поточну мову i18n безпосередньо для форматування дат
+  const currentLang = i18n.language;
 
   const getLinkClass = ({ isActive }: { isActive: boolean }) =>
     `layout__nav-link ${isActive ? 'layout__nav-link--active' : ''}`;
@@ -49,7 +52,7 @@ export default function Layout() {
           <div className="layout__search-wrapper">
             <input 
               type="text" 
-              placeholder={t('layout.searchPlaceholder', { defaultValue: 'Поиск' })}
+              placeholder={t('layout.searchPlaceholder', { defaultValue: 'Search' })}
               className="layout__search-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
