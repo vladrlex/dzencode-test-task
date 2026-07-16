@@ -264,3 +264,136 @@
   overflow-y: auto;
   box-sizing: border-box;
 }
+
+@media (max-width: 1024px) {
+  .layout__header {
+    padding: 0 20px;
+    height: 65px;
+  }
+
+  .layout__left-side {
+    gap: 20px;
+  }
+
+  .layout__search-input {
+    width: 180px;
+  }
+
+  .layout__top-info {
+    gap: 15px;
+  }
+
+  .layout__date-weekday {
+    display: none;
+  }
+
+  .layout__time-wrapper {
+    min-width: auto;
+    gap: 12px;
+  }
+
+  .layout__sidebar {
+    width: 80px;
+    padding-top: 20px;
+  }
+
+  .layout__user-name {
+    display: none;
+  }
+
+  .layout__user-avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .layout__user-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .layout__avatar-settings {
+    width: 18px;
+    height: 18px;
+  }
+
+  .layout__nav-link {
+    padding: 12px 10px;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .layout__content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout__time-wrapper {
+    display: none;
+  }
+
+  .layout__sessions {
+    display: none;
+  }
+
+  .layout__body {
+    flex-direction: column;
+  }
+
+  .layout__sidebar {
+    width: 100%;
+    height: auto;
+    padding-top: 0;
+    box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.05);
+    order: 2;
+    z-index: 100;
+  }
+
+  .layout__user-section {
+    display: none;
+  }
+
+  .layout__navigation {
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 0;
+  }
+
+  .layout__nav-link {
+    flex: 1;
+    padding: 16px 0;
+    text-align: center;
+    border-bottom: none;
+    border-top: 2px solid transparent;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .layout__nav-link--active {
+    border-top-color: #8bc34a;
+    border-bottom-color: transparent;
+  }
+
+  .layout__content {
+    padding: 15px;
+    flex: 1;
+    order: 1;
+  }
+
+  .layout__header {
+    padding: 0 10px;
+    height: 60px;
+  }
+
+  .layout__logo {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  .layout__search-input {
+    width: 100px;
+    padding: 6px 10px;
+  }
+}

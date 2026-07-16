@@ -200,3 +200,59 @@
 .btn-add-product:hover {
   background-color: var(--primary-hover);
 }
+
+@media (max-width: 768px) {
+  .orders__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .orders__list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .order-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    padding: 16px;
+    gap: 12px;
+    align-items: stretch;
+    box-sizing: border-box;
+  }
+
+  .order-card__title {
+    font-size: 14px;
+    margin-right: 24px;
+  }
+
+  .order-card__products {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .order-card__date {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .order-card__price {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+}
+
