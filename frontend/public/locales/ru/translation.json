@@ -31,6 +31,10 @@
     "serialNumberLabel": "Серийный номер",
     "priceUsdLabel": "Цена USD",
     "priceUahLabel": "Цена UAH",
+    "specificationLabel": "Спецификация",
+    "conditionLabel": "Состояние",
+    "conditionNew": "Новый",
+    "conditionUsed": "Б/У",
     "placeholderTitle": "например, Новая поставка",
     "placeholderDesc": "например, Мониторы Dell",
     "placeholderProductTitle": "например, Монитор",
@@ -38,9 +42,10 @@
     "placeholderSerialNumber": "например, 12345",
     "placeholderPriceUsd": "например, 100",
     "placeholderPriceUah": "например, 2600",
+    "cancel": "Отмена",
     "save": "Сохранить",
-    "saveProduct": "Сохранить продукт",
-    "updateProduct": "Обновить продукт"
+    "saveProduct": "Добавить",
+    "updateProduct": "Сохранить"
   },
   "modals": {
     "deleteTitle": "Вы уверены, что хотите удалить этот приход?",

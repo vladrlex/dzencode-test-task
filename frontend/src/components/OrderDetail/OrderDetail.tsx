@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../store/hooks';
 import { type Product, removeProductServer } from '../../store/productsSlice';
 import CloseButton from '../Buttons/CloseButton/CloseButton';
 import EditIcon from '../Icons/EditIcon';
 import DeleteButton from '../Buttons/DeleteButton/DeleteButton';
+import DeleteOrderModal from '../DeleteOrderModal/DeleteOrderModal';
 import './OrderDetail.css';
 
 interface OrderDetailProps {
@@ -17,22 +19,33 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const handleDeleteProduct = async (productId: number) => {
-    if (window.confirm(t('modals.confirmDeleteProduct'))) {
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [productToDelete, setProductToDelete] = useState<{ id: number; title: string } | null>(null);
+
+  const handleDeleteProductClick = (productId: number, productTitle: string) => {
+    setProductToDelete({ id: productId, title: productTitle });
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (productToDelete) {
       try {
-        await dispatch(removeProductServer(productId)).unwrap();
+        await dispatch(removeProductServer(productToDelete.id)).unwrap();
       } catch (error) {
         console.error('Failed to delete product:', error);
+      } finally {
+        setDeleteModalOpen(false);
+        setProductToDelete(null);
       }
     }
   };
 
   return (
     <div className="order-detail">
-      <CloseButton 
-        onClick={onClose} 
-        className="order-detail__close-pos" 
-        ariaLabel="Close details" 
+      <CloseButton
+        onClick={onClose}
+        className="order-detail__close-pos"
+        ariaLabel="Close details"
       />
       <h3 className="order-detail__title">{orderTitle}</h3>
       <div className="order-detail__list">
@@ -48,22 +61,22 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
                   <div className="order-detail__item-sn">SN: {product.serialNumber}</div>
                 </div>
               </div>
-              
+
               <div className={`order-detail__item-condition ${product.isNew ? 'order-detail__item-condition--new' : ''}`}>
                 {product.isNew ? t('productCard.new') : t('productCard.used')}
               </div>
 
               <div className="order-detail__item-actions">
-                <button 
-                  className="btn-action btn-edit" 
+                <button
+                  className="btn-action btn-edit"
                   title={t('orders.modalProductEditTitle')}
                   onClick={() => onEditProduct(product)}
                 >
                   <EditIcon size={16} />
                 </button>
-                
-                <DeleteButton 
-                  onClick={() => handleDeleteProduct(product.id)}
+
+                <DeleteButton
+                  onClick={() => handleDeleteProductClick(product.id, product.title)} // Передаємо id та назву продукту
                   ariaLabel="Delete Product"
                   size={16}
                 />
@@ -72,6 +85,18 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
           ))
         )}
       </div>
+
+      {deleteModalOpen && (
+        <DeleteOrderModal
+          onClose={() => {
+            setDeleteModalOpen(false);
+            setProductToDelete(null);
+          }}
+          onConfirm={handleConfirmDelete}
+          title={t('modals.confirmDeleteProduct', { defaultValue: 'Are you sure you want to delete this product?' })}
+          itemName={productToDelete?.title}
+        />
+      )}
     </div>
   );
 }

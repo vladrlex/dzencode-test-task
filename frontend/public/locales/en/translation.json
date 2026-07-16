@@ -31,6 +31,10 @@
     "serialNumberLabel": "Serial Number",
     "priceUsdLabel": "Price USD",
     "priceUahLabel": "Price UAH",
+    "specificationLabel": "Specification",
+    "conditionLabel": "Condition",
+    "conditionNew": "New",
+    "conditionUsed": "Used",
     "placeholderTitle": "e.g. New Shipment",
     "placeholderDesc": "e.g. Dell Monitors",
     "placeholderProductTitle": "e.g. Monitor",
@@ -38,9 +42,10 @@
     "placeholderSerialNumber": "e.g. 12345",
     "placeholderPriceUsd": "e.g. 100",
     "placeholderPriceUah": "e.g. 2600",
+    "cancel": "Cancel",
     "save": "Save",
-    "saveProduct": "Save Product",
-    "updateProduct": "Update Product"
+    "saveProduct": "Add",
+    "updateProduct": "Save"
   },
   "modals": {
     "deleteTitle": "Are you sure you want to delete this order?",
