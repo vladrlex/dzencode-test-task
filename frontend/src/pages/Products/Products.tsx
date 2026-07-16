@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchProducts, removeProductServer } from '../../store/productsSlice';
 import { fetchOrders } from '../../store/ordersSlice';
 import ProductCard from '../../components/ProductCard/ProductCard';
+import DeleteOrderModal from '../../components/DeleteOrderModal/DeleteOrderModal';
 import './Products.css';
 
 export default function Products() {
@@ -15,6 +16,8 @@ export default function Products() {
 
   const [selectedType, setSelectedType] = useState<string>('All');
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [productToDelete, setProductToDelete] = useState<{ id: number; title: string } | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,12 +35,20 @@ export default function Products() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleDeleteProduct = async (productId: number) => {
-    if (window.confirm(t('modals.confirmDeleteProduct'))) {
+  const handleDeleteProduct = (productId: number, productTitle: string) => {
+    setProductToDelete({ id: productId, title: productTitle });
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (productToDelete) {
       try {
-        await dispatch(removeProductServer(productId)).unwrap();
+        await dispatch(removeProductServer(productToDelete.id)).unwrap();
       } catch (error) {
         console.error('Failed to delete product:', error);
+      } finally {
+        setDeleteModalOpen(false);
+        setProductToDelete(null);
       }
     }
   };
@@ -108,12 +119,24 @@ export default function Products() {
                 key={product.id}
                 product={product}
                 orderTitle={orderTitle}
-                onDelete={handleDeleteProduct}
+                onDelete={(id) => handleDeleteProduct(id, product.title)}
               />
             );
           })}
         </div>
       </div>
+
+      {deleteModalOpen && (
+        <DeleteOrderModal
+          onClose={() => {
+            setDeleteModalOpen(false);
+            setProductToDelete(null);
+          }}
+          onConfirm={handleConfirmDelete}
+          title={t('modals.confirmDeleteProduct', { defaultValue: 'Are you sure you want to delete this product?' })}
+          itemName={productToDelete?.title}
+        />
+      )}
     </div>
   );
 }
