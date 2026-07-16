@@ -10,7 +10,7 @@ export default function Products() {
   const products = useAppSelector((state) => state.products.items);
   const orders = useAppSelector((state) => state.orders.items);
   const loading = useAppSelector((state) => state.products.loading || state.orders.loading);
-  
+
   const [selectedType, setSelectedType] = useState<string>('All');
 
   useEffect(() => {
@@ -18,7 +18,13 @@ export default function Products() {
     dispatch(fetchOrders());
   }, [dispatch]);
 
-  if (loading) return <div className="products__loading">Loading products...</div>;
+  if (loading) {
+    return (
+      <div className="lazy-fallback-container">
+        <div className="lazy-spinner"></div>
+      </div>
+    );
+  }
 
   if (!products || products.length === 0) {
     return (
@@ -31,15 +37,15 @@ export default function Products() {
 
   const productTypes = ['All', ...new Set(products.map((p) => p.type))];
 
-  const filteredProducts = selectedType === 'All' 
-    ? products 
+  const filteredProducts = selectedType === 'All'
+    ? products
     : products.filter((p) => p.type === selectedType);
 
   return (
     <div className="products">
       <div className="products__header">
         <h2 className="products__title">Products / {filteredProducts.length}</h2>
-        
+
         <div className="products__filter">
           <span className="products__filter-label">Filter by type:</span>
           <select
@@ -60,9 +66,9 @@ export default function Products() {
           const orderTitle = parentOrder ? parentOrder.title : 'Unknown Order';
 
           return (
-            <ProductCard 
-              key={product.id} 
-              product={product} 
+            <ProductCard
+              key={product.id}
+              product={product}
               orderTitle={orderTitle}
             />
           );

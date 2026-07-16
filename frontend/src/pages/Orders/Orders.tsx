@@ -54,7 +54,13 @@ export default function Orders() {
     setProductToEdit(null);
   };
 
-  if (loading) return <div className="orders__loading">Loading data...</div>;
+  if (loading) {
+    return (
+      <div className="lazy-fallback-container">
+        <div className="lazy-spinner"></div>
+      </div>
+    );
+  }
 
   const selectedOrder = orders.find((o) => o.id === selectedOrderId);
   const selectedOrderProducts = products.filter((p) => p.order === selectedOrderId);
@@ -119,8 +125,8 @@ export default function Orders() {
         {selectedOrderId && selectedOrder && (
           <div className="order-detail">
             <div className="order-detail__actions">
-              <button 
-                className="btn-add-product" 
+              <button
+                className="btn-add-product"
                 onClick={() => {
                   setProductToEdit(null);
                   setIsProductFormOpen(true);
@@ -129,7 +135,7 @@ export default function Orders() {
                 + Add Product
               </button>
             </div>
-            
+
             <OrderDetail
               orderTitle={selectedOrder.title}
               products={selectedOrderProducts}
@@ -145,9 +151,9 @@ export default function Orders() {
 
       {isProductFormOpen && selectedOrderId && (
         <Modal title={productToEdit ? "Edit Product" : "Add New Product"} onClose={handleCloseProductModal}>
-          <AddProductForm 
-            orderId={selectedOrderId} 
-            onClose={handleCloseProductModal} 
+          <AddProductForm
+            orderId={selectedOrderId}
+            onClose={handleCloseProductModal}
             productToEdit={productToEdit}
           />
         </Modal>
