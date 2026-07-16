@@ -79,7 +79,6 @@ export default function Products() {
   return (
     <div className="products">
       <div className="products__header">
-        {/* Заголовок з перекладом */}
         <h2 className="products__title">{t('products.title')} / {filteredProducts.length}</h2>
 
         <div className="products__filter">
