@@ -6,7 +6,7 @@
   "orders": {
     "title": "Приходы",
     "loading": "Загрузка данных...",
-    "addOrderBtn": "Новый приход",
+    "addOrderBtn": "+ Новый приход",
     "cancelBtn": "Отмена",
     "addProductBtn": "+ Добавить продукт",
     "productsCountLabel": "Продукты",

@@ -19,11 +19,17 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
     type: productToEdit?.type || '',
     serialNumber: productToEdit?.serialNumber || '',
     priceUsd: productToEdit?.price.find(p => p.symbol === 'USD')?.value || '',
-    priceUah: productToEdit?.price.find(p => p.symbol === 'UAH')?.value || ''
+    priceUah: productToEdit?.price.find(p => p.symbol === 'UAH')?.value || '',
+    specification: productToEdit?.specification || 'Standard',
+    isNew: productToEdit ? String(productToEdit.isNew) : '1'
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const today = new Date();
+    const twoYearsLater = new Date();
+    twoYearsLater.setFullYear(today.getFullYear() + 2);
 
     const productData = {
       title: formData.title,
@@ -34,11 +40,14 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
         { value: Number(formData.priceUsd), symbol: 'USD', isDefault: 0 },
         { value: Number(formData.priceUah), symbol: 'UAH', isDefault: 1 }
       ],
-      isNew: productToEdit ? productToEdit.isNew : 1,
-      date: productToEdit ? productToEdit.date : new Date().toISOString(),
+      isNew: Number(formData.isNew),
+      date: productToEdit ? productToEdit.date : today.toISOString(),
       photo: productToEdit ? productToEdit.photo : 'pathToFile.jpg',
-      specification: productToEdit ? productToEdit.specification : 'Standard',
-      guarantee: productToEdit ? productToEdit.guarantee : { start: new Date().toISOString(), end: new Date().toISOString() }
+      specification: formData.specification,
+      guarantee: productToEdit ? productToEdit.guarantee : { 
+        start: today.toISOString(), 
+        end: twoYearsLater.toISOString() 
+      }
     };
 
     try {
@@ -55,13 +64,10 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
 
   return (
     <form className="add-product-form" onSubmit={handleSubmit}>
-      <h2 style={{ margin: '0 0 15px 0', fontSize: '18px' }}>
-        {productToEdit ? t('orders.modalProductEditTitle') : t('orders.modalProductAddTitle')}
-      </h2>
-
       <div className="add-product-form__group">
-        <label>{t('forms.productTitleLabel')}</label>
+        <label htmlFor="product-title">{t('forms.productTitleLabel')}</label>
         <input 
+          id="product-title"
           type="text" 
           minLength={3} 
           value={formData.title} 
@@ -72,8 +78,9 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
       </div>
       
       <div className="add-product-form__group">
-        <label>{t('forms.typeLabel')}</label>
+        <label htmlFor="product-type">{t('forms.typeLabel')}</label>
         <input 
+          id="product-type"
           type="text" 
           value={formData.type} 
           placeholder={t('forms.placeholderType')} 
@@ -83,8 +90,9 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
       </div>
       
       <div className="add-product-form__group">
-        <label>{t('forms.serialNumberLabel')}</label>
+        <label htmlFor="product-sn">{t('forms.serialNumberLabel')}</label>
         <input 
+          id="product-sn"
           type="number" 
           min="1" 
           value={formData.serialNumber} 
@@ -93,10 +101,36 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
           onChange={(e) => setFormData({ ...formData, serialNumber: e.target.value })} 
         />
       </div>
+
+      <div className="add-product-form__group">
+        <label htmlFor="product-spec">{t('forms.specificationLabel', { defaultValue: 'Specification' })}</label>
+        <input 
+          id="product-spec"
+          type="text" 
+          value={formData.specification} 
+          placeholder="e.g. Intel X58, ATX" 
+          required 
+          onChange={(e) => setFormData({ ...formData, specification: e.target.value })} 
+        />
+      </div>
+
+      <div className="add-product-form__group">
+        <label htmlFor="product-condition">{t('forms.conditionLabel', { defaultValue: 'Condition' })}</label>
+        <select 
+          id="product-condition"
+          value={formData.isNew}
+          className="add-product-form__select"
+          onChange={(e) => setFormData({ ...formData, isNew: e.target.value })}
+        >
+          <option value="1">New</option>
+          <option value="0">Used</option>
+        </select>
+      </div>
       
       <div className="add-product-form__group">
-        <label>{t('forms.priceUsdLabel')}</label>
+        <label htmlFor="product-usd">{t('forms.priceUsdLabel')}</label>
         <input 
+          id="product-usd"
           type="number" 
           min="0" 
           step="0.01" 
@@ -108,8 +142,9 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
       </div>
       
       <div className="add-product-form__group">
-        <label>{t('forms.priceUahLabel')}</label>
+        <label htmlFor="product-uah">{t('forms.priceUahLabel')}</label>
         <input 
+          id="product-uah"
           type="number" 
           min="0" 
           step="0.01" 

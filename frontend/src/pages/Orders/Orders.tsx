@@ -9,10 +9,12 @@ import OrderDetail from '../../components/OrderDetail/OrderDetail';
 import DeleteOrderModal from '../../components/DeleteOrderModal/DeleteOrderModal';
 import Modal from '../../components/Modal/Modal';
 import AddProductForm from '../../components/AddProductForm/AddProductForm';
+import ListIcon from '../../components/Icons/ListIcon';
+import DeleteButton from '../../components/Buttons/DeleteButton/DeleteButton';
 import './Orders.css';
 
 export default function Orders() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orders.items);
   const products = useAppSelector((state) => state.products.items);
@@ -77,7 +79,7 @@ export default function Orders() {
       )}
 
       <div className="orders__content">
-        <div className={`orders__list ${selectedOrderId ? 'orders__list--shrink' : ''}`}>
+        <div className={`orders__list stagger-list ${selectedOrderId ? 'orders__list--shrink' : ''}`}>
           {orders.map((order) => {
             const orderProducts = products.filter((p) => p.order === order.id);
             const count = orderProducts.length;
@@ -90,29 +92,34 @@ export default function Orders() {
                 onClick={() => setSelectedOrderId(order.id)}
                 className={`order-card ${selectedOrderId === order.id ? 'order-card--active' : ''}`}
               >
-                <div className="order-card__icon">📋</div>
+                <div className="order-card__icon">
+                  <ListIcon size={18} className="order-card__icon-svg" />
+                </div>
+                
                 <div className="order-card__title">{order.title}</div>
+                
                 <div className="order-card__products">
-                  <div>{count}</div>
-                  <div style={{ fontSize: '10px', color: '#999' }}>{t('orders.productsCountLabel')}</div>
+                  <div className="order-card__products-count">{count}</div>
+                  <div className="order-card__products-label">{t('orders.productsCountLabel')}</div>
                 </div>
+
                 <div className="order-card__date">
-                  <div>{formatDateNumeric(order.date)}</div>
-                  <div style={{ fontWeight: 'bold' }}>{formatDateFull(order.date)}</div>
+                  <div className="order-card__date-secondary">{formatDateNumeric(order.date)}</div>
+                  <div className="order-card__date-main">{formatDateFull(order.date, i18n.language)}</div>
                 </div>
+
                 <div className="order-card__price">
-                  <div>{usd} $</div>
-                  <div style={{ fontSize: '11px', color: '#999' }}>{uah} UAH</div>
+                  <div className="order-card__price-usd">{usd} $</div>
+                  <div className="order-card__price-uah">{uah} UAH</div>
                 </div>
-                <button
-                  className="order-card__delete"
+
+                <DeleteButton
                   onClick={(e) => {
                     e.stopPropagation();
                     setDeleteTargetId(order.id);
                   }}
-                >
-                  🗑️
-                </button>
+                  ariaLabel="Delete order"
+                />
               </div>
             );
           })}

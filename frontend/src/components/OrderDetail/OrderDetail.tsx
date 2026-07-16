@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../store/hooks';
 import { type Product, removeProductServer } from '../../store/productsSlice';
+import CloseButton from '../Buttons/CloseButton/CloseButton';
+import EditIcon from '../Icons/EditIcon';
+import DeleteButton from '../Buttons/DeleteButton/DeleteButton';
 import './OrderDetail.css';
 
 interface OrderDetailProps {
@@ -26,9 +29,11 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
 
   return (
     <div className="order-detail">
-      <button className="order-detail__close" onClick={onClose}>
-        ✕
-      </button>
+      <CloseButton 
+        onClick={onClose} 
+        className="order-detail__close-pos" 
+        ariaLabel="Close details" 
+      />
       <h3 className="order-detail__title">{orderTitle}</h3>
       <div className="order-detail__list">
         {products.length === 0 ? (
@@ -54,15 +59,14 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
                   title={t('orders.modalProductEditTitle')}
                   onClick={() => onEditProduct(product)}
                 >
-                  ✏️
+                  <EditIcon size={16} />
                 </button>
-                <button 
-                  className="btn-action btn-delete" 
-                  title="Delete Product"
+                
+                <DeleteButton 
                   onClick={() => handleDeleteProduct(product.id)}
-                >
-                  🗑️
-                </button>
+                  ariaLabel="Delete Product"
+                  size={16}
+                />
               </div>
             </div>
           ))

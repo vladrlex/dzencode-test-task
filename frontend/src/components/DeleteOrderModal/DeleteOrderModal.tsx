@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import '../DeleteOrderModal/DeteleOrderModal.css';
+import CloseButton from '../Buttons/CloseButton/CloseButton';
+import './DeteleOrderModal.css';
 
 interface DeleteOrderModalProps {
   onClose: () => void;
@@ -12,9 +13,12 @@ export default function DeleteOrderModal({ onClose, onConfirm }: DeleteOrderModa
   return (
     <div className="delete-modal">
       <div className="delete-modal__content">
-        <button className="delete-modal__close" onClick={onClose}>
-          ✕
-        </button>
+        <CloseButton
+          onClick={onClose}
+          className="delete-modal__close-pos"
+          ariaLabel="Close delete modal"
+        />
+
         <h4 className="delete-modal__title">{t('modals.deleteTitle')}</h4>
         <p className="delete-modal__text">{t('modals.deleteText')}</p>
         <div className="delete-modal__actions">

@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { io } from 'socket.io-client';
+import ClockIcon from '../Icons/ClockIcon';
+import UserIcon from '../Icons/UserIcon';
+import ShieldLogoIcon from '../Icons/ShieldLogoIcon';
+import SettingsIcon from '../Icons/SettingsIcon';
 import './Layout.css';
 
 export default function Layout() {
   const { t, i18n } = useTranslation();
   const [activeSessions, setActiveSessions] = useState(1);
   const [time, setTime] = useState(new Date());
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const socket = io('http://localhost:5000');
@@ -35,8 +40,21 @@ export default function Layout() {
   return (
     <div className="layout">
       <header className="layout__header">
-        <div className="layout__logo-wrapper">
-          <span className="layout__logo">INVENTORY</span>
+        <div className="layout__left-side">
+          <div className="layout__logo-wrapper">
+            <ShieldLogoIcon size={32} />
+            <span className="layout__logo">INVENTORY</span>
+          </div>
+
+          <div className="layout__search-wrapper">
+            <input 
+              type="text" 
+              placeholder={t('layout.searchPlaceholder', { defaultValue: 'Поиск' })}
+              className="layout__search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
         
         <div className="layout__top-info">
@@ -55,34 +73,22 @@ export default function Layout() {
             </div>
             
             <div className="layout__clock">
-              <span>🕒</span>
+              <ClockIcon size={14} />
               {time.toLocaleTimeString(currentLang, { hour: '2-digit', minute: '2-digit', hour12: false })}
             </div>
           </div>
 
-          <div className="layout__lang-switcher" style={{ display: 'flex', gap: '5px', marginLeft: '15px' }}>
+          <div className="layout__lang-switcher">
             <button 
               onClick={() => changeLanguage('en')} 
-              style={{ 
-                fontWeight: i18n.language === 'en' ? 'bold' : 'normal',
-                cursor: 'pointer',
-                border: 'none',
-                background: 'none',
-                color: i18n.language === 'en' ? '#689f38' : '#666'
-              }}
+              className={`layout__lang-btn ${i18n.language === 'en' ? 'layout__lang-btn--active' : ''}`}
             >
               EN
             </button>
-            <span style={{ color: '#ccc' }}>|</span>
+            <span className="layout__lang-divider">|</span>
             <button 
               onClick={() => changeLanguage('ru')} 
-              style={{ 
-                fontWeight: i18n.language === 'ru' ? 'bold' : 'normal',
-                cursor: 'pointer',
-                border: 'none',
-                background: 'none',
-                color: i18n.language === 'ru' ? '#689f38' : '#666'
-              }}
+              className={`layout__lang-btn ${i18n.language === 'ru' ? 'layout__lang-btn--active' : ''}`}
             >
               RU
             </button>
@@ -92,17 +98,26 @@ export default function Layout() {
 
       <div className="layout__body">
         <nav className="layout__sidebar">
-          <div className="layout__user">
-            <div className="layout__user-avatar">👤</div>
+          <div className="layout__user-section">
+            <div className="layout__avatar-container">
+              <div className="layout__user-avatar">
+                <UserIcon size={40} className="layout__user-icon" />
+              </div>
+              <button className="layout__avatar-settings" aria-label="Settings">
+                <SettingsIcon size={12} />
+              </button>
+            </div>
             <div className="layout__user-name">{t('layout.activeUser')}</div>
           </div>
 
-          <NavLink to="/orders" className={getLinkClass}>
-            {t('navigation.orders').toUpperCase()}
-          </NavLink>
-          <NavLink to="/products" className={getLinkClass}>
-            {t('navigation.products').toUpperCase()}
-          </NavLink>
+          <div className="layout__navigation">
+            <NavLink to="/orders" className={getLinkClass}>
+              {t('navigation.orders').toUpperCase()}
+            </NavLink>
+            <NavLink to="/products" className={getLinkClass}>
+              {t('navigation.products').toUpperCase()}
+            </NavLink>
+          </div>
         </nav>
 
         <main className="layout__content">

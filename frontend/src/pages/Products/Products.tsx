@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchProducts } from '../../store/productsSlice';
+import { fetchProducts, removeProductServer } from '../../store/productsSlice';
 import { fetchOrders } from '../../store/ordersSlice';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import './Products.css';
@@ -12,13 +12,35 @@ export default function Products() {
   const products = useAppSelector((state) => state.products.items);
   const orders = useAppSelector((state) => state.orders.items);
   const loading = useAppSelector((state) => state.products.loading || state.orders.loading);
-  
+
   const [selectedType, setSelectedType] = useState<string>('All');
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchOrders());
   }, [dispatch]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleDeleteProduct = async (productId: number) => {
+    if (window.confirm(t('modals.confirmDeleteProduct'))) {
+      try {
+        await dispatch(removeProductServer(productId)).unwrap();
+      } catch (error) {
+        console.error('Failed to delete product:', error);
+      }
+    }
+  };
 
   if (loading) return <div className="products__loading">{t('products.loading')}</div>;
 
@@ -33,44 +55,64 @@ export default function Products() {
 
   const productTypes = ['All', ...new Set(products.map((p) => p.type))];
 
-  const filteredProducts = selectedType === 'All' 
-    ? products 
+  const filteredProducts = selectedType === 'All'
+    ? products
     : products.filter((p) => p.type === selectedType);
 
   return (
     <div className="products">
       <div className="products__header">
         <h2 className="products__title">{t('products.title')} / {filteredProducts.length}</h2>
-        
+
         <div className="products__filter">
           <span className="products__filter-label">{t('products.filterLabel')}</span>
-          <select
-            className="products__filter-select"
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-          >
-            {productTypes.map((type) => (
-              <option key={type} value={type}>
-                {type === 'All' ? t('products.allTypes') : type}
-              </option>
-            ))}
-          </select>
+
+          <div className="products__dropdown dropdown-custom" ref={dropdownRef}>
+            <button
+              className={`dropdown-custom__toggle ${isOpen ? 'dropdown-custom__toggle--active' : ''}`}
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <span>{selectedType === 'All' ? t('products.allTypes') : selectedType}</span>
+              <span className={`dropdown-custom__arrow ${isOpen ? 'dropdown-custom__arrow--open' : ''}`}>▼</span>
+            </button>
+
+            {isOpen && (
+              <div className="dropdown-custom__menu">
+                {productTypes.map((type) => (
+                  <div
+                    key={type}
+                    className={`dropdown-custom__item ${selectedType === type ? 'dropdown-custom__item--selected' : ''}`}
+                    onClick={() => {
+                      setSelectedType(type);
+                      setIsOpen(false);
+                    }}
+                  >
+                    {type === 'All' ? t('products.allTypes') : type}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
         </div>
       </div>
 
-      <div className="products__list">
-        {filteredProducts.map((product) => {
-          const parentOrder = orders.find((o) => o.id === product.order);
-          const orderTitle = parentOrder ? parentOrder.title : t('products.unknownOrder');
+      <div className="products__table-wrapper">
+        <div className="products__list stagger-list">
+          {filteredProducts.map((product) => {
+            const parentOrder = orders.find((o) => o.id === product.order);
+            const orderTitle = parentOrder ? parentOrder.title : t('products.unknownOrder');
 
-          return (
-            <ProductCard 
-              key={product.id} 
-              product={product} 
-              orderTitle={orderTitle}
-            />
-          );
-        })}
+            return (
+              <ProductCard
+                key={product.id}
+                product={product}
+                orderTitle={orderTitle}
+                onDelete={handleDeleteProduct}
+              />
+            );
+          })}
+        </div>
       </div>
     </div>
   );
