@@ -6,11 +6,11 @@ export const formatDateNumeric = (dateStr: string): string => {
   return `${day} / ${month}`;
 };
 
-export const formatDateFull = (dateStr: string): string => {
+export const formatDateFull = (dateStr: string, locale: string = 'ru'): string => {
   if (!dateStr) return '';
   const date = new Date(dateStr);
   const day = String(date.getDate()).padStart(2, '0');
-  const monthStr = date.toLocaleDateString('uk-UA', { month: 'short' }).replace('.', '');
+  const monthStr = date.toLocaleDateString(locale, { month: 'short' }).replace('.', '');
   const year = date.getFullYear();
   return `${day} / ${monthStr} / ${year}`;
 };

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchOrders, removeOrderServer, addOrderServer } from '../../store/ordersSlice';
 import { fetchProducts, type Product } from '../../store/productsSlice';
@@ -8,9 +9,12 @@ import OrderDetail from '../../components/OrderDetail/OrderDetail';
 import DeleteOrderModal from '../../components/DeleteOrderModal/DeleteOrderModal';
 import Modal from '../../components/Modal/Modal';
 import AddProductForm from '../../components/AddProductForm/AddProductForm';
+import ListIcon from '../../components/Icons/ListIcon';
+import DeleteButton from '../../components/Buttons/DeleteButton/DeleteButton';
 import './Orders.css';
 
 export default function Orders() {
+  const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orders.items);
   const products = useAppSelector((state) => state.products.items);
@@ -68,20 +72,20 @@ export default function Orders() {
   return (
     <div className="orders">
       <div className="orders__header">
-        <h2 className="orders__title">Orders / {orders.length}</h2>
+        <h2 className="orders__title">{t('orders.title')} / {orders.length}</h2>
         <button className="orders__add-btn" onClick={() => setIsFormOpen(!isFormOpen)}>
-          {isFormOpen ? 'Cancel' : '+ Add Order'}
+          {isFormOpen ? t('orders.cancelBtn') : t('orders.addOrderBtn')}
         </button>
       </div>
 
       {isFormOpen && (
-        <Modal title="Add New Order" onClose={() => setIsFormOpen(false)}>
+        <Modal title={t('orders.modalAddTitle')} onClose={() => setIsFormOpen(false)}>
           <OrderForm onSubmit={handleAddOrder} />
         </Modal>
       )}
 
       <div className="orders__content">
-        <div className={`orders__list ${selectedOrderId ? 'orders__list--shrink' : ''}`}>
+        <div className={`orders__list stagger-list ${selectedOrderId ? 'orders__list--shrink' : ''}`}>
           {orders.map((order) => {
             const orderProducts = products.filter((p) => p.order === order.id);
             const count = orderProducts.length;
@@ -94,29 +98,34 @@ export default function Orders() {
                 onClick={() => setSelectedOrderId(order.id)}
                 className={`order-card ${selectedOrderId === order.id ? 'order-card--active' : ''}`}
               >
-                <div className="order-card__icon">📋</div>
+                <div className="order-card__icon">
+                  <ListIcon size={18} className="order-card__icon-svg" />
+                </div>
+                
                 <div className="order-card__title">{order.title}</div>
+                
                 <div className="order-card__products">
-                  <div>{count}</div>
-                  <div style={{ fontSize: '10px', color: '#999' }}>Products</div>
+                  <div className="order-card__products-count">{count}</div>
+                  <div className="order-card__products-label">{t('orders.productsCountLabel')}</div>
                 </div>
+
                 <div className="order-card__date">
-                  <div>{formatDateNumeric(order.date)}</div>
-                  <div style={{ fontWeight: 'bold' }}>{formatDateFull(order.date)}</div>
+                  <div className="order-card__date-secondary">{formatDateNumeric(order.date)}</div>
+                  <div className="order-card__date-main">{formatDateFull(order.date, i18n.language)}</div>
                 </div>
+
                 <div className="order-card__price">
-                  <div>{usd} $</div>
-                  <div style={{ fontSize: '11px', color: '#999' }}>{uah} UAH</div>
+                  <div className="order-card__price-usd">{usd} $</div>
+                  <div className="order-card__price-uah">{uah} UAH</div>
                 </div>
-                <button
-                  className="order-card__delete"
+
+                <DeleteButton
                   onClick={(e) => {
                     e.stopPropagation();
                     setDeleteTargetId(order.id);
                   }}
-                >
-                  🗑️
-                </button>
+                  ariaLabel="Delete order"
+                />
               </div>
             );
           })}
@@ -132,7 +141,7 @@ export default function Orders() {
                   setIsProductFormOpen(true);
                 }}
               >
-                + Add Product
+                {t('orders.addProductBtn')}
               </button>
             </div>
 
@@ -150,10 +159,13 @@ export default function Orders() {
       </div>
 
       {isProductFormOpen && selectedOrderId && (
-        <Modal title={productToEdit ? "Edit Product" : "Add New Product"} onClose={handleCloseProductModal}>
-          <AddProductForm
-            orderId={selectedOrderId}
-            onClose={handleCloseProductModal}
+        <Modal 
+          title={productToEdit ? t('orders.modalProductEditTitle') : t('orders.modalProductAddTitle')} 
+          onClose={handleCloseProductModal}
+        >
+          <AddProductForm 
+            orderId={selectedOrderId} 
+            onClose={handleCloseProductModal} 
             productToEdit={productToEdit}
           />
         </Modal>

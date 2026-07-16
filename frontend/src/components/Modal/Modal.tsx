@@ -1,3 +1,4 @@
+import CloseButton from '../Buttons/CloseButton/CloseButton';
 import './Modal.css';
 
 interface ModalProps {
@@ -12,7 +13,7 @@ export default function Modal({ onClose, children, title }: ModalProps) {
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <h3>{title}</h3>
-          <button onClick={onClose}>&times;</button>
+          <CloseButton onClick={onClose} ariaLabel="Close modal" />
         </div>
         {children}
       </div>

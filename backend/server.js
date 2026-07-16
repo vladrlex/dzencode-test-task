@@ -65,7 +65,7 @@ app.post('/api/orders', (req, res) => {
   const newOrder = {
     id: newId,
     title: title || `Order ${newId}`,
-    date: new Date().toISOString().replace('T', ' ').substring(0, 19), // Формат 'YYYY-MM-DD HH:mm:ss'
+    date: new Date().toISOString().replace('T', ' ').substring(0, 19),
     description: description || 'No description'
   };
 

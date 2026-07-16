@@ -1,0 +1,69 @@
+{
+  "navigation": {
+    "orders": "Orders",
+    "products": "Products"
+  },
+  "orders": {
+    "title": "Orders",
+    "loading": "Loading data...",
+    "addOrderBtn": "+ Add Order",
+    "cancelBtn": "Cancel",
+    "addProductBtn": "+ Add Product",
+    "productsCountLabel": "Products",
+    "modalAddTitle": "Add New Order",
+    "modalProductAddTitle": "Add New Product",
+    "modalProductEditTitle": "Edit Product"
+  },
+  "products": {
+    "title": "Products",
+    "loading": "Loading products...",
+    "noProducts": "No products found",
+    "emptyText": "The products list is currently empty.",
+    "filterLabel": "Filter by type:",
+    "allTypes": "All",
+    "unknownOrder": "Unknown Order"
+  },
+  "forms": {
+    "titleLabel": "Title",
+    "descLabel": "Description",
+    "productTitleLabel": "Product Title",
+    "typeLabel": "Type",
+    "serialNumberLabel": "Serial Number",
+    "priceUsdLabel": "Price USD",
+    "priceUahLabel": "Price UAH",
+    "specificationLabel": "Specification",
+    "conditionLabel": "Condition",
+    "conditionNew": "New",
+    "conditionUsed": "Used",
+    "placeholderTitle": "e.g. New Shipment",
+    "placeholderDesc": "e.g. Dell Monitors",
+    "placeholderProductTitle": "e.g. Monitor",
+    "placeholderType": "e.g. Monitors",
+    "placeholderSerialNumber": "e.g. 12345",
+    "placeholderPriceUsd": "e.g. 100",
+    "placeholderPriceUah": "e.g. 2600",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saveProduct": "Add",
+    "updateProduct": "Save"
+  },
+  "modals": {
+    "deleteTitle": "Are you sure you want to delete this order?",
+    "deleteText": "This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "confirmDeleteProduct": "Are you sure you want to delete this product?"
+  },
+"layout": {
+  "activeSessions": "Active sessions:",
+  "activeUser": "Active User",
+  "searchPlaceholder": "Search"
+},
+  "productCard": {
+    "new": "New",
+    "used": "Used",
+    "from": "from",
+    "to": "to",
+    "noProductsInOrder": "No products in this order."
+  }
+}
