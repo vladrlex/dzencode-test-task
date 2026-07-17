@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useOutletContext } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchProducts, removeProductServer } from '../../store/productsSlice';
 import { fetchOrders } from '../../store/ordersSlice';
@@ -10,6 +11,7 @@ import './Products.css';
 export default function Products() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { searchQuery } = useOutletContext<{ searchQuery: string }>();
   const products = useAppSelector((state) => state.products.items);
   const orders = useAppSelector((state) => state.orders.items);
   const loading = useAppSelector((state) => state.products.loading || state.orders.loading);
@@ -61,6 +63,14 @@ export default function Products() {
     );
   }
 
+  const productTypes = ['All', ...new Set(products.map((p) => p.type))];
+
+  const filteredProducts = products.filter((p) => {
+    const matchesType = selectedType === 'All' || p.type === selectedType;
+    const matchesSearch = p.title.toLowerCase().includes((searchQuery || '').toLowerCase());
+    return matchesType && matchesSearch;
+  });
+
   if (!products || products.length === 0) {
     return (
       <div className="products__empty">
@@ -69,12 +79,6 @@ export default function Products() {
       </div>
     );
   }
-
-  const productTypes = ['All', ...new Set(products.map((p) => p.type))];
-
-  const filteredProducts = selectedType === 'All'
-    ? products
-    : products.filter((p) => p.type === selectedType);
 
   return (
     <div className="products">
@@ -110,7 +114,6 @@ export default function Products() {
               </div>
             )}
           </div>
-
         </div>
       </div>
 

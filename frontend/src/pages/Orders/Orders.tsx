@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useOutletContext } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchOrders, removeOrderServer, addOrderServer } from '../../store/ordersSlice';
 import { fetchProducts, type Product } from '../../store/productsSlice';
@@ -16,6 +17,7 @@ import './Orders.css';
 export default function Orders() {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
+  const { searchQuery } = useOutletContext<{ searchQuery: string }>();
   const orders = useAppSelector((state) => state.orders.items);
   const products = useAppSelector((state) => state.products.items);
   const loading = useAppSelector((state) => state.orders.loading || state.products.loading);
@@ -69,10 +71,14 @@ export default function Orders() {
   const selectedOrder = orders.find((o) => o.id === selectedOrderId);
   const selectedOrderProducts = products.filter((p) => p.order === selectedOrderId);
 
+  const filteredOrders = orders.filter((order) => 
+    order.title.toLowerCase().includes((searchQuery || '').toLowerCase())
+  );
+
   return (
     <div className="orders">
       <div className="orders__header">
-        <h2 className="orders__title">{t('orders.title')} / {orders.length}</h2>
+        <h2 className="orders__title">{t('orders.title')} / {filteredOrders.length}</h2>
         <button className="orders__add-btn" onClick={() => setIsFormOpen(!isFormOpen)}>
           {isFormOpen ? t('orders.cancelBtn') : t('orders.addOrderBtn')}
         </button>
@@ -86,7 +92,7 @@ export default function Orders() {
 
       <div className="orders__content">
         <div className={`orders__list stagger-list ${selectedOrderId ? 'orders__list--shrink' : ''}`}>
-          {orders.map((order) => {
+          {filteredOrders.map((order) => {
             const orderProducts = products.filter((p) => p.order === order.id);
             const count = orderProducts.length;
             const usd = orderProducts.reduce((sum, p) => sum + (p.price.find((pr) => pr.symbol === 'USD')?.value || 0), 0);

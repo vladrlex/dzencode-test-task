@@ -13,10 +13,21 @@ export default function Layout() {
   const [activeSessions, setActiveSessions] = useState(1);
   const [time, setTime] = useState(new Date());
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
 
   useEffect(() => {
     const socket = io('http://localhost:5000');
-    
+
     socket.on('sessions_count', (count: number) => {
       setActiveSessions(count);
     });
@@ -24,7 +35,7 @@ export default function Layout() {
     const timer = setInterval(() => setTime(new Date()), 1000);
 
     return () => {
-      socket.off('sessions_count'); // Чистимо слухач подій сокету
+      socket.off('sessions_count');
       socket.disconnect();
       clearInterval(timer);
     };
@@ -34,7 +45,6 @@ export default function Layout() {
     i18n.changeLanguage(lng);
   };
 
-  // Використовуємо поточну мову i18n безпосередньо для форматування дат
   const currentLang = i18n.language;
 
   const getLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -50,8 +60,8 @@ export default function Layout() {
           </div>
 
           <div className="layout__search-wrapper">
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder={t('layout.searchPlaceholder', { defaultValue: 'Search' })}
               className="layout__search-input"
               value={searchQuery}
@@ -59,12 +69,12 @@ export default function Layout() {
             />
           </div>
         </div>
-        
+
         <div className="layout__top-info">
           <div className="layout__sessions">
             {t('layout.activeSessions')} <strong className="layout__sessions-count">{activeSessions}</strong>
           </div>
-          
+
           <div className="layout__time-wrapper">
             <div className="layout__date">
               <div className="layout__date-weekday">
@@ -74,7 +84,7 @@ export default function Layout() {
                 {time.toLocaleDateString(currentLang, { day: '2-digit', month: 'short', year: 'numeric' })}
               </div>
             </div>
-            
+
             <div className="layout__clock">
               <ClockIcon size={14} />
               {time.toLocaleTimeString(currentLang, { hour: '2-digit', minute: '2-digit', hour12: false })}
@@ -82,15 +92,15 @@ export default function Layout() {
           </div>
 
           <div className="layout__lang-switcher">
-            <button 
-              onClick={() => changeLanguage('en')} 
+            <button
+              onClick={() => changeLanguage('en')}
               className={`layout__lang-btn ${i18n.language === 'en' ? 'layout__lang-btn--active' : ''}`}
             >
               EN
             </button>
             <span className="layout__lang-divider">|</span>
-            <button 
-              onClick={() => changeLanguage('ru')} 
+            <button
+              onClick={() => changeLanguage('ru')}
               className={`layout__lang-btn ${i18n.language === 'ru' ? 'layout__lang-btn--active' : ''}`}
             >
               RU
@@ -124,7 +134,7 @@ export default function Layout() {
         </nav>
 
         <main className="layout__content">
-          <Outlet />
+          <Outlet context={{ searchQuery: debouncedQuery }} />
         </main>
       </div>
     </div>
