@@ -4,7 +4,7 @@ CREATE TABLE `orders` (
   `date` DATETIME NOT NULL,
   `description` TEXT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+ 
 CREATE TABLE `products` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `serialNumber` INT NOT NULL,
@@ -13,13 +13,15 @@ CREATE TABLE `products` (
   `title` VARCHAR(255) NOT NULL,
   `type` VARCHAR(100) NOT NULL,
   `specification` TEXT NULL,
+  `guarantee_start` DATETIME NULL,
+  `guarantee_end` DATETIME NULL,
   `order_id` INT NOT NULL,
   `date` DATETIME NOT NULL,
   CONSTRAINT `fk_products_orders`
     FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
-    ON DELETE CASCADE 
+    ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+ 
 CREATE TABLE `prices` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `product_id` INT NOT NULL,
@@ -30,3 +32,4 @@ CREATE TABLE `prices` (
     FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+ 

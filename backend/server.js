@@ -2,135 +2,32 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
+
+const { seedIfEmpty } = require('./seed');
+const { registerSessionSocket } = require('./sockets/sessions');
+const ordersRouter = require('./routes/orders');
+const productsRouter = require('./routes/products');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use('/api/orders', ordersRouter);
+app.use('/api/products', productsRouter);
+
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: '*' }
+  cors: { origin: '*' },
 });
 
-const DATA_FILE = path.join(__dirname, 'data.json');
+registerSessionSocket(io);
 
-function readData() {
-  try {
-    const fileData = fs.readFileSync(DATA_FILE, 'utf8');
-    return JSON.parse(fileData);
-  } catch (error) {
-    console.error('Error reading data.json:', error);
-    return { products: [], orders: [] };
-  }
-}
+const PORT = process.env.PORT || 5000;
 
-function writeData(data) {
-  try {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
-  } catch (error) {
-    console.error('Error writing to data.json:', error);
-  }
-}
-
-app.get('/api/orders', (req, res) => {
-  const data = readData();
-  res.json(data.orders);
-});
-
-app.get('/api/products', (req, res) => {
-  const data = readData();
-  res.json(data.products);
-});
-
-app.delete('/api/orders/:id', (req, res) => {
-  const orderId = parseInt(req.params.id);
-  const data = readData();
-
-  data.orders = data.orders.filter((o) => o.id !== orderId);
-  data.products = data.products.filter((p) => p.order !== orderId);
-
-  writeData(data);
-
-  res.status(200).json({ success: true, id: orderId });
-});
-
-app.post('/api/orders', (req, res) => {
-  const { title, description } = req.body;
-  const data = readData();
-
-  const newId = data.orders.length > 0 ? Math.max(...data.orders.map(o => o.id)) + 1 : 1;
-
-  const newOrder = {
-    id: newId,
-    title: title || `Order ${newId}`,
-    date: new Date().toISOString().replace('T', ' ').substring(0, 19),
-    description: description || 'No description'
-  };
-
-  data.orders.push(newOrder);
-  writeData(data);
-
-  res.status(201).json(newOrder);
-});
-
-app.post('/api/products', (req, res) => {
-  const newProductData = req.body;
-  const data = readData();
-
-  const newId = data.products.length > 0 ? Math.max(...data.products.map(p => p.id)) + 1 : 1;
-
-  const newProduct = {
-    ...newProductData,
-    id: newId
-  };
-
-  data.products.push(newProduct);
-  writeData(data);
-
-  res.status(201).json(newProduct);
-});
-
-app.delete('/api/products/:id', (req, res) => {
-  const productId = parseInt(req.params.id);
-  const data = readData();
-
-  data.products = data.products.filter((p) => p.id !== productId);
-  writeData(data);
-
-  res.status(200).json({ id: productId });
-});
-
-app.put('/api/products/:id', (req, res) => {
-  const productId = parseInt(req.params.id);
-  const updatedData = req.body;
-  const data = readData();
-
-  const index = data.products.findIndex((p) => p.id === productId);
-
-  if (index !== -1) {
-    data.products[index] = { ...data.products[index], ...updatedData, id: productId };
-    writeData(data);
-    res.status(200).json(data.products[index]);
-  } else {
-    res.status(404).json({ error: 'Product not found' });
-  }
-});
-
-let activeSessions = 0;
-
-io.on('connection', (socket) => {
-  activeSessions++;
-  io.emit('sessions_count', activeSessions);
-
-  socket.on('disconnect', () => {
-    activeSessions = Math.max(0, activeSessions - 1);
-    io.emit('sessions_count', activeSessions);
+seedIfEmpty()
+  .catch((error) => console.error('Seeding failed:', error))
+  .finally(() => {
+    server.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
   });
-});
-
-const PORT = 5000;
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
