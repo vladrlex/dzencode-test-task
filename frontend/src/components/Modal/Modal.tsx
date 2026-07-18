@@ -15,7 +15,9 @@ export default function Modal({ onClose, children, title }: ModalProps) {
           <h3>{title}</h3>
           <CloseButton onClick={onClose} ariaLabel="Close modal" />
         </div>
-        {children}
+        <div className="modal-body-scroll">
+          {children}
+        </div>
       </div>
     </div>
   );
