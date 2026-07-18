@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavLink, Outlet, useSearchParams } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { io } from 'socket.io-client';
 import { API_URL } from '../../config/config';
@@ -11,6 +11,7 @@ import './Layout.css';
 
 export default function Layout() {
   const { t, i18n } = useTranslation();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeSessions, setActiveSessions] = useState(1);
   const [time, setTime] = useState(new Date());
@@ -150,7 +151,9 @@ export default function Layout() {
         </nav>
 
         <main className="layout__content">
-          <Outlet context={{ searchQuery: debouncedQuery }} />
+          <div key={location.pathname} className="route-transition">
+            <Outlet context={{ searchQuery: debouncedQuery }} />
+          </div>
         </main>
       </div>
     </div>
