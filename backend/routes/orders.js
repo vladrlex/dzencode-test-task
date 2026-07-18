@@ -5,7 +5,18 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const [orders] = await pool.query('SELECT * FROM orders ORDER BY id');
+    const { search } = req.query;
+    let sql = 'SELECT * FROM orders';
+    const params = [];
+
+    if (search) {
+      sql += ' WHERE title LIKE ?';
+      params.push(`%${search}%`);
+    }
+
+    sql += ' ORDER BY id';
+
+    const [orders] = await pool.query(sql, params);
     res.json(orders);
   } catch (error) {
     console.error('GET /api/orders error:', error);

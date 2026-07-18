@@ -20,8 +20,10 @@ const initialState: OrdersState = {
   error: null,
 };
 
-export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
-  const response = await axios.get('http://localhost:5000/api/orders');
+export const fetchOrders = createAsyncThunk('orders/fetchOrders', async (search?: string) => {
+  const response = await axios.get('http://localhost:5000/api/orders', {
+    params: search ? { search } : {},
+  });
   return response.data;
 });
 

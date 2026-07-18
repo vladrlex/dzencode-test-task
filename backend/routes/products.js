@@ -39,8 +39,27 @@ async function getProductWithPrices(productId) {
 
 router.get('/', async (req, res) => {
   try {
-    const [products] = await pool.query('SELECT * FROM products');
-    const [prices] = await pool.query('SELECT * FROM prices');
+    const { search } = req.query;
+    let sql = 'SELECT * FROM products';
+    const params = [];
+
+    if (search) {
+      sql += ' WHERE title LIKE ?';
+      params.push(`%${search}%`);
+    }
+
+    const [products] = await pool.query(sql, params);
+
+    if (!products.length) {
+      return res.json([]);
+    }
+
+    const productIds = products.map((p) => p.id);
+    const placeholders = productIds.map(() => '?').join(',');
+    const [prices] = await pool.query(
+      `SELECT * FROM prices WHERE product_id IN (${placeholders})`,
+      productIds
+    );
 
     const pricesByProduct = {};
     for (const p of prices) {

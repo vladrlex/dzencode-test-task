@@ -23,7 +23,10 @@ export default function Products() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(fetchProducts(searchQuery));
+  }, [dispatch, searchQuery]);
+
+  useEffect(() => {
     dispatch(fetchOrders());
   }, [dispatch]);
 
@@ -65,11 +68,7 @@ export default function Products() {
 
   const productTypes = ['All', ...new Set(products.map((p) => p.type))];
 
-  const filteredProducts = products.filter((p) => {
-    const matchesType = selectedType === 'All' || p.type === selectedType;
-    const matchesSearch = p.title.toLowerCase().includes((searchQuery || '').toLowerCase());
-    return matchesType && matchesSearch;
-  });
+  const filteredProducts = products.filter((p) => selectedType === 'All' || p.type === selectedType);
 
   if (!products || products.length === 0) {
     return (

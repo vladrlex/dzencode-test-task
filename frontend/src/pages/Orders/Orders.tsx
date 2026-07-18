@@ -29,7 +29,10 @@ export default function Orders() {
   const [productToEdit, setProductToEdit] = useState<Product | null>(null);
 
   useEffect(() => {
-    dispatch(fetchOrders());
+    dispatch(fetchOrders(searchQuery));
+  }, [dispatch, searchQuery]);
+
+  useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
@@ -71,14 +74,10 @@ export default function Orders() {
   const selectedOrder = orders.find((o) => o.id === selectedOrderId);
   const selectedOrderProducts = products.filter((p) => p.order === selectedOrderId);
 
-  const filteredOrders = orders.filter((order) => 
-    order.title.toLowerCase().includes((searchQuery || '').toLowerCase())
-  );
-
   return (
     <div className="orders">
       <div className="orders__header">
-        <h2 className="orders__title">{t('orders.title')} / {filteredOrders.length}</h2>
+        <h2 className="orders__title">{t('orders.title')} / {orders.length}</h2>
         <button className="orders__add-btn" onClick={() => setIsFormOpen(!isFormOpen)}>
           {isFormOpen ? t('orders.cancelBtn') : t('orders.addOrderBtn')}
         </button>
@@ -92,7 +91,7 @@ export default function Orders() {
 
       <div className="orders__content">
         <div className={`orders__list stagger-list ${selectedOrderId ? 'orders__list--shrink' : ''}`}>
-          {filteredOrders.map((order) => {
+          {orders.map((order) => {
             const orderProducts = products.filter((p) => p.order === order.id);
             const count = orderProducts.length;
             const usd = orderProducts.reduce((sum, p) => sum + (p.price.find((pr) => pr.symbol === 'USD')?.value || 0), 0);
@@ -107,9 +106,9 @@ export default function Orders() {
                 <div className="order-card__icon">
                   <ListIcon size={18} className="order-card__icon-svg" />
                 </div>
-                
+
                 <div className="order-card__title">{order.title}</div>
-                
+
                 <div className="order-card__products">
                   <div className="order-card__products-count">{count}</div>
                   <div className="order-card__products-label">{t('orders.productsCountLabel')}</div>
@@ -165,13 +164,13 @@ export default function Orders() {
       </div>
 
       {isProductFormOpen && selectedOrderId && (
-        <Modal 
-          title={productToEdit ? t('orders.modalProductEditTitle') : t('orders.modalProductAddTitle')} 
+        <Modal
+          title={productToEdit ? t('orders.modalProductEditTitle') : t('orders.modalProductAddTitle')}
           onClose={handleCloseProductModal}
         >
-          <AddProductForm 
-            orderId={selectedOrderId} 
-            onClose={handleCloseProductModal} 
+          <AddProductForm
+            orderId={selectedOrderId}
+            onClose={handleCloseProductModal}
             productToEdit={productToEdit}
           />
         </Modal>
