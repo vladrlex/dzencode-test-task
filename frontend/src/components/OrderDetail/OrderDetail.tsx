@@ -13,9 +13,10 @@ interface OrderDetailProps {
   products: Product[];
   onClose: () => void;
   onEditProduct: (product: Product) => void;
+  onAddProduct: () => void;
 }
 
-export default function OrderDetail({ orderTitle, products, onClose, onEditProduct }: OrderDetailProps) {
+export default function OrderDetail({ orderTitle, products, onClose, onEditProduct, onAddProduct }: OrderDetailProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -48,6 +49,13 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
         ariaLabel="Close details"
       />
       <h3 className="order-detail__title">{orderTitle}</h3>
+
+      <div className="order-detail__actions">
+        <button className="btn-add-product" onClick={onAddProduct}>
+          {t('orders.addProductBtn')}
+        </button>
+      </div>
+
       <div className="order-detail__list">
         {products.length === 0 ? (
           <div className="order-detail__empty">{t('productCard.noProductsInOrder')}</div>
@@ -76,7 +84,7 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
                 </button>
 
                 <DeleteButton
-                  onClick={() => handleDeleteProductClick(product.id, product.title)} // Передаємо id та назву продукту
+                  onClick={() => handleDeleteProductClick(product.id, product.title)}
                   ariaLabel="Delete Product"
                   size={16}
                 />

@@ -183,35 +183,27 @@ export default function Orders() {
         </div>
 
         {selectedOrderId && selectedOrder && (
-          <div className="order-detail">
-            <div className="order-detail__actions">
-              <button
-                className="btn-add-product"
-                onClick={() => {
-                  setProductToEdit(null);
-                  setIsProductFormOpen(true);
-                }}
-              >
-                {t('orders.addProductBtn')}
-              </button>
-            </div>
-
-            {productsLoading ? (
+          productsLoading ? (
+            <div className="order-detail">
               <div className="lazy-fallback-container">
                 <div className="lazy-spinner"></div>
               </div>
-            ) : (
-              <OrderDetail
-                orderTitle={selectedOrder.title}
-                products={orderProducts}
-                onClose={() => setSelectedOrderId(null)}
-                onEditProduct={(product) => {
-                  setProductToEdit(product);
-                  setIsProductFormOpen(true);
-                }}
-              />
-            )}
-          </div>
+            </div>
+          ) : (
+            <OrderDetail
+              orderTitle={selectedOrder.title}
+              products={orderProducts}
+              onClose={() => setSelectedOrderId(null)}
+              onEditProduct={(product) => {
+                setProductToEdit(product);
+                setIsProductFormOpen(true);
+              }}
+              onAddProduct={() => {
+                setProductToEdit(null);
+                setIsProductFormOpen(true);
+              }}
+            />
+          )
         )}
       </div>
 
