@@ -70,7 +70,7 @@ router.get('/', async (req, res) => {
          FROM products p
          LEFT JOIN orders o ON o.id = p.order_id
          WHERE p.order_id = ?
-         ORDER BY p.id`,
+         ORDER BY p.id DESC`,
         [parseInt(order, 10)]
       );
       const items = await attachPrices(products);
@@ -107,7 +107,7 @@ router.get('/', async (req, res) => {
        FROM products p
        LEFT JOIN orders o ON o.id = p.order_id
        ${whereClause}
-       ORDER BY p.id
+       ORDER BY p.id DESC
        LIMIT ? OFFSET ?`,
       [...whereParams, limit, offset]
     );

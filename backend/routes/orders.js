@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
       LEFT JOIN prices pc ON pc.product_id = pr.id
       ${whereClause}
       GROUP BY o.id
-      ORDER BY o.id
+      ORDER BY o.id DESC
       LIMIT ? OFFSET ?`,
       [...whereParams, limit, offset]
     );
