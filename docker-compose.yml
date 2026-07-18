@@ -39,7 +39,10 @@ services:
         condition: service_healthy
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:5000}
     container_name: dzencode-frontend
     ports:
       - "3000:80"

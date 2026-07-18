@@ -1,41 +1,63 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { API_URL } from '../config/config';
 
 export interface Order {
   id: number;
   title: string;
   date: string;
   description: string;
+  productsCount: number;
+  totalUsd: number;
+  totalUah: number;
+}
+
+export interface OrdersQuery {
+  search?: string;
+  page?: number;
+  limit?: number;
 }
 
 interface OrdersState {
   items: Order[];
   loading: boolean;
   error: string | null;
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
 }
 
 const initialState: OrdersState = {
   items: [],
   loading: false,
   error: null,
+  page: 1,
+  limit: 30,
+  total: 0,
+  totalPages: 1,
 };
 
-export const fetchOrders = createAsyncThunk('orders/fetchOrders', async (search?: string) => {
-  const response = await axios.get('http://localhost:5000/api/orders', {
-    params: search ? { search } : {},
+export const fetchOrders = createAsyncThunk('orders/fetchOrders', async (query: OrdersQuery = {}) => {
+  const response = await axios.get(`${API_URL}/api/orders`, {
+    params: {
+      ...(query.search ? { search: query.search } : {}),
+      page: query.page ?? 1,
+      limit: query.limit ?? 30,
+    },
   });
   return response.data;
 });
 
 export const removeOrderServer = createAsyncThunk('orders/removeOrderServer', async (id: number) => {
-  await axios.delete(`http://localhost:5000/api/orders/${id}`);
+  await axios.delete(`${API_URL}/api/orders/${id}`);
   return id;
 });
 
 export const addOrderServer = createAsyncThunk(
   'orders/addOrderServer',
   async (payload: { title: string; description: string }) => {
-    const response = await axios.post('http://localhost:5000/api/orders', payload);
+    const response = await axios.post(`${API_URL}/api/orders`, payload);
     return response.data;
   }
 );
@@ -56,7 +78,11 @@ const ordersSlice = createSlice({
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload;
+        state.items = action.payload.items;
+        state.page = action.payload.page;
+        state.limit = action.payload.limit;
+        state.total = action.payload.total;
+        state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchOrders.rejected, (state, action) => {
         state.loading = false;

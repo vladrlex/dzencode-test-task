@@ -6,18 +6,52 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const { search } = req.query;
-    let sql = 'SELECT * FROM orders';
-    const params = [];
+    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+    const limit = Math.max(parseInt(req.query.limit, 10) || 30, 1);
+    const offset = (page - 1) * limit;
+
+    let whereClause = '';
+    const whereParams = [];
 
     if (search) {
-      sql += ' WHERE title LIKE ?';
-      params.push(`%${search}%`);
+      whereClause = ' WHERE o.title LIKE ?';
+      whereParams.push(`%${search}%`);
     }
 
-    sql += ' ORDER BY id';
+    const [countRows] = await pool.query(
+      `SELECT COUNT(*) as total FROM orders o${whereClause}`,
+      whereParams
+    );
+    const total = countRows[0].total;
 
-    const [orders] = await pool.query(sql, params);
-    res.json(orders);
+    const [orders] = await pool.query(
+      `SELECT
+        o.*,
+        COUNT(DISTINCT pr.id) AS productsCount,
+        COALESCE(SUM(CASE WHEN pc.symbol = 'USD' THEN pc.value END), 0) AS totalUsd,
+        COALESCE(SUM(CASE WHEN pc.symbol = 'UAH' THEN pc.value END), 0) AS totalUah
+      FROM orders o
+      LEFT JOIN products pr ON pr.order_id = o.id
+      LEFT JOIN prices pc ON pc.product_id = pr.id
+      ${whereClause}
+      GROUP BY o.id
+      ORDER BY o.id
+      LIMIT ? OFFSET ?`,
+      [...whereParams, limit, offset]
+    );
+
+    res.json({
+      items: orders.map((row) => ({
+        ...row,
+        productsCount: Number(row.productsCount),
+        totalUsd: Number(row.totalUsd),
+        totalUah: Number(row.totalUah),
+      })),
+      total,
+      page,
+      limit,
+      totalPages: Math.max(Math.ceil(total / limit), 1),
+    });
   } catch (error) {
     console.error('GET /api/orders error:', error);
     res.status(500).json({ error: 'Failed to fetch orders' });
@@ -35,7 +69,7 @@ router.post('/', async (req, res) => {
     );
 
     const [rows] = await pool.query('SELECT * FROM orders WHERE id = ?', [result.insertId]);
-    res.status(201).json(rows[0]);
+    res.status(201).json({ ...rows[0], productsCount: 0, totalUsd: 0, totalUah: 0 });
   } catch (error) {
     console.error('POST /api/orders error:', error);
     res.status(500).json({ error: 'Failed to create order' });

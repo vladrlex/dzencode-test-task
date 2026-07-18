@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { API_URL } from '../config/config';
 import { deleteOrder } from './ordersSlice';
 
 export interface Price {
@@ -24,32 +25,62 @@ export interface Product {
   guarantee: Guarantee;
   price: Price[];
   order: number;
+  orderTitle?: string;
   date: string;
+}
+
+export interface ProductsQuery {
+  search?: string;
+  page?: number;
+  limit?: number;
+  order?: number;
+  type?: string;
 }
 
 interface ProductsState {
   items: Product[];
   loading: boolean;
   error: string | null;
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  types: string[];
 }
 
 const initialState: ProductsState = {
   items: [],
   loading: false,
   error: null,
+  page: 1,
+  limit: 30,
+  total: 0,
+  totalPages: 1,
+  types: [],
 };
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async (search?: string) => {
-  const response = await axios.get('http://localhost:5000/api/products', {
-    params: search ? { search } : {},
+export const fetchProducts = createAsyncThunk('products/fetchProducts', async (query: ProductsQuery = {}) => {
+  const response = await axios.get(`${API_URL}/api/products`, {
+    params: {
+      ...(query.search ? { search: query.search } : {}),
+      ...(query.order ? { order: query.order } : {}),
+      ...(query.type && query.type !== 'All' ? { type: query.type } : {}),
+      page: query.page ?? 1,
+      limit: query.limit ?? 30,
+    },
   });
   return response.data;
+});
+
+export const fetchProductTypes = createAsyncThunk('products/fetchProductTypes', async () => {
+  const response = await axios.get(`${API_URL}/api/products/meta/types`);
+  return response.data as string[];
 });
 
 export const addProductServer = createAsyncThunk(
   'products/addProductServer',
   async (product: Omit<Product, 'id'>) => {
-    const response = await axios.post('http://localhost:5000/api/products', product);
+    const response = await axios.post(`${API_URL}/api/products`, product);
     return response.data;
   }
 );
@@ -57,7 +88,7 @@ export const addProductServer = createAsyncThunk(
 export const removeProductServer = createAsyncThunk(
   'products/removeProductServer',
   async (id: number) => {
-    await axios.delete(`http://localhost:5000/api/products/${id}`);
+    await axios.delete(`${API_URL}/api/products/${id}`);
     return id;
   }
 );
@@ -65,7 +96,7 @@ export const removeProductServer = createAsyncThunk(
 export const updateProductServer = createAsyncThunk(
   'products/updateProductServer',
   async (product: Product) => {
-    const response = await axios.put(`http://localhost:5000/api/products/${product.id}`, product);
+    const response = await axios.put(`${API_URL}/api/products/${product.id}`, product);
     return response.data;
   }
 );
@@ -82,7 +113,11 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload;
+        state.items = action.payload.items;
+        state.page = action.payload.page;
+        state.limit = action.payload.limit;
+        state.total = action.payload.total;
+        state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
@@ -102,6 +137,9 @@ const productsSlice = createSlice({
       })
       .addCase(deleteOrder, (state, action) => {
         state.items = state.items.filter((product) => product.order !== action.payload);
+      })
+      .addCase(fetchProductTypes.fulfilled, (state, action) => {
+        state.types = action.payload;
       });
   },
 });

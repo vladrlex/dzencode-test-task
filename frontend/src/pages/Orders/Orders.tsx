@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchOrders, removeOrderServer, addOrderServer } from '../../store/ordersSlice';
 import { fetchProducts, type Product } from '../../store/productsSlice';
@@ -12,34 +12,73 @@ import Modal from '../../components/Modal/Modal';
 import AddProductForm from '../../components/AddProductForm/AddProductForm';
 import ListIcon from '../../components/Icons/ListIcon';
 import DeleteButton from '../../components/Buttons/DeleteButton/DeleteButton';
+import Pagination from '../../components/Pagination/Pagination';
 import './Orders.css';
 
 export default function Orders() {
   const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const orders = useAppSelector((state) => state.orders.items);
-  const products = useAppSelector((state) => state.products.items);
-  const loading = useAppSelector((state) => state.orders.loading || state.products.loading);
+  const ordersPage = useAppSelector((state) => state.orders.page);
+  const ordersLimit = useAppSelector((state) => state.orders.limit);
+  const ordersTotalPages = useAppSelector((state) => state.orders.totalPages);
+  const ordersLoading = useAppSelector((state) => state.orders.loading);
+
+  const orderProducts = useAppSelector((state) => state.products.items);
+  const productsLoading = useAppSelector((state) => state.products.loading);
 
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isProductFormOpen, setIsProductFormOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState<Product | null>(null);
+  const [page, setPageState] = useState(Number(searchParams.get('page')) || 1);
+  const [limit, setLimitState] = useState(Number(searchParams.get('limit')) || 30);
+
+  const setPage = (newPage: number) => {
+    setPageState(newPage);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set('page', String(newPage));
+      return next;
+    });
+  };
+
+  const setLimit = (newLimit: number) => {
+    setLimitState(newLimit);
+    setPageState(1);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set('limit', String(newLimit));
+      next.set('page', '1');
+      return next;
+    });
+  };
 
   useEffect(() => {
-    dispatch(fetchOrders(searchQuery));
-  }, [dispatch, searchQuery]);
+    setPageState(1);
+  }, [searchQuery]);
 
   useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+    dispatch(fetchOrders({ search: searchQuery, page, limit }));
+  }, [dispatch, searchQuery, page, limit]);
+
+  useEffect(() => {
+    if (selectedOrderId) {
+      dispatch(fetchProducts({ order: selectedOrderId }));
+    }
+  }, [dispatch, selectedOrderId]);
+
+  const refetchOrders = () => dispatch(fetchOrders({ search: searchQuery, page, limit }));
 
   const handleAddOrder = async (title: string, description: string) => {
     try {
       await dispatch(addOrderServer({ title, description })).unwrap();
       setIsFormOpen(false);
+      refetchOrders();
     } catch (error) {
       console.error(error);
     }
@@ -54,6 +93,7 @@ export default function Orders() {
       } finally {
         if (selectedOrderId === deleteTargetId) setSelectedOrderId(null);
         setDeleteTargetId(null);
+        refetchOrders();
       }
     }
   };
@@ -63,7 +103,13 @@ export default function Orders() {
     setProductToEdit(null);
   };
 
-  if (loading) {
+  const handleProductSaved = () => {
+    handleCloseProductModal();
+    if (selectedOrderId) dispatch(fetchProducts({ order: selectedOrderId }));
+    refetchOrders();
+  };
+
+  if (ordersLoading) {
     return (
       <div className="lazy-fallback-container">
         <div className="lazy-spinner"></div>
@@ -72,7 +118,6 @@ export default function Orders() {
   }
 
   const selectedOrder = orders.find((o) => o.id === selectedOrderId);
-  const selectedOrderProducts = products.filter((p) => p.order === selectedOrderId);
 
   return (
     <div className="orders">
@@ -91,49 +136,50 @@ export default function Orders() {
 
       <div className="orders__content">
         <div className={`orders__list stagger-list ${selectedOrderId ? 'orders__list--shrink' : ''}`}>
-          {orders.map((order) => {
-            const orderProducts = products.filter((p) => p.order === order.id);
-            const count = orderProducts.length;
-            const usd = orderProducts.reduce((sum, p) => sum + (p.price.find((pr) => pr.symbol === 'USD')?.value || 0), 0);
-            const uah = orderProducts.reduce((sum, p) => sum + (p.price.find((pr) => pr.symbol === 'UAH')?.value || 0), 0);
-
-            return (
-              <div
-                key={order.id}
-                onClick={() => setSelectedOrderId(order.id)}
-                className={`order-card ${selectedOrderId === order.id ? 'order-card--active' : ''}`}
-              >
-                <div className="order-card__icon">
-                  <ListIcon size={18} className="order-card__icon-svg" />
-                </div>
-
-                <div className="order-card__title">{order.title}</div>
-
-                <div className="order-card__products">
-                  <div className="order-card__products-count">{count}</div>
-                  <div className="order-card__products-label">{t('orders.productsCountLabel')}</div>
-                </div>
-
-                <div className="order-card__date">
-                  <div className="order-card__date-secondary">{formatDateNumeric(order.date)}</div>
-                  <div className="order-card__date-main">{formatDateFull(order.date, i18n.language)}</div>
-                </div>
-
-                <div className="order-card__price">
-                  <div className="order-card__price-usd">{usd} $</div>
-                  <div className="order-card__price-uah">{uah} UAH</div>
-                </div>
-
-                <DeleteButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setDeleteTargetId(order.id);
-                  }}
-                  ariaLabel="Delete order"
-                />
+          {orders.map((order) => (
+            <div
+              key={order.id}
+              onClick={() => setSelectedOrderId(order.id)}
+              className={`order-card ${selectedOrderId === order.id ? 'order-card--active' : ''}`}
+            >
+              <div className="order-card__icon">
+                <ListIcon size={18} className="order-card__icon-svg" />
               </div>
-            );
-          })}
+
+              <div className="order-card__title">{order.title}</div>
+
+              <div className="order-card__products">
+                <div className="order-card__products-count">{order.productsCount}</div>
+                <div className="order-card__products-label">{t('orders.productsCountLabel')}</div>
+              </div>
+
+              <div className="order-card__date">
+                <div className="order-card__date-secondary">{formatDateNumeric(order.date)}</div>
+                <div className="order-card__date-main">{formatDateFull(order.date, i18n.language)}</div>
+              </div>
+
+              <div className="order-card__price">
+                <div className="order-card__price-usd">{order.totalUsd} $</div>
+                <div className="order-card__price-uah">{order.totalUah} UAH</div>
+              </div>
+
+              <DeleteButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDeleteTargetId(order.id);
+                }}
+                ariaLabel="Delete order"
+              />
+            </div>
+          ))}
+
+          <Pagination
+            page={ordersPage}
+            totalPages={ordersTotalPages}
+            limit={ordersLimit}
+            onPageChange={setPage}
+            onLimitChange={setLimit}
+          />
         </div>
 
         {selectedOrderId && selectedOrder && (
@@ -150,15 +196,21 @@ export default function Orders() {
               </button>
             </div>
 
-            <OrderDetail
-              orderTitle={selectedOrder.title}
-              products={selectedOrderProducts}
-              onClose={() => setSelectedOrderId(null)}
-              onEditProduct={(product) => {
-                setProductToEdit(product);
-                setIsProductFormOpen(true);
-              }}
-            />
+            {productsLoading ? (
+              <div className="lazy-fallback-container">
+                <div className="lazy-spinner"></div>
+              </div>
+            ) : (
+              <OrderDetail
+                orderTitle={selectedOrder.title}
+                products={orderProducts}
+                onClose={() => setSelectedOrderId(null)}
+                onEditProduct={(product) => {
+                  setProductToEdit(product);
+                  setIsProductFormOpen(true);
+                }}
+              />
+            )}
           </div>
         )}
       </div>
@@ -170,7 +222,7 @@ export default function Orders() {
         >
           <AddProductForm
             orderId={selectedOrderId}
-            onClose={handleCloseProductModal}
+            onClose={handleProductSaved}
             productToEdit={productToEdit}
           />
         </Modal>

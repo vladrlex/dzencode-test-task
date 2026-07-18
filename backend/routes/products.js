@@ -19,62 +19,121 @@ function mapProductRow(row, pricesByProduct) {
     },
     price: pricesByProduct[row.id] || [],
     order: row.order_id,
+    orderTitle: row.orderTitle,
     date: row.date,
   };
 }
 
+async function attachPrices(products) {
+  if (!products.length) return [];
+
+  const productIds = products.map((p) => p.id);
+  const placeholders = productIds.map(() => '?').join(',');
+  const [prices] = await pool.query(
+    `SELECT * FROM prices WHERE product_id IN (${placeholders})`,
+    productIds
+  );
+
+  const pricesByProduct = {};
+  for (const p of prices) {
+    if (!pricesByProduct[p.product_id]) pricesByProduct[p.product_id] = [];
+    pricesByProduct[p.product_id].push({
+      value: Number(p.value),
+      symbol: p.symbol,
+      isDefault: p.isDefault,
+    });
+  }
+
+  return products.map((row) => mapProductRow(row, pricesByProduct));
+}
+
 async function getProductWithPrices(productId) {
-  const [rows] = await pool.query('SELECT * FROM products WHERE id = ?', [productId]);
+  const [rows] = await pool.query(
+    `SELECT p.*, o.title AS orderTitle
+     FROM products p
+     LEFT JOIN orders o ON o.id = p.order_id
+     WHERE p.id = ?`,
+    [productId]
+  );
   if (!rows.length) return null;
-
-  const [priceRows] = await pool.query('SELECT * FROM prices WHERE product_id = ?', [productId]);
-  const prices = priceRows.map((p) => ({
-    value: Number(p.value),
-    symbol: p.symbol,
-    isDefault: p.isDefault,
-  }));
-
-  return mapProductRow(rows[0], { [productId]: prices });
+  const [mapped] = await attachPrices(rows);
+  return mapped;
 }
 
 router.get('/', async (req, res) => {
   try {
-    const { search } = req.query;
-    let sql = 'SELECT * FROM products';
-    const params = [];
+    const { search, order, type } = req.query;
+
+    if (order) {
+      const [products] = await pool.query(
+        `SELECT p.*, o.title AS orderTitle
+         FROM products p
+         LEFT JOIN orders o ON o.id = p.order_id
+         WHERE p.order_id = ?
+         ORDER BY p.id`,
+        [parseInt(order, 10)]
+      );
+      const items = await attachPrices(products);
+      return res.json({ items, total: items.length, page: 1, limit: items.length || 1, totalPages: 1 });
+    }
+
+    const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
+    const limit = Math.max(parseInt(req.query.limit, 10) || 30, 1);
+    const offset = (page - 1) * limit;
+
+    const conditions = [];
+    const whereParams = [];
 
     if (search) {
-      sql += ' WHERE title LIKE ?';
-      params.push(`%${search}%`);
+      conditions.push('p.title LIKE ?');
+      whereParams.push(`%${search}%`);
     }
 
-    const [products] = await pool.query(sql, params);
-
-    if (!products.length) {
-      return res.json([]);
+    if (type && type !== 'All') {
+      conditions.push('p.type = ?');
+      whereParams.push(type);
     }
 
-    const productIds = products.map((p) => p.id);
-    const placeholders = productIds.map(() => '?').join(',');
-    const [prices] = await pool.query(
-      `SELECT * FROM prices WHERE product_id IN (${placeholders})`,
-      productIds
+    const whereClause = conditions.length ? ` WHERE ${conditions.join(' AND ')}` : '';
+
+    const [countRows] = await pool.query(
+      `SELECT COUNT(*) as total FROM products p${whereClause}`,
+      whereParams
+    );
+    const total = countRows[0].total;
+
+    const [products] = await pool.query(
+      `SELECT p.*, o.title AS orderTitle
+       FROM products p
+       LEFT JOIN orders o ON o.id = p.order_id
+       ${whereClause}
+       ORDER BY p.id
+       LIMIT ? OFFSET ?`,
+      [...whereParams, limit, offset]
     );
 
-    const pricesByProduct = {};
-    for (const p of prices) {
-      if (!pricesByProduct[p.product_id]) pricesByProduct[p.product_id] = [];
-      pricesByProduct[p.product_id].push({
-        value: Number(p.value),
-        symbol: p.symbol,
-        isDefault: p.isDefault,
-      });
-    }
+    const items = await attachPrices(products);
 
-    res.json(products.map((row) => mapProductRow(row, pricesByProduct)));
+    res.json({
+      items,
+      total,
+      page,
+      limit,
+      totalPages: Math.max(Math.ceil(total / limit), 1),
+    });
   } catch (error) {
     console.error('GET /api/products error:', error);
     res.status(500).json({ error: 'Failed to fetch products' });
+  }
+});
+
+router.get('/meta/types', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT DISTINCT type FROM products ORDER BY type');
+    res.json(rows.map((r) => r.type));
+  } catch (error) {
+    console.error('GET /api/products/meta/types error:', error);
+    res.status(500).json({ error: 'Failed to fetch product types' });
   }
 });
 

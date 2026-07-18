@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { io } from 'socket.io-client';
+import { API_URL } from '../../config/config';
 import ClockIcon from '../Icons/ClockIcon';
 import UserIcon from '../Icons/UserIcon';
 import ShieldLogoIcon from '../Icons/ShieldLogoIcon';
@@ -10,23 +11,38 @@ import './Layout.css';
 
 export default function Layout() {
   const { t, i18n } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeSessions, setActiveSessions] = useState(1);
   const [time, setTime] = useState(new Date());
-  const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+  const [debouncedQuery, setDebouncedQuery] = useState(searchParams.get('q') || '');
 
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(searchQuery);
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev);
+          if (searchQuery) {
+            next.set('q', searchQuery);
+          } else {
+            next.delete('q');
+          }
+          next.delete('page');
+          return next;
+        },
+        { replace: true }
+      );
     }, 300);
 
     return () => {
       clearTimeout(handler);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
   useEffect(() => {
-    const socket = io('http://localhost:5000');
+    const socket = io(API_URL);
 
     socket.on('sessions_count', (count: number) => {
       setActiveSessions(count);
