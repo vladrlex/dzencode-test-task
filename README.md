@@ -23,9 +23,11 @@ A single-page inventory management application for tracking **Orders** and the *
 | UI | React 19 + TypeScript |
 | State | Redux Toolkit |
 | Routing | React Router (with route-level code splitting via `React.lazy`) |
-| Auth | JWT (backend-issued, verified per-request) |
+| Auth | JWT (backend-issued, verified per-request), rate-limited login |
 | Real-time | Socket.io (active sessions counter) |
-| Styling | CSS, BEM methodology |
+| Styling | CSS (BEM methodology) + Bootstrap grid/components on the Dashboard |
+| Charts | Recharts |
+| Maps | React Leaflet + OpenStreetMap |
 | i18n | react-i18next (English / Russian) |
 | Testing | Vitest + React Testing Library |
 | Backend | Node.js + Express + MySQL (mysql2) |
@@ -38,6 +40,7 @@ A single-page inventory management application for tracking **Orders** and the *
 ### Authentication
 - The whole app sits behind a login screen. The backend issues a JWT on login; every `/api/orders` and `/api/products` request requires it.
 - Session (token + username) persists in `localStorage`, so a page refresh doesn't log you out.
+- Login is rate-limited (10 attempts / 15 min per IP) to slow down brute-force attempts.
 
 ### Top Menu
 - Live clock and current date, localized to the selected language.
@@ -46,7 +49,7 @@ A single-page inventory management application for tracking **Orders** and the *
 - Language switcher (EN/RU) — the choice persists in `localStorage`.
 
 ### Navigation Menu
-- Route links between **Orders** and **Products** pages.
+- Route links between **Orders**, **Products**, and **Dashboard** pages.
 
 ### Orders
 - Paginated list of all orders: title, product count, creation date in two formats, total sum in **USD** and **UAH**.
@@ -57,6 +60,11 @@ A single-page inventory management application for tracking **Orders** and the *
 - Paginated list of all products: name, serial number, availability status, warranty dates in different formats, specification, supplier, price in different currencies, and the parent order's name.
 - Filter by product type (select) and full-text search.
 - Add / edit / delete a product from within an order.
+
+### Dashboard
+- Bar chart (Recharts) of products per supplier with exact counts.
+- Map (React Leaflet + OpenStreetMap) plotting each supplier's city, marker size scaled by product count, with a popup showing the exact figure.
+- Built with Bootstrap grid/cards, scoped to this page only — the rest of the app keeps its own hand-built BEM styling.
 
 ### i18n
 - Full English/Russian translation coverage, including form placeholders and accessibility labels.
@@ -100,7 +108,7 @@ dzencode-test-task/
 │   └── seed*.sql, seed.js, data.json  # demo data seeding
 ├── frontend/
 │   ├── src/
-│   │   ├── pages/        # Orders, Products, Login
+│   │   ├── pages/        # Orders, Products, Dashboard, Login
 │   │   ├── components/   # Layout, Modal, ProductCard, forms, etc.
 │   │   ├── store/        # Redux slices (orders, products, auth)
 │   │   └── i18n/, utils/, config/
@@ -132,7 +140,7 @@ docker-compose up --build
 ```bash
 cd backend
 npm install
-# create a .env with DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NAME and JWT_SECRET
+cp .env.example .env   # fill in DB credentials and a JWT_SECRET
 npm start
 ```
 
@@ -140,6 +148,7 @@ npm start
 ```bash
 cd frontend
 npm install
+cp .env.example .env   # points at http://localhost:5000 by default
 npm run dev
 ```
 
