@@ -10,6 +10,7 @@ interface AuthState {
   username: string | null;
   status: 'idle' | 'loading' | 'failed';
   error: string | null;
+  sessionChecked: boolean;
 }
 
 const initialState: AuthState = {
@@ -17,6 +18,7 @@ const initialState: AuthState = {
   username: localStorage.getItem(USERNAME_STORAGE_KEY),
   status: 'idle',
   error: null,
+  sessionChecked: false,
 };
 
 export const login = createAsyncThunk(
@@ -33,6 +35,15 @@ export const login = createAsyncThunk(
     }
   }
 );
+
+export const verifySession = createAsyncThunk('auth/verifySession', async () => {
+  if (!localStorage.getItem(TOKEN_STORAGE_KEY)) return;
+  try {
+    await axios.get(`${API_URL}/api/auth/me`);
+  } catch {
+    // a 401 here is already handled globally by the response interceptor (logs the user out)
+  }
+});
 
 const authSlice = createSlice({
   name: 'auth',
@@ -61,6 +72,12 @@ const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.status = 'failed';
         state.error = (action.payload as string) || 'Login failed';
+      })
+      .addCase(verifySession.fulfilled, (state) => {
+        state.sessionChecked = true;
+      })
+      .addCase(verifySession.rejected, (state) => {
+        state.sessionChecked = true;
       });
   },
 });

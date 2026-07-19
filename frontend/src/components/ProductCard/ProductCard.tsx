@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { Product } from '../../store/productsSlice';
+import { formatDateNumeric, formatDateFull, formatDateWithYear } from '../../utils/dateFormatter';
 import ProductIcon from '../Icons/ProductIcon';
 import DeleteButton from '../Buttons/DeleteButton/DeleteButton';
 import './ProductCard.css';
@@ -9,40 +10,6 @@ interface ProductCardProps {
   orderTitle: string;
   onDelete: (productId: number) => void;
 }
-
-const formatDateNumeric = (dateString: string): string => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day} / ${month} / ${year}`;
-};
-
-const formatDateShortDayMonth = (dateString: string): string => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  return `${day} / ${month}`;
-};
-
-const formatDateWithMonthName = (dateString: string, locale: string = 'ru'): string => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const year = date.getFullYear();
-  
-  let month = new Intl.DateTimeFormat(locale, { month: 'short' }).format(date);
-  month = month.replace('.', '');
-  
-  if (month.length > 3) {
-    month = month.substring(0, 3);
-  }
-  
-  const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
-  return `${day} / ${capitalizedMonth} / ${year}`;
-};
 
 export default function ProductCard({ product, orderTitle, onDelete }: ProductCardProps) {
   const { t, i18n } = useTranslation();
@@ -69,8 +36,8 @@ export default function ProductCard({ product, orderTitle, onDelete }: ProductCa
       </div>
 
       <div className="product-card__guarantee">
-        <div className="product-card__guarantee-label">{t('productCard.from')} {formatDateNumeric(product.guarantee.start)}</div>
-        <div className="product-card__guarantee-label">{t('productCard.to')} {formatDateNumeric(product.guarantee.end)}</div>
+        <div className="product-card__guarantee-label">{t('productCard.from')} {formatDateWithYear(product.guarantee.start)}</div>
+        <div className="product-card__guarantee-label">{t('productCard.to')} {formatDateWithYear(product.guarantee.end)}</div>
       </div>
 
       <div className={`product-card__condition ${product.isNew ? 'product-card__condition--new' : ''}`}>
@@ -95,8 +62,8 @@ export default function ProductCard({ product, orderTitle, onDelete }: ProductCa
       </div>
 
       <div className="product-card__date">
-        <div className="product-card__date-short">{formatDateShortDayMonth(product.date)}</div>
-        <div className="product-card__date-full">{formatDateWithMonthName(product.date, i18n.language)}</div>
+        <div className="product-card__date-short">{formatDateNumeric(product.date)}</div>
+        <div className="product-card__date-full">{formatDateFull(product.date, i18n.language)}</div>
       </div>
 
       <DeleteButton onClick={() => onDelete(product.id)} ariaLabel={t('a11y.delete')} size={16} />

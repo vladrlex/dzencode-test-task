@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatDateNumeric, formatDateFull } from './dateFormatter';
+import { formatDateNumeric, formatDateFull, formatDateWithYear } from './dateFormatter';
 
 describe('formatDateNumeric', () => {
   it('returns an empty string for an empty input', () => {
@@ -26,5 +26,15 @@ describe('formatDateFull', () => {
 
   it('defaults to the ru locale when none is provided', () => {
     expect(formatDateFull('2024-03-05')).toBe('05 / март / 2024');
+  });
+});
+
+describe('formatDateWithYear', () => {
+  it('returns an empty string for an empty input', () => {
+    expect(formatDateWithYear('')).toBe('');
+  });
+
+  it('formats a date as DD / MM / YYYY', () => {
+    expect(formatDateWithYear('2024-03-05')).toBe('05 / 03 / 2024');
   });
 });

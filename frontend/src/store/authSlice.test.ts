@@ -1,11 +1,12 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import reducer, { login, logout } from './authSlice';
+import reducer, { login, logout, verifySession } from './authSlice';
 
 const baseState = {
   token: null as string | null,
   username: null as string | null,
   status: 'idle' as const,
   error: null as string | null,
+  sessionChecked: true,
 };
 
 describe('authSlice', () => {
@@ -58,5 +59,21 @@ describe('authSlice', () => {
     expect(state.username).toBeNull();
     expect(localStorage.getItem('auth_token')).toBeNull();
     expect(localStorage.getItem('auth_username')).toBeNull();
+  });
+
+  it('marks the session as checked on verifySession.fulfilled', () => {
+    const state = reducer(
+      { ...baseState, sessionChecked: false },
+      verifySession.fulfilled(undefined, 'requestId', undefined)
+    );
+    expect(state.sessionChecked).toBe(true);
+  });
+
+  it('marks the session as checked even on verifySession.rejected', () => {
+    const state = reducer(
+      { ...baseState, sessionChecked: false },
+      verifySession.rejected(new Error('network error'), 'requestId', undefined)
+    );
+    expect(state.sessionChecked).toBe(true);
   });
 });
