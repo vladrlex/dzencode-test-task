@@ -73,7 +73,7 @@ export default function ProductCard({ product, orderTitle, onDelete }: ProductCa
         <div className="product-card__guarantee-label">{t('productCard.to')} {formatDateNumeric(product.guarantee.end)}</div>
       </div>
 
-      <div className="product-card__condition">
+      <div className={`product-card__condition ${product.isNew ? 'product-card__condition--new' : ''}`}>
         {product.isNew ? t('productCard.new') : t('productCard.used')}
       </div>
 

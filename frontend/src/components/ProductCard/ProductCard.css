@@ -92,6 +92,10 @@
   white-space: nowrap;
 }
 
+.product-card__condition--new {
+  color: var(--primary-color);
+}
+
 .product-card__price {
   text-align: right;
   display: flex;
