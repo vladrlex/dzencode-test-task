@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import CloseButton from '../Buttons/CloseButton/CloseButton';
 import './Modal.css';
 
@@ -8,7 +9,7 @@ interface ModalProps {
 }
 
 export default function Modal({ onClose, children, title }: ModalProps) {
-  return (
+  return createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
@@ -19,6 +20,7 @@ export default function Modal({ onClose, children, title }: ModalProps) {
           {children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
