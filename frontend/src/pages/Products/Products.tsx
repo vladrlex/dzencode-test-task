@@ -6,6 +6,7 @@ import { fetchProducts, fetchProductTypes, removeProductServer } from '../../sto
 import ProductCard from '../../components/ProductCard/ProductCard';
 import DeleteOrderModal from '../../components/DeleteOrderModal/DeleteOrderModal';
 import Pagination from '../../components/Pagination/Pagination';
+import Dropdown from '../../components/Dropdown/Dropdown';
 import './Products.css';
 
 export default function Products() {
@@ -23,12 +24,10 @@ export default function Products() {
   const productsLoading = useAppSelector((state) => state.products.loading);
 
   const [selectedType, setSelectedTypeState] = useState<string>(searchParams.get('type') || 'All');
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [productToDelete, setProductToDelete] = useState<{ id: number; title: string } | null>(null);
   const [localPage, setLocalPageState] = useState(Number(searchParams.get('page')) || 1);
   const [localLimit, setLocalLimitState] = useState(Number(searchParams.get('limit')) || 30);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const setLocalPage = (newPage: number) => {
     setLocalPageState(newPage);
@@ -84,16 +83,6 @@ export default function Products() {
     dispatch(fetchProducts({ search: searchQuery, type: selectedType, page: effectivePage, limit: localLimit }));
   }, [dispatch, searchQuery, selectedType, localPage, localLimit]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   const handleDeleteProduct = (productId: number, productTitle: string) => {
     setProductToDelete({ id: productId, title: productTitle });
     setDeleteModalOpen(true);
@@ -138,41 +127,16 @@ export default function Products() {
         <div className="products__filter">
           <span className="products__filter-label">{t('products.filterLabel')}</span>
 
-          <div className="products__dropdown dropdown-custom" ref={dropdownRef}>
-            <button
-              className={`dropdown-custom__toggle ${isOpen ? 'dropdown-custom__toggle--active' : ''}`}
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <span>{selectedType === 'All' ? t('products.allTypes') : selectedType}</span>
-              <span className={`dropdown-custom__arrow ${isOpen ? 'dropdown-custom__arrow--open' : ''}`}>▼</span>
-            </button>
-
-            {isOpen && (
-              <div className="dropdown-custom__menu">
-                <div
-                  className={`dropdown-custom__item ${selectedType === 'All' ? 'dropdown-custom__item--selected' : ''}`}
-                  onClick={() => {
-                    setSelectedType('All');
-                    setIsOpen(false);
-                  }}
-                >
-                  {t('products.allTypes')}
-                </div>
-                {productTypes.map((type) => (
-                  <div
-                    key={type}
-                    className={`dropdown-custom__item ${selectedType === type ? 'dropdown-custom__item--selected' : ''}`}
-                    onClick={() => {
-                      setSelectedType(type);
-                      setIsOpen(false);
-                    }}
-                  >
-                    {type}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <Dropdown
+            className="products__dropdown"
+            options={[
+              { value: 'All', label: t('products.allTypes') },
+              ...productTypes.map((type) => ({ value: type, label: type })),
+            ]}
+            value={selectedType}
+            onChange={setSelectedType}
+            triggerLabel={selectedType === 'All' ? t('products.allTypes') : selectedType}
+          />
         </div>
       </div>
 

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Dropdown from '../Dropdown/Dropdown';
 import './Pagination.css';
 
 interface PaginationProps {
@@ -47,18 +47,6 @@ export default function Pagination({
   onLimitChange,
 }: PaginationProps) {
   const { t } = useTranslation();
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   if (totalPages <= 1) return null;
 
@@ -71,33 +59,12 @@ export default function Pagination({
           {t('pagination.rowsPerPage', { defaultValue: 'Rows per page' })}
         </span>
 
-        <div className="pagination__dropdown dropdown-custom" ref={dropdownRef}>
-          <button
-            type="button"
-            className={`dropdown-custom__toggle ${isOpen ? 'dropdown-custom__toggle--active' : ''}`}
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            <span>{limit}</span>
-            <span className={`dropdown-custom__arrow ${isOpen ? 'dropdown-custom__arrow--open' : ''}`}>▼</span>
-          </button>
-
-          {isOpen && (
-            <div className="dropdown-custom__menu">
-              {limitOptions.map((option) => (
-                <div
-                  key={option}
-                  className={`dropdown-custom__item ${limit === option ? 'dropdown-custom__item--selected' : ''}`}
-                  onClick={() => {
-                    onLimitChange(option);
-                    setIsOpen(false);
-                  }}
-                >
-                  {option}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <Dropdown
+          className="pagination__dropdown"
+          options={limitOptions.map((option) => ({ value: option, label: option }))}
+          value={limit}
+          onChange={onLimitChange}
+        />
       </div>
 
       <div className="pagination__pages">

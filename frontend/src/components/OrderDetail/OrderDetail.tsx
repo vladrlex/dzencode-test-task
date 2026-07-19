@@ -14,9 +14,10 @@ interface OrderDetailProps {
   onClose: () => void;
   onEditProduct: (product: Product) => void;
   onAddProduct: () => void;
+  onProductDeleted: () => void;
 }
 
-export default function OrderDetail({ orderTitle, products, onClose, onEditProduct, onAddProduct }: OrderDetailProps) {
+export default function OrderDetail({ orderTitle, products, onClose, onEditProduct, onAddProduct, onProductDeleted }: OrderDetailProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -32,6 +33,7 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
     if (productToDelete) {
       try {
         await dispatch(removeProductServer(productToDelete.id)).unwrap();
+        onProductDeleted();
       } catch (error) {
         console.error('Failed to delete product:', error);
       } finally {

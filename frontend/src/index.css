@@ -124,6 +124,10 @@ code {
   font-family: inherit;
 }
 
+.dropdown-custom--full-width {
+  width: 100%;
+}
+
 .dropdown-custom__toggle {
   width: 100%;
   display: flex;

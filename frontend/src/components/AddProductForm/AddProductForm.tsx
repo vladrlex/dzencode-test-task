@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../store/hooks';
 import { addProductServer, updateProductServer, type Product } from '../../store/productsSlice';
+import Dropdown from '../Dropdown/Dropdown';
 import './AddProductForm.css';
 
 interface AddProductFormProps {
@@ -24,19 +25,6 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
     supplier: productToEdit?.supplier || '',
     isNew: productToEdit ? String(productToEdit.isNew) : '1'
   });
-
-  const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
-  const selectRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
-        setIsSelectOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -142,46 +130,17 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
 
       <div className="add-product-form__group">
         <label>{t('forms.conditionLabel', { defaultValue: 'Condition' })}</label>
-        <div className="dropdown-custom" ref={selectRef} style={{ width: '100%' }}>
-          <button
-            type="button"
-            className={`dropdown-custom__toggle ${isSelectOpen ? 'dropdown-custom__toggle--active' : ''}`}
-            onClick={() => setIsSelectOpen(!isSelectOpen)}
-            style={{ width: '100%', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-          >
-            <span>
-              {formData.isNew === '1' 
-                ? t('forms.conditionNew', { defaultValue: 'New' }) 
-                : t('forms.conditionUsed', { defaultValue: 'Used' })}
-            </span>
-            <span className={`dropdown-custom__arrow ${isSelectOpen ? 'dropdown-custom__arrow--open' : ''}`}>▼</span>
-          </button>
-
-          {isSelectOpen && (
-            <div className="dropdown-custom__menu" style={{ width: '100%', boxSizing: 'border-box', zIndex: 100 }}>
-              <div
-                className={`dropdown-custom__item ${formData.isNew === '1' ? 'dropdown-custom__item--selected' : ''}`}
-                onClick={() => {
-                  setFormData({ ...formData, isNew: '1' });
-                  setIsSelectOpen(false);
-                }}
-              >
-                {t('forms.conditionNew', { defaultValue: 'New' })}
-              </div>
-              <div
-                className={`dropdown-custom__item ${formData.isNew === '0' ? 'dropdown-custom__item--selected' : ''}`}
-                onClick={() => {
-                  setFormData({ ...formData, isNew: '0' });
-                  setIsSelectOpen(false);
-                }}
-              >
-                {t('forms.conditionUsed', { defaultValue: 'Used' })}
-              </div>
-            </div>
-          )}
-        </div>
+        <Dropdown
+          fullWidth
+          options={[
+            { value: '1', label: t('forms.conditionNew', { defaultValue: 'New' }) },
+            { value: '0', label: t('forms.conditionUsed', { defaultValue: 'Used' }) },
+          ]}
+          value={formData.isNew}
+          onChange={(isNew) => setFormData({ ...formData, isNew })}
+        />
       </div>
-      
+
       <div className="add-product-form__group">
         <label htmlFor="product-usd">{t('forms.priceUsdLabel', { defaultValue: 'Цена USD' })}</label>
         <input 

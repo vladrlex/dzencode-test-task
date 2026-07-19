@@ -4,19 +4,17 @@ import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchOrders, removeOrderServer, addOrderServer } from '../../store/ordersSlice';
 import { fetchProducts, type Product } from '../../store/productsSlice';
-import { formatDateNumeric, formatDateFull } from '../../utils/dateFormatter';
 import OrderForm from '../../components/OrderForm/OrderForm';
+import OrderCard from '../../components/OrderCard/OrderCard';
 import OrderDetail from '../../components/OrderDetail/OrderDetail';
 import DeleteOrderModal from '../../components/DeleteOrderModal/DeleteOrderModal';
 import Modal from '../../components/Modal/Modal';
 import AddProductForm from '../../components/AddProductForm/AddProductForm';
-import ListIcon from '../../components/Icons/ListIcon';
-import DeleteButton from '../../components/Buttons/DeleteButton/DeleteButton';
 import Pagination from '../../components/Pagination/Pagination';
 import './Orders.css';
 
 export default function Orders() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { searchQuery } = useOutletContext<{ searchQuery: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -145,40 +143,13 @@ export default function Orders() {
       <div className="orders__content">
         <div className={`orders__list stagger-list ${selectedOrderId ? 'orders__list--shrink' : ''}`}>
           {orders.map((order) => (
-            <div
+            <OrderCard
               key={order.id}
-              onClick={() => setSelectedOrderId(order.id)}
-              className={`order-card ${selectedOrderId === order.id ? 'order-card--active' : ''}`}
-            >
-              <div className="order-card__icon">
-                <ListIcon size={18} className="order-card__icon-svg" />
-              </div>
-
-              <div className="order-card__title">{order.title}</div>
-
-              <div className="order-card__products">
-                <div className="order-card__products-count">{order.productsCount}</div>
-                <div className="order-card__products-label">{t('orders.productsCountLabel')}</div>
-              </div>
-
-              <div className="order-card__date">
-                <div className="order-card__date-secondary">{formatDateNumeric(order.date)}</div>
-                <div className="order-card__date-main">{formatDateFull(order.date, i18n.language)}</div>
-              </div>
-
-              <div className="order-card__price">
-                <div className="order-card__price-usd">{order.totalUsd} $</div>
-                <div className="order-card__price-uah">{order.totalUah} UAH</div>
-              </div>
-
-              <DeleteButton
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDeleteTargetId(order.id);
-                }}
-                ariaLabel={t('a11y.deleteOrder')}
-              />
-            </div>
+              order={order}
+              isActive={selectedOrderId === order.id}
+              onSelect={() => setSelectedOrderId(order.id)}
+              onDelete={() => setDeleteTargetId(order.id)}
+            />
           ))}
 
           <Pagination
@@ -210,6 +181,7 @@ export default function Orders() {
                 setProductToEdit(null);
                 setIsProductFormOpen(true);
               }}
+              onProductDeleted={refetchOrders}
             />
           )
         )}
