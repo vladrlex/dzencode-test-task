@@ -168,7 +168,7 @@ export default function Orders() {
                   e.stopPropagation();
                   setDeleteTargetId(order.id);
                 }}
-                ariaLabel="Delete order"
+                ariaLabel={t('a11y.deleteOrder')}
               />
             </div>
           ))}

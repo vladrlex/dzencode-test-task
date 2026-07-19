@@ -46,7 +46,7 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
       <CloseButton
         onClick={onClose}
         className="order-detail__close-pos"
-        ariaLabel="Close details"
+        ariaLabel={t('a11y.closeDetails')}
       />
       <h3 className="order-detail__title">{orderTitle}</h3>
 
@@ -66,7 +66,7 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
                 <div className={`order-detail__item-status ${product.isNew ? 'order-detail__item-status--new' : ''}`} />
                 <div className="order-detail__item-info">
                   <div className="order-detail__item-title">{product.title}</div>
-                  <div className="order-detail__item-sn">SN: {product.serialNumber}</div>
+                  <div className="order-detail__item-sn">{t('productCard.serialNumberShort')}: {product.serialNumber}</div>
                 </div>
               </div>
 
@@ -85,7 +85,7 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
 
                 <DeleteButton
                   onClick={() => handleDeleteProductClick(product.id, product.title)}
-                  ariaLabel="Delete Product"
+                  ariaLabel={t('a11y.deleteProduct')}
                   size={16}
                 />
               </div>
