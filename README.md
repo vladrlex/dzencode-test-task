@@ -63,6 +63,30 @@ A single-page inventory management application for tracking **Orders** and the *
 
 ---
 
+## Screenshots
+
+**Orders — English / Russian UI**
+
+<img src="docs/screenshots/orders_Eng.png" width="49%" /> <img src="docs/screenshots/orders_Ru.png" width="49%" />
+
+**Order detail panel**
+
+![Order detail](docs/screenshots/order_details.png)
+
+**Add product form**
+
+![Add product form](docs/screenshots/add_product_form.png)
+
+**Products — English / Russian UI**
+
+<img src="docs/screenshots/products_Eng.png" width="49%" /> <img src="docs/screenshots/products_Ru.png" width="49%" />
+
+**Dashboard — supplier chart and map**
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+---
+
 ## Project Structure
 
 ```
