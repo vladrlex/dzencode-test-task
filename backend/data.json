@@ -8,6 +8,7 @@
       "title": "Gigabyte Technology X58-USB3 (Socket 1366) 6 X58-USB3",
       "type": "Motherboards",
       "specification": "Intel X58, ATX",
+      "supplier": "MTI",
       "guarantee": {
         "start": "2017-04-06 00:00:00",
         "end": "2025-08-06 00:00:00"
@@ -35,6 +36,7 @@
       "title": "Gigabyte Technology X58-USB3 (Socket 1366) 6 X58-USB3",
       "type": "Motherboards",
       "specification": "Intel X58, ATX",
+      "supplier": "Товариство з обмеженою відповідальністю \"Технологічна Дистрибуційна Компанія Україна\"",
       "guarantee": {
         "start": "2017-04-06 00:00:00",
         "end": "2025-08-06 00:00:00"
@@ -62,6 +64,7 @@
       "title": "Dell UltraSharp U2720Q 27-inch 4K UHD",
       "type": "Monitors",
       "specification": "27 inch, 4K, IPS",
+      "supplier": "ELKO Київ",
       "guarantee": {
         "start": "2020-01-15 00:00:00",
         "end": "2023-01-15 00:00:00"
@@ -89,6 +92,7 @@
       "title": "AMD Ryzen 5 5600 6-Core 12-Thread",
       "type": "Processors",
       "specification": "Socket AM4, 65W",
+      "supplier": "Приватне підприємство \"Об'єднана Торгово-Технічна Компанія Схід-Захід\"",
       "guarantee": {
         "start": "2023-05-10 00:00:00",
         "end": "2026-05-10 00:00:00"
@@ -116,6 +120,7 @@
       "title": "NVIDIA GeForce RTX 3070 8GB GDDR6",
       "type": "Graphics Cards",
       "specification": "PCIe 4.0, 8GB",
+      "supplier": "Brain",
       "guarantee": {
         "start": "2024-02-20 00:00:00",
         "end": "2027-02-20 00:00:00"
@@ -143,6 +148,7 @@
       "title": "Samsung QE65QN800D 65\" Neo QLED 8K",
       "type": "Televisions",
       "specification": "65 inch, 8K Resolution",
+      "supplier": "Фокстрот. Техніка для дому",
       "guarantee": {
         "start": "2025-11-01 00:00:00",
         "end": "2027-11-01 00:00:00"

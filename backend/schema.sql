@@ -13,6 +13,7 @@ CREATE TABLE `products` (
   `title` VARCHAR(255) NOT NULL,
   `type` VARCHAR(100) NOT NULL,
   `specification` TEXT NULL,
+  `supplier` VARCHAR(255) NULL,
   `guarantee_start` DATETIME NULL,
   `guarantee_end` DATETIME NULL,
   `order_id` INT NOT NULL,

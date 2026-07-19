@@ -429,3 +429,22 @@ INSERT INTO products (serialNumber, isNew, photo, title, type, specification, gu
 SET @pid = LAST_INSERT_ID();
 INSERT INTO prices (product_id, value, symbol, isDefault) VALUES (@pid, 2098.62, 'USD', 0);
 INSERT INTO prices (product_id, value, symbol, isDefault) VALUES (@pid, 87092.73, 'UAH', 1);
+
+UPDATE products SET supplier = ELT(
+  1 + (id MOD 15),
+  'ASBIS',
+  'MTI',
+  'ELKO Київ',
+  'Brain',
+  'Comfy Trade',
+  'ТехноСвіт',
+  'Дніпро-М',
+  'ТОВ "Комптек"',
+  'АСБІС-Україна',
+  'Фокстрот. Техніка для дому',
+  'ТОВ "Технополіс"',
+  'Товариство з обмеженою відповідальністю "Технологічна Дистрибуційна Компанія Україна"',
+  'Приватне підприємство "Об''єднана Торгово-Технічна Компанія Схід-Захід"',
+  'Товариство з обмеженою відповідальністю "Міжнародний Постачальник Комп''ютерної Техніки та Периферії"',
+  'Приватне акціонерне товариство "Всеукраїнська Гуртова База Побутової Техніки"'
+) WHERE supplier IS NULL;

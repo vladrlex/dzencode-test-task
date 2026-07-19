@@ -49,9 +49,6 @@ export default function ProductCard({ product, orderTitle, onDelete }: ProductCa
   const uahPrice = product.price?.find((p) => p.symbol === 'UAH')?.value;
   const usdPrice = product.price?.find((p) => p.symbol === 'USD')?.value;
 
-  const groupName = product.specification || 'Длинное предлинное длиннющее название группы';
-  const userAssigned = (product as any).assignedTo || 'Христорождественский Александр';
-
   return (
     <div className="product-card">
       <div className={`product-card__status ${product.isNew ? 'product-card__status--new' : ''}`} />
@@ -86,11 +83,11 @@ export default function ProductCard({ product, orderTitle, onDelete }: ProductCa
       </div>
 
       <div className="product-card__group">
-        {groupName}
+        {product.specification}
       </div>
 
-      <div className="product-card__user-assigned">
-        {userAssigned}
+      <div className="product-card__supplier">
+        {product.supplier || t('productCard.supplierUnknown')}
       </div>
 
       <div className="product-card__order">

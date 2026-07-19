@@ -32,6 +32,7 @@
     "priceUsdLabel": "Цена USD",
     "priceUahLabel": "Цена UAH",
     "specificationLabel": "Спецификация",
+    "supplierLabel": "Поставщик",
     "conditionLabel": "Состояние",
     "conditionNew": "Новый",
     "conditionUsed": "Б/У",
@@ -40,6 +41,7 @@
     "placeholderProductTitle": "например, Монитор",
     "placeholderType": "например, Мониторы",
     "placeholderSerialNumber": "например, 12345",
+    "placeholderSupplier": "например, ООО ТехДистриб",
     "placeholderPriceUsd": "например, 100",
     "placeholderPriceUah": "например, 2600",
     "placeholderSpecification": "например, Intel X58, ATX",
@@ -68,6 +70,7 @@
     "statusAvailable": "Свободен",
     "statusInRepair": "В ремонте",
     "serialNumberShort": "SN",
+    "supplierUnknown": "Поставщик не указан",
     "noProductsInOrder": "В этом приходе нет продуктов."
   },
   "a11y": {
