@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import {
   BarChart,
   Bar,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -11,6 +12,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import type { Map as LeafletMap, CircleMarker as LeafletCircleMarker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { API_URL } from '../../config/config';
 import { SUPPLIER_LOCATIONS } from '../../data/supplierLocations';
@@ -28,6 +30,10 @@ export default function Dashboard() {
   const { t } = useTranslation();
   const [supplierCounts, setSupplierCounts] = useState<SupplierCount[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedSupplier, setSelectedSupplier] = useState<string | null>(null);
+
+  const mapRef = useRef<LeafletMap | null>(null);
+  const markerRefs = useRef<Record<string, LeafletCircleMarker | null>>({});
 
   useEffect(() => {
     axios
@@ -41,6 +47,15 @@ export default function Dashboard() {
     ...loc,
     count: supplierCounts.find((s) => s.supplier === loc.supplier)?.count ?? 0,
   })).filter((loc) => loc.count > 0);
+
+  const selectSupplier = (supplier: string) => {
+    setSelectedSupplier(supplier);
+    const point = mapPoints.find((p) => p.supplier === supplier);
+    if (point) {
+      mapRef.current?.flyTo([point.lat, point.lng], 8, { duration: 1 });
+      markerRefs.current[supplier]?.openPopup();
+    }
+  };
 
   if (loading) {
     return (
@@ -71,7 +86,21 @@ export default function Dashboard() {
                     tickFormatter={(value: string) => truncate(value, 18)}
                   />
                   <Tooltip />
-                  <Bar dataKey="count" fill="#7cb342" radius={[0, 4, 4, 0]} />
+                  <Bar
+                    dataKey="count"
+                    radius={[0, 4, 4, 0]}
+                    cursor="pointer"
+                    onClick={(data) => {
+                      if (data.payload?.supplier) selectSupplier(data.payload.supplier);
+                    }}
+                  >
+                    {supplierCounts.map((entry) => (
+                      <Cell
+                        key={entry.supplier}
+                        fill={entry.supplier === selectedSupplier ? '#4f7a26' : '#7cb342'}
+                      />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -83,6 +112,7 @@ export default function Dashboard() {
             <div className="card-body">
               <h5 className="card-title">{t('dashboard.supplierMap')}</h5>
               <MapContainer
+                ref={mapRef}
                 center={[49.0, 31.0]}
                 zoom={5}
                 scrollWheelZoom={false}
@@ -95,9 +125,20 @@ export default function Dashboard() {
                 {mapPoints.map((point) => (
                   <CircleMarker
                     key={point.supplier}
+                    ref={(marker) => {
+                      markerRefs.current[point.supplier] = marker;
+                    }}
                     center={[point.lat, point.lng]}
                     radius={6 + (point.count / maxSupplierCount) * 14}
-                    pathOptions={{ color: '#7cb342', fillColor: '#7cb342', fillOpacity: 0.5 }}
+                    pathOptions={{
+                      color: point.supplier === selectedSupplier ? '#4f7a26' : '#7cb342',
+                      fillColor: point.supplier === selectedSupplier ? '#4f7a26' : '#7cb342',
+                      fillOpacity: point.supplier === selectedSupplier ? 0.8 : 0.5,
+                      weight: point.supplier === selectedSupplier ? 3 : 1,
+                    }}
+                    eventHandlers={{
+                      click: () => selectSupplier(point.supplier),
+                    }}
                   >
                     <Popup>
                       <strong>{point.supplier}</strong>
