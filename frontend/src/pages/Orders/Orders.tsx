@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -58,12 +58,19 @@ export default function Orders() {
     });
   };
 
-  useEffect(() => {
-    setPageState(1);
-  }, [searchQuery]);
+  const prevSearchQuery = useRef(searchQuery);
 
   useEffect(() => {
-    dispatch(fetchOrders({ search: searchQuery, page, limit }));
+    const isNewSearch = prevSearchQuery.current !== searchQuery;
+    prevSearchQuery.current = searchQuery;
+    const effectivePage = isNewSearch ? 1 : page;
+
+    if (isNewSearch && page !== 1) {
+      setPageState(1);
+      return;
+    }
+
+    dispatch(fetchOrders({ search: searchQuery, page: effectivePage, limit }));
   }, [dispatch, searchQuery, page, limit]);
 
   useEffect(() => {

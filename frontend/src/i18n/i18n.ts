@@ -6,7 +6,6 @@ export const LANGUAGE_STORAGE_KEY = 'app_language';
 
 i18n
   .use(Backend)
-  // Передаємо i18n в react-i18next
   .use(initReactI18next)
   .init({
     lng: localStorage.getItem(LANGUAGE_STORAGE_KEY) || 'en',

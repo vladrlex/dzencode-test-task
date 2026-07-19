@@ -159,7 +159,6 @@
   overflow: hidden;
 }
 
-/* ДЕСКТОПНИЙ SIDEBAR */
 .layout__sidebar {
   width: 200px;
   background-color: var(--text-white);

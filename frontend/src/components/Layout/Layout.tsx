@@ -45,7 +45,7 @@ export default function Layout() {
     return () => {
       clearTimeout(handler);
     };
-  }, [searchQuery]);
+  }, [searchQuery, setSearchParams]);
 
   useEffect(() => {
     const socket = io(API_URL);

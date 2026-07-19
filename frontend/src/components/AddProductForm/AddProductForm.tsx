@@ -25,11 +25,9 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
     isNew: productToEdit ? String(productToEdit.isNew) : '1'
   });
 
-  // Нові стейти для кастомного селекту
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
-  // Закриваємо випадайку при кліку поза нею
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
@@ -142,12 +140,11 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
         />
       </div>
 
-      {/* НАШ КАСТОМНИЙ DROPDOWN СЕЛЕКТ */}
       <div className="add-product-form__group">
         <label>{t('forms.conditionLabel', { defaultValue: 'Condition' })}</label>
         <div className="dropdown-custom" ref={selectRef} style={{ width: '100%' }}>
           <button
-            type="button" /* Важливо! Запобігає сабміту форми при кліку */
+            type="button"
             className={`dropdown-custom__toggle ${isSelectOpen ? 'dropdown-custom__toggle--active' : ''}`}
             onClick={() => setIsSelectOpen(!isSelectOpen)}
             style={{ width: '100%', textAlign: 'left', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}

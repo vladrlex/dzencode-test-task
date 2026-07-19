@@ -1,6 +1,3 @@
--- Backfills the `specification` column for demo/seed products that still
--- have the generic 'Standard specification' placeholder, replacing it with
--- realistic per-type specs (deterministic by id, safe to re-run).
 UPDATE products SET specification = CASE type
   WHEN 'Processors' THEN ELT(1 + (id MOD 4),
     'Socket AM4, 65W',

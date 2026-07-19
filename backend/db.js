@@ -8,7 +8,7 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME || 'dzencode',
   waitForConnections: true,
   connectionLimit: 10,
-  dateStrings: true, //
+  dateStrings: true,
 });
 
 module.exports = pool;

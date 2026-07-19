@@ -65,16 +65,23 @@ export default function Products() {
     });
   };
 
+  const prevSearchQuery = useRef(searchQuery);
+
   useEffect(() => {
     dispatch(fetchProductTypes());
   }, [dispatch]);
 
   useEffect(() => {
-    setLocalPageState(1);
-  }, [searchQuery]);
+    const isNewSearch = prevSearchQuery.current !== searchQuery;
+    prevSearchQuery.current = searchQuery;
+    const effectivePage = isNewSearch ? 1 : localPage;
 
-  useEffect(() => {
-    dispatch(fetchProducts({ search: searchQuery, type: selectedType, page: localPage, limit: localLimit }));
+    if (isNewSearch && localPage !== 1) {
+      setLocalPageState(1);
+      return;
+    }
+
+    dispatch(fetchProducts({ search: searchQuery, type: selectedType, page: effectivePage, limit: localLimit }));
   }, [dispatch, searchQuery, selectedType, localPage, localLimit]);
 
   useEffect(() => {

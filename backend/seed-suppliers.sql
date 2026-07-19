@@ -1,5 +1,3 @@
--- Backfills the `supplier` column for demo/seed data with a realistic mix
--- of short and long distributor names. Safe to re-run (deterministic by id).
 UPDATE products SET supplier = ELT(
   1 + (id MOD 15),
   'ASBIS',
