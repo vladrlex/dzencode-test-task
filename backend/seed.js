@@ -31,8 +31,8 @@ async function seedIfEmpty() {
   for (const product of data.products) {
     await pool.query(
       `INSERT INTO products
-        (id, serialNumber, isNew, photo, title, type, specification, guarantee_start, guarantee_end, order_id, date)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (id, serialNumber, isNew, photo, title, type, specification, supplier, guarantee_start, guarantee_end, order_id, date)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         product.id,
         product.serialNumber,
@@ -41,6 +41,7 @@ async function seedIfEmpty() {
         product.title,
         product.type,
         product.specification || null,
+        product.supplier || null,
         product.guarantee?.start || null,
         product.guarantee?.end || null,
         product.order,
