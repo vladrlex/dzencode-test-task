@@ -13,6 +13,7 @@ function mapProductRow(row, pricesByProduct) {
     title: row.title,
     type: row.type,
     specification: row.specification,
+    supplier: row.supplier,
     guarantee: {
       start: row.guarantee_start,
       end: row.guarantee_end,
@@ -147,6 +148,7 @@ router.post('/', async (req, res) => {
       title,
       type,
       specification,
+      supplier,
       guarantee = {},
       price = [],
       order,
@@ -157,8 +159,8 @@ router.post('/', async (req, res) => {
 
     const [result] = await conn.query(
       `INSERT INTO products
-        (serialNumber, isNew, photo, title, type, specification, guarantee_start, guarantee_end, order_id, date)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        (serialNumber, isNew, photo, title, type, specification, supplier, guarantee_start, guarantee_end, order_id, date)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         serialNumber,
         isNew ?? 1,
@@ -166,6 +168,7 @@ router.post('/', async (req, res) => {
         title,
         type,
         specification || null,
+        supplier || null,
         toMySQLDateTime(guarantee.start),
         toMySQLDateTime(guarantee.end),
         order,
@@ -206,6 +209,7 @@ router.put('/:id', async (req, res) => {
       title,
       type,
       specification,
+      supplier,
       guarantee = {},
       price,
       order,
@@ -222,6 +226,7 @@ router.put('/:id', async (req, res) => {
         title = COALESCE(?, title),
         type = COALESCE(?, type),
         specification = COALESCE(?, specification),
+        supplier = COALESCE(?, supplier),
         guarantee_start = COALESCE(?, guarantee_start),
         guarantee_end = COALESCE(?, guarantee_end),
         order_id = COALESCE(?, order_id),
@@ -234,6 +239,7 @@ router.put('/:id', async (req, res) => {
         title ?? null,
         type ?? null,
         specification ?? null,
+        supplier ?? null,
         toMySQLDateTime(guarantee.start),
         toMySQLDateTime(guarantee.end),
         order ?? null,

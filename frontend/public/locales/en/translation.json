@@ -32,6 +32,7 @@
     "priceUsdLabel": "Price USD",
     "priceUahLabel": "Price UAH",
     "specificationLabel": "Specification",
+    "supplierLabel": "Supplier",
     "conditionLabel": "Condition",
     "conditionNew": "New",
     "conditionUsed": "Used",
@@ -40,6 +41,7 @@
     "placeholderProductTitle": "e.g. Monitor",
     "placeholderType": "e.g. Monitors",
     "placeholderSerialNumber": "e.g. 12345",
+    "placeholderSupplier": "e.g. TechDistrib LLC",
     "placeholderPriceUsd": "e.g. 100",
     "placeholderPriceUah": "e.g. 2600",
     "cancel": "Cancel",
@@ -64,6 +66,7 @@
     "used": "Used",
     "from": "from",
     "to": "to",
+    "supplierUnknown": "Supplier not specified",
     "noProductsInOrder": "No products in this order."
   }
 }

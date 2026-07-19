@@ -22,6 +22,7 @@ export interface Product {
   title: string;
   type: string;
   specification: string;
+  supplier: string | null;
   guarantee: Guarantee;
   price: Price[];
   order: number;

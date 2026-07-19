@@ -32,6 +32,7 @@
     "priceUsdLabel": "Цена USD",
     "priceUahLabel": "Цена UAH",
     "specificationLabel": "Спецификация",
+    "supplierLabel": "Поставщик",
     "conditionLabel": "Состояние",
     "conditionNew": "Новый",
     "conditionUsed": "Б/У",
@@ -40,6 +41,7 @@
     "placeholderProductTitle": "например, Монитор",
     "placeholderType": "например, Мониторы",
     "placeholderSerialNumber": "например, 12345",
+    "placeholderSupplier": "например, ООО ТехДистриб",
     "placeholderPriceUsd": "например, 100",
     "placeholderPriceUah": "например, 2600",
     "cancel": "Отмена",
@@ -64,6 +66,7 @@
     "used": "Б/У",
     "from": "с",
     "to": "по",
+    "supplierUnknown": "Поставщик не указан",
     "noProductsInOrder": "В этом приходе нет продуктов."
   }
 }

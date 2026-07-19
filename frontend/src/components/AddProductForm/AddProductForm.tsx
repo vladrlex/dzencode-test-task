@@ -21,6 +21,7 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
     priceUsd: productToEdit?.price.find(p => p.symbol === 'USD')?.value || '',
     priceUah: productToEdit?.price.find(p => p.symbol === 'UAH')?.value || '',
     specification: productToEdit?.specification || 'Standard',
+    supplier: productToEdit?.supplier || '',
     isNew: productToEdit ? String(productToEdit.isNew) : '1'
   });
 
@@ -59,7 +60,8 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
       date: productToEdit ? productToEdit.date : today.toISOString(),
       photo: productToEdit ? productToEdit.photo : 'pathToFile.jpg',
       specification: formData.specification,
-      guarantee: productToEdit ? productToEdit.guarantee : { 
+      supplier: formData.supplier || null,
+      guarantee: productToEdit ? productToEdit.guarantee : {
         start: today.toISOString(), 
         end: twoYearsLater.toISOString() 
       }
@@ -125,7 +127,18 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
           value={formData.specification} 
           placeholder="e.g. Intel X58, ATX" 
           required 
-          onChange={(e) => setFormData({ ...formData, specification: e.target.value })} 
+          onChange={(e) => setFormData({ ...formData, specification: e.target.value })}
+        />
+      </div>
+
+      <div className="add-product-form__group">
+        <label htmlFor="product-supplier">{t('forms.supplierLabel', { defaultValue: 'Supplier' })}</label>
+        <input
+          id="product-supplier"
+          type="text"
+          value={formData.supplier}
+          placeholder={t('forms.placeholderSupplier', { defaultValue: 'e.g. TechDistrib LLC' })}
+          onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
         />
       </div>
 
