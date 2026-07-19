@@ -123,7 +123,7 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
           id="product-spec"
           type="text" 
           value={formData.specification} 
-          placeholder="e.g. Intel X58, ATX" 
+          placeholder={t('forms.placeholderSpecification', { defaultValue: 'e.g. Intel X58, ATX' })}
           required 
           onChange={(e) => setFormData({ ...formData, specification: e.target.value })} 
         />

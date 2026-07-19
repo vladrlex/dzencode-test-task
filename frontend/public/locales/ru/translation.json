@@ -42,6 +42,7 @@
     "placeholderSerialNumber": "например, 12345",
     "placeholderPriceUsd": "например, 100",
     "placeholderPriceUah": "например, 2600",
+    "placeholderSpecification": "например, Intel X58, ATX",
     "cancel": "Отмена",
     "save": "Сохранить",
     "saveProduct": "Добавить",
@@ -64,6 +65,18 @@
     "used": "Б/У",
     "from": "с",
     "to": "по",
+    "statusAvailable": "Свободен",
+    "statusInRepair": "В ремонте",
+    "serialNumberShort": "SN",
     "noProductsInOrder": "В этом приходе нет продуктов."
+  },
+  "a11y": {
+    "closeModal": "Закрыть модальное окно",
+    "closeDeleteModal": "Закрыть окно удаления",
+    "closeDetails": "Закрыть детали",
+    "deleteOrder": "Удалить приход",
+    "deleteProduct": "Удалить продукт",
+    "delete": "Удалить",
+    "settings": "Настройки"
   }
 }

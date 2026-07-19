@@ -132,7 +132,7 @@ export default function Layout() {
               <div className="layout__user-avatar">
                 <UserIcon size={40} className="layout__user-icon" />
               </div>
-              <button className="layout__avatar-settings" aria-label="Settings">
+              <button className="layout__avatar-settings" aria-label={t('a11y.settings')}>
                 <SettingsIcon size={12} />
               </button>
             </div>

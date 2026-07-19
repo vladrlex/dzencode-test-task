@@ -62,18 +62,18 @@ export default function ProductCard({ product, orderTitle, onDelete }: ProductCa
 
       <div className="product-card__info">
         <div className="product-card__title">{product.title}</div>
-        <div className="product-card__sn">SN: {product.serialNumber}</div>
+        <div className="product-card__sn">{t('productCard.serialNumberShort')}: {product.serialNumber}</div>
       </div>
 
       <div className={`product-card__cell product-card__status-text ${
         product.isNew ? 'product-card__status-text--free' : 'product-card__status-text--repair'
       }`}>
-        {product.isNew ? 'свободен' : 'В ремонте'}
+        {product.isNew ? t('productCard.statusAvailable') : t('productCard.statusInRepair')}
       </div>
-      
+
       <div className="product-card__guarantee">
-        <div className="product-card__guarantee-label">c {formatDateNumeric(product.guarantee.start)}</div>
-        <div className="product-card__guarantee-label">по {formatDateNumeric(product.guarantee.end)}</div>
+        <div className="product-card__guarantee-label">{t('productCard.from')} {formatDateNumeric(product.guarantee.start)}</div>
+        <div className="product-card__guarantee-label">{t('productCard.to')} {formatDateNumeric(product.guarantee.end)}</div>
       </div>
 
       <div className="product-card__condition">
@@ -102,7 +102,7 @@ export default function ProductCard({ product, orderTitle, onDelete }: ProductCa
         <div className="product-card__date-full">{formatDateWithMonthName(product.date, i18n.language)}</div>
       </div>
 
-      <DeleteButton onClick={() => onDelete(product.id)} ariaLabel="Delete" size={16} />
+      <DeleteButton onClick={() => onDelete(product.id)} ariaLabel={t('a11y.delete')} size={16} />
     </div>
   );
 }

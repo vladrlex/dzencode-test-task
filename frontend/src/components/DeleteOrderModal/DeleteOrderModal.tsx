@@ -23,7 +23,7 @@ export default function DeleteOrderModal({
         <CloseButton
           onClick={onClose}
           className="delete-modal__close-pos"
-          ariaLabel="Close delete modal"
+          ariaLabel={t('a11y.closeDeleteModal')}
         />
 
         <h4 className="delete-modal__title">

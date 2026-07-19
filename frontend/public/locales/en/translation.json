@@ -42,6 +42,7 @@
     "placeholderSerialNumber": "e.g. 12345",
     "placeholderPriceUsd": "e.g. 100",
     "placeholderPriceUah": "e.g. 2600",
+    "placeholderSpecification": "e.g. Intel X58, ATX",
     "cancel": "Cancel",
     "save": "Save",
     "saveProduct": "Add",
@@ -64,6 +65,18 @@
     "used": "Used",
     "from": "from",
     "to": "to",
+    "statusAvailable": "Available",
+    "statusInRepair": "In repair",
+    "serialNumberShort": "SN",
     "noProductsInOrder": "No products in this order."
+  },
+  "a11y": {
+    "closeModal": "Close modal",
+    "closeDeleteModal": "Close delete modal",
+    "closeDetails": "Close details",
+    "deleteOrder": "Delete order",
+    "deleteProduct": "Delete product",
+    "delete": "Delete",
+    "settings": "Settings"
   }
 }
