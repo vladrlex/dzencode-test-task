@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import CloseButton from '../Buttons/CloseButton/CloseButton';
 import './DeteleOrderModal.css';
@@ -17,7 +18,7 @@ export default function DeleteOrderModal({
 }: DeleteOrderModalProps) {
   const { t } = useTranslation();
 
-  return (
+  return createPortal(
     <div className="delete-modal">
       <div className="delete-modal__content">
         <CloseButton
@@ -29,7 +30,7 @@ export default function DeleteOrderModal({
         <h4 className="delete-modal__title">
           {title || t('modals.deleteTitle')}
         </h4>
-        
+
         {itemName ? (
           <p className="delete-modal__text delete-modal__text--item">{itemName}</p>
         ) : (
@@ -45,6 +46,7 @@ export default function DeleteOrderModal({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
