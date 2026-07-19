@@ -1,3 +1,13 @@
+CREATE TABLE `users` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `username` VARCHAR(100) NOT NULL UNIQUE,
+  `password_hash` VARCHAR(255) NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `users` (`username`, `password_hash`) VALUES
+  ('admin', '$2b$10$TE2KbeG0rNnZb0yUlfOUg.O3WrojpuRE6lqPaoM1I8ZhxkHcyxoe6');
+
 CREATE TABLE `orders` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `title` VARCHAR(255) NOT NULL,

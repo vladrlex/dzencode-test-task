@@ -1,11 +1,19 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
+import Login from './pages/Login/Login';
+import { useAppSelector } from './store/hooks';
 
 const Orders = lazy(() => import('./pages/Orders/Orders'));
 const Products = lazy(() => import('./pages/Products/Products'));
 
 export default function App() {
+  const token = useAppSelector((state) => state.auth.token);
+
+  if (!token) {
+    return <Login />;
+  }
+
   return (
     <BrowserRouter>
       <Suspense

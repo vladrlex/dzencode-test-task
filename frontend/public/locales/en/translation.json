@@ -80,6 +80,18 @@
     "deleteOrder": "Delete order",
     "deleteProduct": "Delete product",
     "delete": "Delete",
-    "settings": "Settings"
+    "settings": "Settings",
+    "logout": "Log out"
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "usernameLabel": "Username",
+    "passwordLabel": "Password",
+    "placeholderUsername": "admin",
+    "placeholderPassword": "••••••••",
+    "loginBtn": "Sign in",
+    "loggingIn": "Signing in...",
+    "loginError": "Invalid username or password",
+    "logoutBtn": "Log out"
   }
 }

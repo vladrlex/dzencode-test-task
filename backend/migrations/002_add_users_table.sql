@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `username` VARCHAR(100) NOT NULL UNIQUE,
+  `password_hash` VARCHAR(255) NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT IGNORE INTO `users` (`username`, `password_hash`) VALUES
+  ('admin', '$2b$10$TE2KbeG0rNnZb0yUlfOUg.O3WrojpuRE6lqPaoM1I8ZhxkHcyxoe6');

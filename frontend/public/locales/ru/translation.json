@@ -80,6 +80,18 @@
     "deleteOrder": "Удалить приход",
     "deleteProduct": "Удалить продукт",
     "delete": "Удалить",
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "logout": "Выйти"
+  },
+  "auth": {
+    "loginTitle": "Вход",
+    "usernameLabel": "Логин",
+    "passwordLabel": "Пароль",
+    "placeholderUsername": "admin",
+    "placeholderPassword": "••••••••",
+    "loginBtn": "Войти",
+    "loggingIn": "Выполняется вход...",
+    "loginError": "Неверный логин или пароль",
+    "logoutBtn": "Выйти"
   }
 }

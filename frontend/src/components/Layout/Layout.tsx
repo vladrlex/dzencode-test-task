@@ -3,14 +3,20 @@ import { NavLink, Outlet, useLocation, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next';
 import { io } from 'socket.io-client';
 import { API_URL } from '../../config/config';
+import { LANGUAGE_STORAGE_KEY } from '../../i18n/i18n';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { logout } from '../../store/authSlice';
 import ClockIcon from '../Icons/ClockIcon';
 import UserIcon from '../Icons/UserIcon';
 import ShieldLogoIcon from '../Icons/ShieldLogoIcon';
 import SettingsIcon from '../Icons/SettingsIcon';
+import LogoutIcon from '../Icons/LogoutIcon';
 import './Layout.css';
 
 export default function Layout() {
   const { t, i18n } = useTranslation();
+  const dispatch = useAppDispatch();
+  const username = useAppSelector((state) => state.auth.username);
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeSessions, setActiveSessions] = useState(1);
@@ -59,6 +65,11 @@ export default function Layout() {
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, lng);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   const currentLang = i18n.language;
@@ -136,7 +147,11 @@ export default function Layout() {
                 <SettingsIcon size={12} />
               </button>
             </div>
-            <div className="layout__user-name">{t('layout.activeUser')}</div>
+            <div className="layout__user-name">{username || t('layout.activeUser')}</div>
+            <button className="layout__logout-btn" onClick={handleLogout} aria-label={t('a11y.logout')}>
+              <LogoutIcon size={14} />
+              {t('auth.logoutBtn')}
+            </button>
           </div>
 
           <div className="layout__navigation">
