@@ -1,8 +1,16 @@
 # Orders & Products — SPA (dZENcode Test Task)
 
-A single-page application for managing **Orders** and **Products**, built as a test assignment for **dZENcode**. Includes real-time active-session tracking via WebSockets, client-side routing, global state management, and a component-based architecture.
+A single-page inventory management application for tracking **Orders** and the **Products** within them, built as a test assignment for **dZENcode** (Junior+ level).
 
 **Repository:** https://github.com/vladrlex/dzencode-test-task
+
+**Live demo:**
+- Frontend: https://dzencode-frontend-2fyu.onrender.com
+- Backend API: https://dzencode-backend-yrku.onrender.com
+
+**Demo login:** `admin` / `Demo12345!`
+
+> The backend is on Render's free tier and spins down after inactivity — the first request after a while can take up to ~50s to wake it up.
 
 ---
 
@@ -10,34 +18,46 @@ A single-page application for managing **Orders** and **Products**, built as a t
 
 | Layer | Technology |
 |---|---|
-| UI | React (latest) + TypeScript |
+| UI | React 19 + TypeScript |
 | State | Redux Toolkit |
-| Routing | React Router |
+| Routing | React Router (with route-level code splitting via `React.lazy`) |
+| Auth | JWT (backend-issued, verified per-request) |
 | Real-time | Socket.io (active sessions counter) |
 | Styling | CSS, BEM methodology |
-| i18n | react-i18next (multi-language support) |
-| Backend | Node.js + Express |
+| i18n | react-i18next (English / Russian) |
+| Testing | Vitest + React Testing Library |
+| Backend | Node.js + Express + MySQL (mysql2) |
 | Containers | Docker + Docker Compose |
 
 ---
 
 ## Features
 
+### Authentication
+- The whole app sits behind a login screen. The backend issues a JWT on login; every `/api/orders` and `/api/products` request requires it.
+- Session (token + username) persists in `localStorage`, so a page refresh doesn't log you out.
+
 ### Top Menu
-- Live clock and current date, updated in real time.
+- Live clock and current date, localized to the selected language.
 - Active sessions counter — number of open browser tabs/windows across all connected clients, synced via WebSocket.
+- Global search across orders and products (debounced).
+- Language switcher (EN/RU) — the choice persists in `localStorage`.
 
 ### Navigation Menu
 - Route links between **Orders** and **Products** pages.
 
 ### Orders
-- List of all orders: title, product count, creation date in two formats, total sum in **USD** and **UAH**.
-- Click an order to open a detail panel with the full list of products inside it. The panel can be closed.
+- Paginated list of all orders: title, product count, creation date in two formats, total sum in **USD** and **UAH**.
+- Click an order to open a detail panel with the full list of products inside it, including add/edit/delete per product. The panel can be closed.
 - Delete an order via a confirmation popup.
 
 ### Products
-- List of all products: name, type, warranty dates in different formats, price in different currencies, and the parent order's name.
-- Filter products by type (select component).
+- Paginated list of all products: name, serial number, availability status, warranty dates in different formats, specification, supplier, price in different currencies, and the parent order's name.
+- Filter by product type (select) and full-text search.
+- Add / edit / delete a product from within an order.
+
+### i18n
+- Full English/Russian translation coverage, including form placeholders and accessibility labels.
 
 ---
 
@@ -45,8 +65,20 @@ A single-page application for managing **Orders** and **Products**, built as a t
 
 ```
 dzencode-test-task/
-├── backend/          # Node.js + Express server, Socket.io
-├── frontend/          # React + TypeScript SPA
+├── backend/
+│   ├── routes/          # orders, products, auth
+│   ├── middleware/       # JWT auth guard
+│   ├── sockets/          # active-sessions websocket
+│   ├── migrations/       # incremental SQL migrations for existing databases
+│   ├── schema.sql        # full schema (used on first container boot)
+│   └── seed*.sql, seed.js, data.json  # demo data seeding
+├── frontend/
+│   ├── src/
+│   │   ├── pages/        # Orders, Products, Login
+│   │   ├── components/   # Layout, Modal, ProductCard, forms, etc.
+│   │   ├── store/        # Redux slices (orders, products, auth)
+│   │   └── i18n/, utils/, config/
+│   └── public/locales/   # en/ru translation.json
 └── docker-compose.yml
 ```
 
@@ -66,6 +98,7 @@ docker-compose up --build
 
 - Frontend: [http://localhost:3000](http://localhost:3000)
 - Backend / Socket.io: `http://localhost:5000`
+- Login with `admin` / `Demo12345!` (seeded automatically on first boot)
 
 ### Option 2 — Local development
 
@@ -73,6 +106,7 @@ docker-compose up --build
 ```bash
 cd backend
 npm install
+# create a .env with DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NAME and JWT_SECRET
 npm start
 ```
 
@@ -85,17 +119,23 @@ npm run dev
 
 The frontend dev server (Vite) will print the local URL to open, typically [http://localhost:5173](http://localhost:5173).
 
+### Running tests
+
+```bash
+cd frontend
+npm test
+```
+
 ---
 
-## Notes / Possible Improvements
+## Database
 
-- Add unit and integration tests for `Orders` and `Products` reducers/components.
-- Add a database schema file (currently mock data lives in `app.js`).
-- Add loading/error states polish and empty-state illustrations.
-- Deploy to a public host (VDS) for reviewer access without local setup.
+- `backend/schema.sql` — full schema, applied automatically on first MySQL container boot.
+- `backend/migrations/` — incremental `ALTER TABLE` scripts to bring an already-running database up to date (e.g. adding the `supplier` column, adding the `users` table for auth) without losing data.
+- `backend/db_schema.mwb` — MySQL Workbench EER diagram of the schema, for visual comparison against what's actually implemented.
 
 ---
 
 ## Self-check
 
-Before submitting, the project was launched from a clean clone using only the instructions in this README to confirm setup accuracy.
+Before submitting, the project was launched from a clean clone using only the instructions in this README to confirm setup accuracy, and the live Render deployment was smoke-tested end-to-end (login, protected API routes, CRUD on orders/products).
