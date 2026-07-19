@@ -25,6 +25,7 @@ export default function Orders() {
   const ordersPage = useAppSelector((state) => state.orders.page);
   const ordersLimit = useAppSelector((state) => state.orders.limit);
   const ordersTotalPages = useAppSelector((state) => state.orders.totalPages);
+  const ordersTotal = useAppSelector((state) => state.orders.total);
   const ordersLoading = useAppSelector((state) => state.orders.loading);
 
   const orderProducts = useAppSelector((state) => state.products.items);
@@ -129,7 +130,7 @@ export default function Orders() {
   return (
     <div className="orders">
       <div className="orders__header">
-        <h2 className="orders__title">{t('orders.title')} / {orders.length}</h2>
+        <h2 className="orders__title">{t('orders.title')} / {ordersTotal}</h2>
         <button className="orders__add-btn" onClick={() => setIsFormOpen(!isFormOpen)}>
           {isFormOpen ? t('orders.cancelBtn') : t('orders.addOrderBtn')}
         </button>
