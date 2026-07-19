@@ -10,6 +10,8 @@ A single-page inventory management application for tracking **Orders** and the *
 
 **Demo login:** `admin` / `Demo12345!`
 
+**Demo video:** https://www.loom.com/share/885e43c42b3f49839c3da29e80013f72
+
 > The backend is on Render's free tier and spins down after inactivity — the first request after a while can take up to ~50s to wake it up.
 
 ---
