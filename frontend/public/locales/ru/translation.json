@@ -1,7 +1,8 @@
 {
   "navigation": {
     "orders": "Приходы",
-    "products": "Продукты"
+    "products": "Продукты",
+    "dashboard": "Дашборд"
   },
   "orders": {
     "title": "Приходы",
@@ -82,6 +83,15 @@
     "delete": "Удалить",
     "settings": "Настройки",
     "logout": "Выйти"
+  },
+  "dashboard": {
+    "title": "Дашборд",
+    "productsBySupplier": "Товары по поставщику",
+    "supplierMap": "Локации поставщиков",
+    "productsCount_one": "{{count}} товар",
+    "productsCount_few": "{{count}} товара",
+    "productsCount_many": "{{count}} товаров",
+    "productsCount_other": "{{count}} товара"
   },
   "auth": {
     "loginTitle": "Вход",

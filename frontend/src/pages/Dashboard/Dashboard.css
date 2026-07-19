@@ -1,0 +1,19 @@
+.dashboard {
+  padding: 0;
+}
+
+.dashboard__title {
+  margin-bottom: var(--spacing-md);
+}
+
+.dashboard__card {
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+}
+
+.dashboard__card .card-title {
+  color: var(--text-h);
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+}

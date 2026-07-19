@@ -1,7 +1,8 @@
 {
   "navigation": {
     "orders": "Orders",
-    "products": "Products"
+    "products": "Products",
+    "dashboard": "Dashboard"
   },
   "orders": {
     "title": "Orders",
@@ -82,6 +83,13 @@
     "delete": "Delete",
     "settings": "Settings",
     "logout": "Log out"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "productsBySupplier": "Products by supplier",
+    "supplierMap": "Supplier locations",
+    "productsCount_one": "{{count}} product",
+    "productsCount_other": "{{count}} products"
   },
   "auth": {
     "loginTitle": "Sign in",

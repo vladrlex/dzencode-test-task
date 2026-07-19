@@ -161,6 +161,9 @@ export default function Layout() {
             <NavLink to="/products" className={getLinkClass}>
               {t('navigation.products').toUpperCase()}
             </NavLink>
+            <NavLink to="/dashboard" className={getLinkClass}>
+              {t('navigation.dashboard').toUpperCase()}
+            </NavLink>
           </div>
         </nav>
 

@@ -138,6 +138,19 @@ router.get('/meta/types', async (req, res) => {
   }
 });
 
+router.get('/meta/supplier-counts', async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT supplier, COUNT(*) as count FROM products
+       WHERE supplier IS NOT NULL GROUP BY supplier ORDER BY count DESC`
+    );
+    res.json(rows.map((r) => ({ supplier: r.supplier, count: Number(r.count) })));
+  } catch (error) {
+    console.error('GET /api/products/meta/supplier-counts error:', error);
+    res.status(500).json({ error: 'Failed to fetch supplier counts' });
+  }
+});
+
 router.post('/', async (req, res) => {
   const conn = await pool.getConnection();
   try {
