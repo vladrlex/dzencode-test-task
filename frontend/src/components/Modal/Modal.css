@@ -32,6 +32,7 @@
 .modal-body-scroll {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   min-height: 0;
 }
