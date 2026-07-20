@@ -11,7 +11,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 40px;
-  background-color: var(--text-white);
+  background-color: var(--surface);
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
   height: 75px;
   box-sizing: border-box;
@@ -43,7 +43,7 @@
 }
 
 .layout__search-input {
-  background-color: #f0f3f6;
+  background-color: var(--bg-alt);
   border: 1px solid var(--border);
   border-radius: 4px;
   padding: 8px 16px;
@@ -55,11 +55,11 @@
 }
 
 .layout__search-input::placeholder {
-  color: #a0aab5;
+  color: var(--icon-muted);
 }
 
 .layout__search-input:focus {
-  background-color: var(--text-white);
+  background-color: var(--surface);
   border-color: #8bc34a;
   box-shadow: 0 0 0 3px rgba(139, 195, 74, 0.15);
 }
@@ -99,7 +99,7 @@
 
 .layout__sidebar {
   width: 200px;
-  background-color: var(--text-white);
+  background-color: var(--surface);
   box-shadow: 1px 0 0 var(--border);
   padding-top: 40px;
   display: flex;
@@ -124,7 +124,7 @@
   width: 76px;
   height: 76px;
   border-radius: 50%;
-  background-color: #f0f3f6;
+  background-color: var(--bg-alt);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -132,7 +132,7 @@
 }
 
 .layout__user-icon {
-  color: #a0aab5;
+  color: var(--icon-muted);
 }
 
 .layout__avatar-settings {
@@ -142,9 +142,9 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background-color: var(--text-white);
+  background-color: var(--surface);
   border: 1px solid var(--border);
-  color: #a0aab5;
+  color: var(--icon-muted);
   display: flex;
   align-items: center;
   justify-content: center;

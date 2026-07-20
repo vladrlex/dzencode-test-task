@@ -2,7 +2,7 @@
   display: flex;
   gap: var(--spacing-sm);
   padding: var(--spacing-md);
-  background-color: var(--text-white);
+  background-color: var(--surface);
   border-radius: var(--border-radius);
   border: 1px solid var(--border);
   align-items: flex-end;
@@ -32,7 +32,7 @@
   border: 1px solid var(--border);
   font-size: 14px;
   color: var(--text-h);
-  background-color: var(--text-white);
+  background-color: var(--surface);
   transition: border-color var(--transition-fast);
 }
 

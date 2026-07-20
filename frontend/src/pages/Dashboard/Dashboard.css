@@ -9,6 +9,8 @@
 .dashboard__card {
   border: 1px solid var(--border);
   border-radius: var(--border-radius);
+  background-color: var(--surface);
+  color: var(--text-h);
 }
 
 .dashboard__card .card-title {
@@ -24,4 +26,29 @@
 
 .dashboard__row-spacer {
   margin-top: var(--spacing-md);
+}
+
+:root[data-theme="dark"] .leaflet-popup-content-wrapper,
+:root[data-theme="dark"] .leaflet-popup-tip {
+  background-color: var(--surface);
+  color: var(--text-h);
+}
+
+:root[data-theme="dark"] .leaflet-control-zoom a {
+  background-color: var(--surface);
+  color: var(--text-h);
+  border-color: var(--border) !important;
+}
+
+:root[data-theme="dark"] .leaflet-control-zoom a:hover {
+  background-color: var(--hover-bg);
+}
+
+:root[data-theme="dark"] .leaflet-control-attribution {
+  background-color: rgba(31, 34, 38, 0.8);
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .leaflet-control-attribution a {
+  color: var(--link-color);
 }

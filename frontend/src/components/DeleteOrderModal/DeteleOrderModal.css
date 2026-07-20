@@ -13,7 +13,7 @@
 }
 
 .delete-modal__content {
-  background-color: var(--text-white);
+  background-color: var(--surface);
   border-radius: var(--border-radius);
   padding: 30px;
   width: 400px;
@@ -60,7 +60,7 @@
 
 .delete-modal__btn--cancel {
   border: 1px solid var(--border);
-  background-color: var(--text-white);
+  background-color: var(--surface);
   color: var(--text);
 }
 

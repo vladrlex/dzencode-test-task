@@ -13,7 +13,7 @@
   padding: 30px;
   text-align: center;
   color: var(--text);
-  background-color: var(--text-white);
+  background-color: var(--surface);
   border-radius: var(--border-radius);
   border: 1px solid var(--border);
 }

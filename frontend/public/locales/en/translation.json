@@ -82,7 +82,9 @@
     "deleteProduct": "Delete product",
     "delete": "Delete",
     "settings": "Settings",
-    "logout": "Log out"
+    "logout": "Log out",
+    "switchToDark": "Switch to dark theme",
+    "switchToLight": "Switch to light theme"
   },
   "dashboard": {
     "title": "Dashboard",

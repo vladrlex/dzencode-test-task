@@ -4,7 +4,7 @@
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
-  background-color: var(--text-white);
+  background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
   cursor: pointer;

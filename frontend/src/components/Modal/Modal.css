@@ -13,7 +13,7 @@
 }
 
 .modal-content {
-  background: var(--text-white);
+  background: var(--surface);
   padding: var(--spacing-lg);
   border-radius: var(--border-radius);
   width: 700px;

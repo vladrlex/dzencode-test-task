@@ -37,7 +37,7 @@
   height: 32px;
   padding: 0 8px;
   border: 1px solid var(--border);
-  background: var(--text-white);
+  background: var(--surface);
   border-radius: var(--border-radius);
   cursor: pointer;
   font-size: 13px;

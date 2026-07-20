@@ -16,7 +16,7 @@
 }
 
 .delete-btn:hover {
-  background-color: #ffebee;
+  background-color: var(--danger-bg-hover);
   color: var(--error-color);
   transform: scale(1.1);
 }

@@ -16,7 +16,7 @@
 }
 
 .close-btn:hover {
-  background-color: #ffebee;
+  background-color: var(--danger-bg-hover);
   color: var(--error-color);
   border-color: rgba(211, 47, 47, 0.3);
   transform: rotate(90deg);

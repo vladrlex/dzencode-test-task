@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { logout } from '../../store/authSlice';
 import Clock from '../Clock/Clock';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
+import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import UserIcon from '../Icons/UserIcon';
 import ShieldLogoIcon from '../Icons/ShieldLogoIcon';
 import SettingsIcon from '../Icons/SettingsIcon';
@@ -93,6 +94,7 @@ export default function Layout() {
 
           <Clock className="layout__time-wrapper" />
           <LanguageSwitcher className="layout__lang-switcher" />
+          <ThemeToggle />
         </div>
       </header>
 

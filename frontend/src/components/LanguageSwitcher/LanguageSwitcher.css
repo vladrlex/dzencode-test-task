@@ -8,7 +8,7 @@
 .language-switcher__btn {
   font-size: 13px;
   font-weight: 600;
-  color: #a0aab5;
+  color: var(--icon-muted);
   background: none;
   border: none;
   cursor: pointer;

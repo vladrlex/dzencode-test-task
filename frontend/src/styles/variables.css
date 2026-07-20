@@ -1,9 +1,16 @@
 :root {
+  color-scheme: light;
+
   --bg: #f0f3f5;
   --text-white: #ffffff;
   --border: #e1e6eb;
 
-
+  --surface: #ffffff;
+  --bg-alt: #f0f3f6;
+  --hover-bg: #f5f7fa;
+  --icon-muted: #a0aab5;
+  --danger-bg-hover: #ffebee;
+  --code-bg: #eef2f5;
 
   --text-h: #354052;
   --text: #7f8fa4;
@@ -13,7 +20,7 @@
   --heading: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
---grid-template: 24px 40px minmax(140px, 1.8fr) 80px 100px 50px 100px minmax(110px, 1.2fr) minmax(120px, 1.3fr) minmax(120px, 1.3fr) 60px 40px;  
+--grid-template: 24px 40px minmax(140px, 1.8fr) 80px 100px 50px 100px minmax(110px, 1.2fr) minmax(120px, 1.3fr) minmax(120px, 1.3fr) 60px 40px;
 
   --primary-color: #7cb342;
   --primary-hover: #689f38;
@@ -32,4 +39,27 @@
   --anim-translate: 15px;
   --transition-fast: 0.2s ease;
   --border-radius: 4px;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #16181b;
+  --text-white: #ffffff;
+  --border: #33383e;
+
+  --surface: #1f2226;
+  --bg-alt: #24272c;
+  --hover-bg: #2a2e33;
+  --icon-muted: #6d7680;
+  --danger-bg-hover: rgba(211, 47, 47, 0.18);
+  --code-bg: #24272c;
+
+  --text-h: #e9ebee;
+  --text: #9aa4b0;
+  --link-color: #7ab0e8;
+
+  --primary-color: #7cb342;
+  --primary-hover: #8bc34a;
+  --error-color: #ef5350;
 }

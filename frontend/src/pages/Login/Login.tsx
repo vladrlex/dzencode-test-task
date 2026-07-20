@@ -5,6 +5,7 @@ import { login } from '../../store/authSlice';
 import ShieldLogoIcon from '../../components/Icons/ShieldLogoIcon';
 import Clock from '../../components/Clock/Clock';
 import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher';
+import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
 import './Login.css';
 
 const formatCountdown = (totalSeconds: number): string => {
@@ -49,6 +50,7 @@ export default function Login() {
       <div className="login__topbar">
         <Clock className="login__clock" />
         <LanguageSwitcher />
+        <ThemeToggle />
       </div>
 
       <form className="login__card" onSubmit={handleSubmit}>
