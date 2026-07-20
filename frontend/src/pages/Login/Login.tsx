@@ -57,7 +57,7 @@ export default function Login() {
 
         <div className="login__topbar-right">
           <Clock className="login__clock" />
-          <LanguageSwitcher />
+          <LanguageSwitcher className="login__lang-switcher" />
           <ThemeToggle />
         </div>
       </div>

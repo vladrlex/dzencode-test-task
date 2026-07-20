@@ -42,17 +42,34 @@
 .login__topbar-right {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 40px;
 }
 
 .login__clock {
-  min-width: 0;
+  min-width: 220px;
+}
+
+.login__lang-switcher {
+  min-width: 70px;
 }
 
 @media (max-width: 1024px) {
   .login__topbar {
     padding: 0 20px;
     height: 65px;
+  }
+
+  .login__topbar-right {
+    gap: 15px;
+  }
+
+  .clock.login__clock {
+    min-width: auto;
+    gap: 12px;
+  }
+
+  .login__clock .clock__weekday {
+    display: none;
   }
 }
 
