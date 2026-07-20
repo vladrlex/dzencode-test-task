@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchProducts, fetchProductTypes, removeProductServer } from '../../store/productsSlice';
+import { addToast } from '../../store/uiSlice';
 import ProductCard from './ProductCard/ProductCard';
 import DeleteOrderModal from '../../components/DeleteOrderModal/DeleteOrderModal';
 import Pagination from '../../components/Pagination/Pagination';
@@ -114,6 +115,7 @@ export default function Products() {
         dispatch(fetchProducts({ search: searchQuery, type: selectedType, page: localPage, limit: localLimit }));
       } catch (error) {
         console.error('Failed to delete product:', error);
+        dispatch(addToast(t('errors.deleteProductFailed')));
       } finally {
         setDeleteModalOpen(false);
         setProductToDelete(null);

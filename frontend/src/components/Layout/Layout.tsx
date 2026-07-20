@@ -10,8 +10,8 @@ import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import UserIcon from '../Icons/UserIcon';
 import ShieldLogoIcon from '../Icons/ShieldLogoIcon';
-import SettingsIcon from '../Icons/SettingsIcon';
 import LogoutIcon from '../Icons/LogoutIcon';
+import ToastContainer from '../ToastContainer/ToastContainer';
 import './Layout.css';
 
 export default function Layout() {
@@ -105,9 +105,6 @@ export default function Layout() {
               <div className="layout__user-avatar">
                 <UserIcon size={40} className="layout__user-icon" />
               </div>
-              <button className="layout__avatar-settings" aria-label={t('a11y.settings')}>
-                <SettingsIcon size={12} />
-              </button>
             </div>
             <div className="layout__user-name">{username || t('layout.activeUser')}</div>
             <button className="layout__logout-btn" onClick={handleLogout} aria-label={t('a11y.logout')}>
@@ -135,6 +132,8 @@ export default function Layout() {
           </div>
         </main>
       </div>
+
+      <ToastContainer />
     </div>
   );
 }

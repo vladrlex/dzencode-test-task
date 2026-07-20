@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../../store/hooks';
 import { addProductServer, updateProductServer, type Product } from '../../../store/productsSlice';
+import { addToast } from '../../../store/uiSlice';
 import Dropdown from '../../../components/Dropdown/Dropdown';
 import Input from '../../../components/Input/Input';
 import Button from '../../../components/Button/Button';
@@ -64,6 +65,7 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
       onClose();
     } catch (error) {
       console.error('Failed to save product:', error);
+      dispatch(addToast(t('errors.saveProductFailed')));
     }
   };
 

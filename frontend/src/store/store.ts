@@ -3,6 +3,7 @@ import productsReducer from './productsSlice';
 import ordersReducer from './ordersSlice';
 import authReducer from './authSlice';
 import themeReducer from './themeSlice';
+import uiReducer from './uiSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     orders: ordersReducer,
     auth: authReducer,
     theme: themeReducer,
+    ui: uiReducer,
   },
 });
 

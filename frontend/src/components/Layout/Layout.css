@@ -114,7 +114,6 @@
 }
 
 .layout__avatar-container {
-  position: relative;
   margin-bottom: 12px;
 }
 
@@ -131,31 +130,6 @@
 
 .layout__user-icon {
   color: var(--icon-muted);
-}
-
-.layout__avatar-settings {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--icon-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: all var(--transition-fast);
-  padding: 0;
-}
-
-.layout__avatar-settings:hover {
-  color: var(--text-h);
-  border-color: var(--text);
-  transform: rotate(30deg);
 }
 
 .layout__user-name {
@@ -276,11 +250,6 @@
   .layout__user-icon {
     width: 28px;
     height: 28px;
-  }
-
-  .layout__avatar-settings {
-    width: 18px;
-    height: 18px;
   }
 
   .layout__nav-link {

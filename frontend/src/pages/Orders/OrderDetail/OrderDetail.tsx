@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../../store/hooks';
 import { type Product, removeProductServer } from '../../../store/productsSlice';
+import { addToast } from '../../../store/uiSlice';
 import CloseButton from '../../../components/Buttons/CloseButton/CloseButton';
 import EditIcon from '../../../components/Icons/EditIcon';
 import DeleteButton from '../../../components/Buttons/DeleteButton/DeleteButton';
@@ -37,6 +38,7 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
         onProductDeleted();
       } catch (error) {
         console.error('Failed to delete product:', error);
+        dispatch(addToast(t('errors.deleteProductFailed')));
       } finally {
         setDeleteModalOpen(false);
         setProductToDelete(null);
