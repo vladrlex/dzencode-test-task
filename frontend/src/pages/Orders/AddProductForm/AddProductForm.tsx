@@ -6,6 +6,13 @@ import { addToast } from '../../../store/uiSlice';
 import Dropdown from '../../../components/Dropdown/Dropdown';
 import Input from '../../../components/Input/Input';
 import Button from '../../../components/Button/Button';
+import TagIcon from '../../../components/Icons/TagIcon';
+import CategoryIcon from '../../../components/Icons/CategoryIcon';
+import BarcodeIcon from '../../../components/Icons/BarcodeIcon';
+import SpecIcon from '../../../components/Icons/SpecIcon';
+import SupplierIcon from '../../../components/Icons/SupplierIcon';
+import DollarIcon from '../../../components/Icons/DollarIcon';
+import HryvniaIcon from '../../../components/Icons/HryvniaIcon';
 import './AddProductForm.css';
 
 interface AddProductFormProps {
@@ -74,55 +81,66 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
       <Input
         id="product-title"
         label={t('forms.productTitleLabel', { defaultValue: 'Название продукта' })}
+        wrapperClassName="add-product-form__full"
+        icon={<TagIcon size={16} />}
         type="text"
         minLength={3}
         value={formData.title}
         placeholder={t('forms.placeholderProductTitle', { defaultValue: 'например, Монитор' })}
         required
+        autoFocus
         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
       />
 
-      <Input
-        id="product-type"
-        label={t('forms.typeLabel', { defaultValue: 'Тип' })}
-        type="text"
-        value={formData.type}
-        placeholder={t('forms.placeholderType', { defaultValue: 'например, Мониторы' })}
-        required
-        onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-      />
+      <div className="add-product-form__row">
+        <Input
+          id="product-type"
+          label={t('forms.typeLabel', { defaultValue: 'Тип' })}
+          icon={<CategoryIcon size={16} />}
+          type="text"
+          value={formData.type}
+          placeholder={t('forms.placeholderType', { defaultValue: 'например, Мониторы' })}
+          required
+          onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+        />
 
-      <Input
-        id="product-sn"
-        label={t('forms.serialNumberLabel', { defaultValue: 'Серийный номер' })}
-        type="number"
-        min="1"
-        value={formData.serialNumber}
-        placeholder={t('forms.placeholderSerialNumber', { defaultValue: 'например, 12345' })}
-        required
-        onChange={(e) => setFormData({ ...formData, serialNumber: e.target.value })}
-      />
+        <Input
+          id="product-sn"
+          label={t('forms.serialNumberLabel', { defaultValue: 'Серийный номер' })}
+          icon={<BarcodeIcon size={16} />}
+          type="number"
+          min="1"
+          value={formData.serialNumber}
+          placeholder={t('forms.placeholderSerialNumber', { defaultValue: 'например, 12345' })}
+          required
+          onChange={(e) => setFormData({ ...formData, serialNumber: e.target.value })}
+        />
+      </div>
 
-      <Input
-        id="product-spec"
-        label={t('forms.specificationLabel', { defaultValue: 'Specification' })}
-        type="text"
-        value={formData.specification}
-        placeholder={t('forms.placeholderSpecification', { defaultValue: 'e.g. Intel X58, ATX' })}
-        required
-        onChange={(e) => setFormData({ ...formData, specification: e.target.value })}
-      />
+      <div className="add-product-form__row">
+        <Input
+          id="product-spec"
+          label={t('forms.specificationLabel', { defaultValue: 'Specification' })}
+          icon={<SpecIcon size={16} />}
+          type="text"
+          value={formData.specification}
+          placeholder={t('forms.placeholderSpecification', { defaultValue: 'e.g. Intel X58, ATX' })}
+          required
+          onChange={(e) => setFormData({ ...formData, specification: e.target.value })}
+        />
 
-      <Input
-        id="product-supplier"
-        label={t('forms.supplierLabel', { defaultValue: 'Supplier' })}
-        type="text"
-        value={formData.supplier}
-        placeholder={t('forms.placeholderSupplier', { defaultValue: 'e.g. TechDistrib LLC' })}
-        onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
-      />
+        <Input
+          id="product-supplier"
+          label={t('forms.supplierLabel', { defaultValue: 'Supplier' })}
+          icon={<SupplierIcon size={16} />}
+          type="text"
+          value={formData.supplier}
+          placeholder={t('forms.placeholderSupplier', { defaultValue: 'e.g. TechDistrib LLC' })}
+          onChange={(e) => setFormData({ ...formData, supplier: e.target.value })}
+        />
+      </div>
 
-      <div className="input-field">
+      <div className="input-field add-product-form__full">
         <label>{t('forms.conditionLabel', { defaultValue: 'Condition' })}</label>
         <Dropdown
           fullWidth
@@ -135,29 +153,37 @@ export default function AddProductForm({ orderId, onClose, productToEdit }: AddP
         />
       </div>
 
-      <Input
-        id="product-usd"
-        label={t('forms.priceUsdLabel', { defaultValue: 'Цена USD' })}
-        type="number"
-        min="0"
-        step="0.01"
-        value={formData.priceUsd}
-        placeholder={t('forms.placeholderPriceUsd', { defaultValue: 'например, 100' })}
-        required
-        onChange={(e) => setFormData({ ...formData, priceUsd: e.target.value })}
-      />
+      <div className="add-product-form__section-label">
+        {t('forms.pricingSection', { defaultValue: 'Pricing' })}
+      </div>
 
-      <Input
-        id="product-uah"
-        label={t('forms.priceUahLabel', { defaultValue: 'Цена UAH' })}
-        type="number"
-        min="0"
-        step="0.01"
-        value={formData.priceUah}
-        placeholder={t('forms.placeholderPriceUah', { defaultValue: 'например, 2600' })}
-        required
-        onChange={(e) => setFormData({ ...formData, priceUah: e.target.value })}
-      />
+      <div className="add-product-form__row">
+        <Input
+          id="product-usd"
+          label={t('forms.priceUsdLabel', { defaultValue: 'Цена USD' })}
+          icon={<DollarIcon size={16} />}
+          type="number"
+          min="0"
+          step="0.01"
+          value={formData.priceUsd}
+          placeholder={t('forms.placeholderPriceUsd', { defaultValue: 'например, 100' })}
+          required
+          onChange={(e) => setFormData({ ...formData, priceUsd: e.target.value })}
+        />
+
+        <Input
+          id="product-uah"
+          label={t('forms.priceUahLabel', { defaultValue: 'Цена UAH' })}
+          icon={<HryvniaIcon size={16} />}
+          type="number"
+          min="0"
+          step="0.01"
+          value={formData.priceUah}
+          placeholder={t('forms.placeholderPriceUah', { defaultValue: 'например, 2600' })}
+          required
+          onChange={(e) => setFormData({ ...formData, priceUah: e.target.value })}
+        />
+      </div>
 
       <div className="add-product-form__actions">
         <Button type="button" variant="ghost" onClick={onClose}>

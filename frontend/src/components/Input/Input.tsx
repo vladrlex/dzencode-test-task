@@ -1,16 +1,20 @@
-import type { InputHTMLAttributes } from 'react';
+import type { InputHTMLAttributes, ReactNode } from 'react';
 import './Input.css';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   wrapperClassName?: string;
+  icon?: ReactNode;
 }
 
-export default function Input({ label, id, wrapperClassName = '', ...rest }: InputProps) {
+export default function Input({ label, id, wrapperClassName = '', icon, ...rest }: InputProps) {
   return (
-    <div className={`input-field ${wrapperClassName}`}>
+    <div className={`input-field ${icon ? 'input-field--with-icon' : ''} ${wrapperClassName}`}>
       <label htmlFor={id}>{label}</label>
-      <input id={id} {...rest} />
+      <div className="input-field__control">
+        {icon && <span className="input-field__icon">{icon}</span>}
+        <input id={id} {...rest} />
+      </div>
     </div>
   );
 }

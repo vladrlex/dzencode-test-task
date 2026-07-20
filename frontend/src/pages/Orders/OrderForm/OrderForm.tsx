@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Input from '../../../components/Input/Input';
 import Button from '../../../components/Button/Button';
+import FolderIcon from '../../../components/Icons/FolderIcon';
+import DescriptionIcon from '../../../components/Icons/DescriptionIcon';
 import './OrderForm.css';
 
 interface OrderFormProps {
@@ -32,17 +34,20 @@ export default function OrderForm({ onSubmit }: OrderFormProps) {
         id="order-title-input"
         label={t('forms.titleLabel')}
         wrapperClassName="order-form__field"
+        icon={<FolderIcon size={16} />}
         type="text"
         value={newTitle}
         onChange={(e) => setNewTitle(e.target.value)}
         placeholder={t('forms.placeholderTitle')}
         required
+        autoFocus
       />
 
       <Input
         id="order-desc-input"
         label={t('forms.descLabel')}
         wrapperClassName="order-form__field order-form__field--large"
+        icon={<DescriptionIcon size={16} />}
         type="text"
         value={newDesc}
         onChange={(e) => setNewDesc(e.target.value)}

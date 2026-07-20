@@ -49,7 +49,8 @@
     "cancel": "Cancel",
     "save": "Save",
     "saveProduct": "Add",
-    "updateProduct": "Save"
+    "updateProduct": "Save",
+    "pricingSection": "Pricing"
   },
   "modals": {
     "deleteTitle": "Are you sure you want to delete this order?",
