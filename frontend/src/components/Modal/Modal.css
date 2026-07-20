@@ -25,6 +25,10 @@
   overflow: hidden;
 }
 
+.modal-content--sm {
+  width: 400px;
+}
+
 .modal-body-scroll {
   flex: 1;
   overflow-y: auto;

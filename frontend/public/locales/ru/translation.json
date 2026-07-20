@@ -76,7 +76,6 @@
   },
   "a11y": {
     "closeModal": "Закрыть модальное окно",
-    "closeDeleteModal": "Закрыть окно удаления",
     "closeDetails": "Закрыть детали",
     "deleteOrder": "Удалить приход",
     "deleteProduct": "Удалить продукт",

@@ -76,7 +76,6 @@
   },
   "a11y": {
     "closeModal": "Close modal",
-    "closeDeleteModal": "Close delete modal",
     "closeDetails": "Close details",
     "deleteOrder": "Delete order",
     "deleteProduct": "Delete product",
