@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '../config/config';
 
@@ -65,11 +65,7 @@ export const addOrderServer = createAsyncThunk(
 const ordersSlice = createSlice({
   name: 'orders',
   initialState,
-  reducers: {
-    deleteOrder: (state, action: PayloadAction<number>) => {
-      state.items = state.items.filter((item) => item.id !== action.payload);
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchOrders.pending, (state) => {
@@ -105,5 +101,4 @@ const ordersSlice = createSlice({
   },
 });
 
-export const { deleteOrder } = ordersSlice.actions;
 export default ordersSlice.reducer;

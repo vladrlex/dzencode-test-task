@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('../db');
 const { toMySQLDateTime } = require('../utils/dateUtils');
+const { validateProductCreate, validateProductUpdate } = require('../utils/validateProduct');
 
 const router = express.Router();
 
@@ -179,6 +180,11 @@ router.get('/meta/condition-counts', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  const validationErrors = validateProductCreate(req.body);
+  if (validationErrors.length) {
+    return res.status(400).json({ error: 'Invalid product data', details: validationErrors });
+  }
+
   const conn = await pool.getConnection();
   try {
     const {
@@ -194,6 +200,11 @@ router.post('/', async (req, res) => {
       order,
       date,
     } = req.body;
+
+    const [orderRows] = await conn.query('SELECT id FROM orders WHERE id = ?', [order]);
+    if (!orderRows.length) {
+      return res.status(400).json({ error: `Order ${order} does not exist` });
+    }
 
     await conn.beginTransaction();
 
@@ -239,6 +250,11 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
+  const validationErrors = validateProductUpdate(req.body);
+  if (validationErrors.length) {
+    return res.status(400).json({ error: 'Invalid product data', details: validationErrors });
+  }
+
   const conn = await pool.getConnection();
   try {
     const productId = parseInt(req.params.id, 10);
@@ -255,6 +271,13 @@ router.put('/:id', async (req, res) => {
       order,
       date,
     } = req.body;
+
+    if (order !== undefined) {
+      const [orderRows] = await conn.query('SELECT id FROM orders WHERE id = ?', [order]);
+      if (!orderRows.length) {
+        return res.status(400).json({ error: `Order ${order} does not exist` });
+      }
+    }
 
     await conn.beginTransaction();
 
@@ -316,7 +339,10 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const productId = parseInt(req.params.id, 10);
-    await pool.query('DELETE FROM products WHERE id = ?', [productId]);
+    const [result] = await pool.query('DELETE FROM products WHERE id = ?', [productId]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
     res.status(200).json({ id: productId });
   } catch (error) {
     console.error('DELETE /api/products/:id error:', error);

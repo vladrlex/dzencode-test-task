@@ -4,6 +4,7 @@ import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchOrders, removeOrderServer, addOrderServer } from '../../store/ordersSlice';
 import { fetchProducts, type Product } from '../../store/productsSlice';
+import { addToast } from '../../store/uiSlice';
 import OrderForm from './OrderForm/OrderForm';
 import OrderCard from './OrderCard/OrderCard';
 import OrderDetail from './OrderDetail/OrderDetail';
@@ -87,6 +88,7 @@ export default function Orders() {
       refetchOrders();
     } catch (error) {
       console.error(error);
+      dispatch(addToast(t('errors.addOrderFailed')));
     }
   };
 
@@ -96,6 +98,7 @@ export default function Orders() {
         await dispatch(removeOrderServer(deleteTargetId)).unwrap();
       } catch (error) {
         console.error(error);
+        dispatch(addToast(t('errors.deleteOrderFailed')));
       } finally {
         if (selectedOrderId === deleteTargetId) setSelectedOrderId(null);
         setDeleteTargetId(null);

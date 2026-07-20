@@ -80,7 +80,6 @@
     "deleteOrder": "Delete order",
     "deleteProduct": "Delete product",
     "delete": "Delete",
-    "settings": "Settings",
     "logout": "Log out",
     "switchToDark": "Switch to dark theme",
     "switchToLight": "Switch to light theme"
@@ -110,5 +109,12 @@
     "loginError": "Invalid username or password",
     "tryAgainIn": "Try again in {{time}}",
     "logoutBtn": "Log out"
+  },
+  "errors": {
+    "deleteOrderFailed": "Failed to delete the order. Please try again.",
+    "deleteProductFailed": "Failed to delete the product. Please try again.",
+    "addOrderFailed": "Failed to create the order. Please try again.",
+    "saveProductFailed": "Failed to save the product. Please try again.",
+    "dashboardLoadFailed": "Failed to load some dashboard data. Please refresh the page."
   }
 }

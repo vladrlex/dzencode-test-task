@@ -7,6 +7,11 @@ const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Used to run bcrypt.compare even when the username doesn't exist, so a
+// "no such user" response takes the same time as a "wrong password" one
+// and doesn't leak which usernames are registered via a timing side-channel.
+const DUMMY_HASH = '$2a$10$CwTycUXWue0Thq9StjUM0uJ8O8/rLzWuvbBw.pQ6joBLLbHV6Hraa';
+
 const loginLimiter = rateLimit({
   windowMs: 5 * 60 * 1000,
   limit: 10,
@@ -26,7 +31,9 @@ router.post('/login', loginLimiter, async (req, res) => {
     const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [username]);
     const user = rows[0];
 
-    if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+    const passwordMatches = await bcrypt.compare(password, user ? user.password_hash : DUMMY_HASH);
+
+    if (!user || !passwordMatches) {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
 

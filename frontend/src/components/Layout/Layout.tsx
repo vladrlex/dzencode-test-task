@@ -10,14 +10,15 @@ import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import UserIcon from '../Icons/UserIcon';
 import ShieldLogoIcon from '../Icons/ShieldLogoIcon';
-import SettingsIcon from '../Icons/SettingsIcon';
 import LogoutIcon from '../Icons/LogoutIcon';
+import ToastContainer from '../ToastContainer/ToastContainer';
 import './Layout.css';
 
 export default function Layout() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const username = useAppSelector((state) => state.auth.username);
+  const token = useAppSelector((state) => state.auth.token);
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeSessions, setActiveSessions] = useState(1);
@@ -48,7 +49,9 @@ export default function Layout() {
   }, [searchQuery, setSearchParams]);
 
   useEffect(() => {
-    const socket = io(API_URL);
+    if (!token) return;
+
+    const socket = io(API_URL, { auth: { token } });
 
     socket.on('sessions_count', (count: number) => {
       setActiveSessions(count);
@@ -58,7 +61,7 @@ export default function Layout() {
       socket.off('sessions_count');
       socket.disconnect();
     };
-  }, []);
+  }, [token]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -105,9 +108,6 @@ export default function Layout() {
               <div className="layout__user-avatar">
                 <UserIcon size={40} className="layout__user-icon" />
               </div>
-              <button className="layout__avatar-settings" aria-label={t('a11y.settings')}>
-                <SettingsIcon size={12} />
-              </button>
             </div>
             <div className="layout__user-name">{username || t('layout.activeUser')}</div>
             <button className="layout__logout-btn" onClick={handleLogout} aria-label={t('a11y.logout')}>
@@ -135,6 +135,8 @@ export default function Layout() {
           </div>
         </main>
       </div>
+
+      <ToastContainer />
     </div>
   );
 }

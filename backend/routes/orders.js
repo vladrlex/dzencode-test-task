@@ -1,5 +1,6 @@
 const express = require('express');
 const pool = require('../db');
+const { toMySQLDateTime } = require('../utils/dateUtils');
 
 const router = express.Router();
 
@@ -84,7 +85,7 @@ router.get('/meta/stats', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { title, description } = req.body;
-    const date = new Date().toISOString().replace('T', ' ').substring(0, 19);
+    const date = toMySQLDateTime(new Date());
 
     const [result] = await pool.query(
       'INSERT INTO orders (title, date, description) VALUES (?, ?, ?)',
@@ -102,7 +103,10 @@ router.post('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const orderId = parseInt(req.params.id, 10);
-    await pool.query('DELETE FROM orders WHERE id = ?', [orderId]);
+    const [result] = await pool.query('DELETE FROM orders WHERE id = ?', [orderId]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
     res.status(200).json({ success: true, id: orderId });
   } catch (error) {
     console.error('DELETE /api/orders/:id error:', error);

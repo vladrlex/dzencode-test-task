@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { API_URL } from '../config/config';
-import { deleteOrder } from './ordersSlice';
+import { removeOrderServer } from './ordersSlice';
 
 export interface Price {
   value: number;
@@ -136,7 +136,7 @@ const productsSlice = createSlice({
           state.items[index] = action.payload;
         }
       })
-      .addCase(deleteOrder, (state, action) => {
+      .addCase(removeOrderServer.fulfilled, (state, action) => {
         state.items = state.items.filter((product) => product.order !== action.payload);
       })
       .addCase(fetchProductTypes.fulfilled, (state, action) => {

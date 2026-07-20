@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import reducer, { deleteOrder, fetchOrders, removeOrderServer, addOrderServer, type Order } from './ordersSlice';
+import reducer, { fetchOrders, removeOrderServer, addOrderServer, type Order } from './ordersSlice';
 
 const baseState = {
   items: [] as Order[],
@@ -73,13 +73,5 @@ describe('ordersSlice', () => {
       addOrderServer.fulfilled(newOrder, 'requestId', { title: 'New order', description: 'desc' })
     );
     expect(state.items).toContainEqual(newOrder);
-  });
-
-  it('removes an order locally via the deleteOrder action', () => {
-    const state = reducer(
-      { ...baseState, items: [makeOrder({ id: 1 }), makeOrder({ id: 2 })] },
-      deleteOrder(1)
-    );
-    expect(state.items.map((o) => o.id)).toEqual([2]);
   });
 });
