@@ -18,6 +18,7 @@ export default function Layout() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const username = useAppSelector((state) => state.auth.username);
+  const token = useAppSelector((state) => state.auth.token);
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeSessions, setActiveSessions] = useState(1);
@@ -48,7 +49,9 @@ export default function Layout() {
   }, [searchQuery, setSearchParams]);
 
   useEffect(() => {
-    const socket = io(API_URL);
+    if (!token) return;
+
+    const socket = io(API_URL, { auth: { token } });
 
     socket.on('sessions_count', (count: number) => {
       setActiveSessions(count);
@@ -58,7 +61,7 @@ export default function Layout() {
       socket.off('sessions_count');
       socket.disconnect();
     };
-  }, []);
+  }, [token]);
 
   const handleLogout = () => {
     dispatch(logout());
