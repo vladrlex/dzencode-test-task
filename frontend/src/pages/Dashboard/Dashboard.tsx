@@ -151,16 +151,16 @@ export default function Dashboard() {
 
       {orderStats && (
         <div className="row g-4 dashboard__stats">
-          <div className="col-6 col-md-3">
+          <div className="col-12 col-sm-6 col-md-3">
             <StatTile label={t('dashboard.totalOrders')} value={orderStats.totalOrders.toLocaleString('en-US')} />
           </div>
-          <div className="col-6 col-md-3">
+          <div className="col-12 col-sm-6 col-md-3">
             <StatTile label={t('dashboard.totalProducts')} value={orderStats.totalProducts.toLocaleString('en-US')} />
           </div>
-          <div className="col-6 col-md-3">
+          <div className="col-12 col-sm-6 col-md-3">
             <StatTile label={t('dashboard.totalValueUsd')} value={`$${orderStats.totalUsd.toLocaleString('en-US')}`} />
           </div>
-          <div className="col-6 col-md-3">
+          <div className="col-12 col-sm-6 col-md-3">
             <StatTile label={t('dashboard.totalValueUah')} value={`₴${orderStats.totalUah.toLocaleString('en-US')}`} />
           </div>
         </div>
