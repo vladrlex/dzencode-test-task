@@ -4,12 +4,12 @@ import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchOrders, removeOrderServer, addOrderServer } from '../../store/ordersSlice';
 import { fetchProducts, type Product } from '../../store/productsSlice';
-import OrderForm from '../../components/OrderForm/OrderForm';
-import OrderCard from '../../components/OrderCard/OrderCard';
-import OrderDetail from '../../components/OrderDetail/OrderDetail';
+import OrderForm from './OrderForm/OrderForm';
+import OrderCard from './OrderCard/OrderCard';
+import OrderDetail from './OrderDetail/OrderDetail';
 import DeleteOrderModal from '../../components/DeleteOrderModal/DeleteOrderModal';
 import Modal from '../../components/Modal/Modal';
-import AddProductForm from '../../components/AddProductForm/AddProductForm';
+import AddProductForm from './AddProductForm/AddProductForm';
 import Pagination from '../../components/Pagination/Pagination';
 import './Orders.css';
 

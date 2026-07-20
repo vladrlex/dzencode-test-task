@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import type { Order } from '../../store/ordersSlice';
-import { formatDateNumeric, formatDateFull } from '../../utils/dateFormatter';
-import ListIcon from '../Icons/ListIcon';
-import DeleteButton from '../Buttons/DeleteButton/DeleteButton';
+import type { Order } from '../../../store/ordersSlice';
+import { formatDateNumeric, formatDateFull } from '../../../utils/dateFormatter';
+import ListIcon from '../../../components/Icons/ListIcon';
+import DeleteButton from '../../../components/Buttons/DeleteButton/DeleteButton';
 import './OrderCard.css';
 
 interface OrderCardProps {

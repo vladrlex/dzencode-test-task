@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useOutletContext, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchProducts, fetchProductTypes, removeProductServer } from '../../store/productsSlice';
-import ProductCard from '../../components/ProductCard/ProductCard';
+import ProductCard from './ProductCard/ProductCard';
 import DeleteOrderModal from '../../components/DeleteOrderModal/DeleteOrderModal';
 import Pagination from '../../components/Pagination/Pagination';
 import Dropdown from '../../components/Dropdown/Dropdown';

@@ -1,0 +1,29 @@
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.input-field input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  color: var(--text-h);
+  background-color: var(--surface);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-field input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(124, 179, 66, 0.15);
+}

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from '../../store/hooks';
-import { type Product, removeProductServer } from '../../store/productsSlice';
-import CloseButton from '../Buttons/CloseButton/CloseButton';
-import EditIcon from '../Icons/EditIcon';
-import DeleteButton from '../Buttons/DeleteButton/DeleteButton';
-import DeleteOrderModal from '../DeleteOrderModal/DeleteOrderModal';
+import { useAppDispatch } from '../../../store/hooks';
+import { type Product, removeProductServer } from '../../../store/productsSlice';
+import CloseButton from '../../../components/Buttons/CloseButton/CloseButton';
+import EditIcon from '../../../components/Icons/EditIcon';
+import DeleteButton from '../../../components/Buttons/DeleteButton/DeleteButton';
+import DeleteOrderModal from '../../../components/DeleteOrderModal/DeleteOrderModal';
+import Button from '../../../components/Button/Button';
 import './OrderDetail.css';
 
 interface OrderDetailProps {
@@ -53,9 +54,9 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
       <h3 className="order-detail__title">{orderTitle}</h3>
 
       <div className="order-detail__actions">
-        <button className="btn-add-product" onClick={onAddProduct}>
+        <Button className="btn-add-product" onClick={onAddProduct}>
           {t('orders.addProductBtn')}
-        </button>
+        </Button>
       </div>
 
       <div className="order-detail__list">

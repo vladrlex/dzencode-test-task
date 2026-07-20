@@ -1,0 +1,65 @@
+.app-btn {
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.app-btn:disabled {
+  cursor: not-allowed;
+}
+
+.app-btn--full-width {
+  width: 100%;
+}
+
+.app-btn--primary {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+}
+
+.app-btn--primary:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.app-btn--primary:disabled {
+  background-color: var(--text);
+  opacity: 0.6;
+}
+
+.app-btn--secondary {
+  background-color: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.app-btn--secondary:hover:not(:disabled) {
+  background-color: var(--bg);
+  border-color: var(--text);
+}
+
+.app-btn--danger {
+  background-color: var(--error-color);
+  color: var(--text-white);
+}
+
+.app-btn--danger:hover:not(:disabled) {
+  background-color: #d32f2f;
+  transform: scale(1.02);
+}
+
+.app-btn--danger:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.app-btn--ghost {
+  background: none;
+  color: var(--icon-muted);
+}
+
+.app-btn--ghost:hover:not(:disabled) {
+  color: var(--text-h);
+}

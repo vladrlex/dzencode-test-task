@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import Modal from '../Modal/Modal';
+import Button from '../Button/Button';
 import './DeteleOrderModal.css';
 
 interface DeleteOrderModalProps {
@@ -26,12 +27,12 @@ export default function DeleteOrderModal({
       )}
 
       <div className="delete-modal__actions">
-        <button className="delete-modal__btn delete-modal__btn--cancel" onClick={onClose}>
+        <Button variant="secondary" onClick={onClose}>
           {t('modals.cancel')}
-        </button>
-        <button className="delete-modal__btn delete-modal__btn--confirm" onClick={onConfirm}>
+        </Button>
+        <Button variant="danger" onClick={onConfirm}>
           {t('modals.delete')}
-        </button>
+        </Button>
       </div>
     </Modal>
   );
