@@ -66,31 +66,6 @@
   margin: 0 0 var(--spacing-xs);
 }
 
-.login__field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.login__field label {
-  font-size: 13px;
-  color: var(--text);
-}
-
-.login__field input {
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--border-radius);
-  font-size: 14px;
-  color: var(--text-h);
-  background-color: var(--surface);
-}
-
-.login__field input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-}
-
 .login__error {
   color: var(--error-color);
   font-size: 13px;
@@ -99,21 +74,4 @@
 .login__submit {
   margin-top: var(--spacing-xs);
   padding: 10px;
-  background: var(--primary-color);
-  color: var(--text-white);
-  border: none;
-  border-radius: var(--border-radius);
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition-fast);
-}
-
-.login__submit:hover:not(:disabled) {
-  background: var(--primary-hover);
-}
-
-.login__submit:disabled {
-  background: var(--text);
-  opacity: 0.6;
-  cursor: not-allowed;
 }

@@ -1,0 +1,33 @@
+.add-product-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs);
+  height: 100%;
+}
+
+.add-product-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 20px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (max-width: 768px) {
+  .add-product-form .input-field input {
+    padding: 16px;
+    font-size: 16px;
+  }
+
+  .add-product-form__actions {
+    flex-direction: row;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+
+  .add-product-form__actions .app-btn--primary {
+    flex: 1;
+  }
+}

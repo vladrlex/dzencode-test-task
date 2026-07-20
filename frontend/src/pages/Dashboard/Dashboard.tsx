@@ -19,7 +19,7 @@ import type { Map as LeafletMap, CircleMarker as LeafletCircleMarker } from 'lea
 import 'leaflet/dist/leaflet.css';
 import { API_URL } from '../../config/config';
 import { SUPPLIER_LOCATIONS } from '../../data/supplierLocations';
-import StatTile from '../../components/StatTile/StatTile';
+import StatTile from './StatTile/StatTile';
 import { useAppSelector } from '../../store/hooks';
 import './Dashboard.css';
 

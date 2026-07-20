@@ -1,0 +1,18 @@
+.order-form {
+  display: flex;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background-color: var(--surface);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border);
+  align-items: flex-end;
+}
+
+.order-form__field {
+  flex: 1;
+  min-width: 0;
+}
+
+.order-form__field--large {
+  flex: 2;
+}

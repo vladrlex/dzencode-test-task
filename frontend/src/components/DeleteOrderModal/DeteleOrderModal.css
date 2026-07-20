@@ -10,38 +10,3 @@
   justify-content: flex-end;
   gap: 15px;
 }
-
-.delete-modal__btn {
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all var(--transition-fast);
-}
-
-.delete-modal__btn--cancel {
-  border: 1px solid var(--border);
-  background-color: var(--surface);
-  color: var(--text);
-}
-
-.delete-modal__btn--cancel:hover {
-  background-color: var(--bg);
-  border-color: var(--text);
-}
-
-.delete-modal__btn--confirm {
-  border: none;
-  background-color: var(--error-color);
-  color: var(--text-white);
-}
-
-.delete-modal__btn--confirm:hover {
-  background-color: #d32f2f;
-  transform: scale(1.02);
-}
-
-.delete-modal__btn--confirm:active {
-  transform: scale(0.98);
-}

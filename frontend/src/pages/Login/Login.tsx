@@ -6,6 +6,8 @@ import ShieldLogoIcon from '../../components/Icons/ShieldLogoIcon';
 import Clock from '../../components/Clock/Clock';
 import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher';
 import ThemeToggle from '../../components/ThemeToggle/ThemeToggle';
+import Input from '../../components/Input/Input';
+import Button from '../../components/Button/Button';
 import './Login.css';
 
 const formatCountdown = (totalSeconds: number): string => {
@@ -61,40 +63,36 @@ export default function Login() {
 
         <h2 className="login__title">{t('auth.loginTitle')}</h2>
 
-        <div className="login__field">
-          <label htmlFor="login-username">{t('auth.usernameLabel')}</label>
-          <input
-            id="login-username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder={t('auth.placeholderUsername')}
-            required
-            autoFocus
-          />
-        </div>
+        <Input
+          id="login-username"
+          label={t('auth.usernameLabel')}
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder={t('auth.placeholderUsername')}
+          required
+          autoFocus
+        />
 
-        <div className="login__field">
-          <label htmlFor="login-password">{t('auth.passwordLabel')}</label>
-          <input
-            id="login-password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder={t('auth.placeholderPassword')}
-            required
-          />
-        </div>
+        <Input
+          id="login-password"
+          label={t('auth.passwordLabel')}
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder={t('auth.placeholderPassword')}
+          required
+        />
 
         {!isRateLimited && error && <div className="login__error">{t('auth.loginError')}</div>}
 
-        <button type="submit" className="login__submit" disabled={status === 'loading' || isRateLimited}>
+        <Button type="submit" className="login__submit" disabled={status === 'loading' || isRateLimited}>
           {isRateLimited
             ? t('auth.tryAgainIn', { time: formatCountdown(countdown) })
             : status === 'loading'
             ? t('auth.loggingIn')
             : t('auth.loginBtn')}
-        </button>
+        </Button>
       </form>
     </div>
   );

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import type { Product } from '../../store/productsSlice';
-import { formatDateNumeric, formatDateFull, formatDateWithYear } from '../../utils/dateFormatter';
-import ProductIcon from '../Icons/ProductIcon';
-import DeleteButton from '../Buttons/DeleteButton/DeleteButton';
+import type { Product } from '../../../store/productsSlice';
+import { formatDateNumeric, formatDateFull, formatDateWithYear } from '../../../utils/dateFormatter';
+import ProductIcon from '../../../components/Icons/ProductIcon';
+import DeleteButton from '../../../components/Buttons/DeleteButton/DeleteButton';
 import './ProductCard.css';
 
 interface ProductCardProps {
