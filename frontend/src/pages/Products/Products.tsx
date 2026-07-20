@@ -65,10 +65,29 @@ export default function Products() {
   };
 
   const prevSearchQuery = useRef(searchQuery);
+  const tableWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     dispatch(fetchProductTypes());
   }, [dispatch]);
+
+  useEffect(() => {
+    const wrapper = tableWrapperRef.current;
+    if (!wrapper) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY === 0) return;
+      const canScrollRight = wrapper.scrollLeft < wrapper.scrollWidth - wrapper.clientWidth - 1;
+      const canScrollLeft = wrapper.scrollLeft > 0;
+      if ((e.deltaY > 0 && canScrollRight) || (e.deltaY < 0 && canScrollLeft)) {
+        e.preventDefault();
+        wrapper.scrollLeft += e.deltaY;
+      }
+    };
+
+    wrapper.addEventListener('wheel', handleWheel, { passive: false });
+    return () => wrapper.removeEventListener('wheel', handleWheel);
+  }, [products]);
 
   useEffect(() => {
     const isNewSearch = prevSearchQuery.current !== searchQuery;
@@ -140,7 +159,7 @@ export default function Products() {
         </div>
       </div>
 
-      <div className="products__table-wrapper">
+      <div className="products__table-wrapper" ref={tableWrapperRef}>
         <div className="products__list stagger-list">
           {products.map((product) => (
             <ProductCard
