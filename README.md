@@ -10,7 +10,7 @@ A single-page inventory management application for tracking **Orders** and the *
 
 **Demo login:** `admin` / `Demo12345!`
 
-**Demo video:** https://www.loom.com/share/885e43c42b3f49839c3da29e80013f72
+**Demo video:** https://www.loom.com/share/16e9e71cd08f471bb3ed38cf924fe460
 
 > The backend is on Render's free tier and spins down after inactivity — the first request after a while can take up to ~50s to wake it up.
 
@@ -47,6 +47,7 @@ A single-page inventory management application for tracking **Orders** and the *
 - Active sessions counter — number of open browser tabs/windows across all connected clients, synced via WebSocket.
 - Global search across orders and products (debounced).
 - Language switcher (EN/RU) — the choice persists in `localStorage`.
+- Light/dark theme toggle — the choice persists in `localStorage`.
 
 ### Navigation Menu
 - Route links between **Orders**, **Products**, and **Dashboard** pages.
@@ -73,25 +74,29 @@ A single-page inventory management application for tracking **Orders** and the *
 
 ## Screenshots
 
-**Orders — English / Russian UI**
+**Login — dark theme, and the rate-limit cooldown after too many failed attempts**
 
-<img src="docs/screenshots/orders_Eng.png" width="49%" /> <img src="docs/screenshots/orders_Ru.png" width="49%" />
+<img src="docs/screenshots/auth.png" width="49%" /> <img src="docs/screenshots/auth_timer.png" width="49%" />
 
-**Order detail panel**
+**Orders — dark/Russian and light/English UI**
 
-![Order detail](docs/screenshots/order_details.png)
+<img src="docs/screenshots/orders_dark_ru.png" width="49%" /> <img src="docs/screenshots/orders_white_eng.png" width="49%" />
 
-**Add product form**
+**Order detail panel — light theme, Russian**
 
-![Add product form](docs/screenshots/add_product_form.png)
+![Order detail](docs/screenshots/order_details_white_ru.png)
 
-**Products — English / Russian UI**
+**Add product form — dark theme**
 
-<img src="docs/screenshots/products_Eng.png" width="49%" /> <img src="docs/screenshots/products_Ru.png" width="49%" />
+![Add product form](docs/screenshots/product_add_from_dark_eng.png)
 
-**Dashboard — supplier chart and map**
+**Products — dark/English and light/Russian UI**
 
-![Dashboard](docs/screenshots/dashboard.png)
+<img src="docs/screenshots/products_dark_eng.png" width="49%" /> <img src="docs/screenshots/products_white_ru.png" width="49%" />
+
+**Dashboard — supplier chart and map, dark theme**
+
+![Dashboard](docs/screenshots/dashboard_dark_eng.png)
 
 ---
 
