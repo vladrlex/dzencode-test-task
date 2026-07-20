@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../store/hooks';
 import { type Product, removeProductServer } from '../../store/productsSlice';
@@ -20,14 +20,9 @@ interface OrderDetailProps {
 export default function OrderDetail({ orderTitle, products, onClose, onEditProduct, onAddProduct, onProductDeleted }: OrderDetailProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const rootRef = useRef<HTMLDivElement>(null);
 
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [productToDelete, setProductToDelete] = useState<{ id: number; title: string } | null>(null);
-
-  useEffect(() => {
-    rootRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, []);
 
   const handleDeleteProductClick = (productId: number, productTitle: string) => {
     setProductToDelete({ id: productId, title: productTitle });
@@ -49,7 +44,7 @@ export default function OrderDetail({ orderTitle, products, onClose, onEditProdu
   };
 
   return (
-    <div className="order-detail" ref={rootRef}>
+    <div className="order-detail">
       <CloseButton
         onClick={onClose}
         className="order-detail__close-pos"

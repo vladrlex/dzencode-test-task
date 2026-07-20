@@ -66,6 +66,8 @@
   border-radius: 6px;
   padding: var(--spacing-lg);
   min-height: 500px;
+  position: sticky;
+  top: 0;
 }
 
 .order-detail__actions {
