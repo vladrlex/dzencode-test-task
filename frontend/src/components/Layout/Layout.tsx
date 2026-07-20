@@ -98,6 +98,13 @@ export default function Layout() {
           <Clock className="layout__time-wrapper" />
           <LanguageSwitcher className="layout__lang-switcher" />
           <ThemeToggle />
+          <button
+            className="layout__mobile-logout"
+            onClick={handleLogout}
+            aria-label={t('a11y.logout')}
+          >
+            <LogoutIcon size={16} />
+          </button>
         </div>
       </header>
 

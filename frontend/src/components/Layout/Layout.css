@@ -90,6 +90,10 @@
   min-width: 70px;
 }
 
+.layout__mobile-logout {
+  display: none;
+}
+
 .layout__body {
   display: flex;
   flex: 1;
@@ -291,6 +295,24 @@
     display: none;
   }
 
+  .layout__mobile-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--text);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .layout__mobile-logout:hover {
+    color: var(--error-color);
+  }
+
   .layout__navigation {
     flex-direction: row;
     justify-content: space-around;
@@ -335,7 +357,7 @@
   }
 
   .layout__search-input {
-    width: 100px;
-    padding: 6px 10px;
+    width: 60px;
+    padding: 6px 8px;
   }
 }
