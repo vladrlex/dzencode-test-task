@@ -139,6 +139,8 @@ docker-compose up --build
 - Backend / Socket.io: `http://localhost:5000`
 - Login with `admin` / `Demo12345!` (seeded automatically on first boot)
 
+`docker-compose.yml` ships with an insecure default `JWT_SECRET` for zero-config local runs — override it by exporting `JWT_SECRET=<your-value>` before `docker-compose up`, or by adding it to a root `.env` file, for anything beyond throwaway local testing.
+
 On first boot the backend auto-seeds a small demo set (a handful of orders/products) from `backend/data.json`. To load the same large demo dataset (1000 orders / 5000 products) shown in the live deployment and in the README screenshots, run this once the containers are up:
 
 ```bash
