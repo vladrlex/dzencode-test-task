@@ -59,13 +59,16 @@
   flex: 0 0 450px;
 }
 
-.order-detail {
-  flex: 1;
+.order-detail-loading {
+  flex: 1 1 450px;
+  max-width: 700px;
   background-color: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
   min-height: 500px;
+  min-width: 0;
+  margin-left: 10px;
   position: sticky;
   top: 0;
 }

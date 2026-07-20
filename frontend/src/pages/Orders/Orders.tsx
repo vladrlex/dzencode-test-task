@@ -163,7 +163,7 @@ export default function Orders() {
 
         {selectedOrderId && selectedOrder && (
           productsLoading ? (
-            <div className="order-detail">
+            <div className="order-detail-loading">
               <div className="lazy-fallback-container">
                 <div className="lazy-spinner"></div>
               </div>
