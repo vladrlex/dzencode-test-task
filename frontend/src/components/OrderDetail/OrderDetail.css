@@ -1,5 +1,6 @@
 .order-detail {
-  flex: 0 0 350px;
+  flex: 1 1 450px;
+  max-width: 700px;
   background-color: var(--surface);
   border-radius: var(--border-radius);
   border: 1px solid var(--border);
