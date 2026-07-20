@@ -7,14 +7,15 @@ interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   title: string;
+  size?: 'md' | 'sm';
 }
 
-export default function Modal({ onClose, children, title }: ModalProps) {
+export default function Modal({ onClose, children, title, size = 'md' }: ModalProps) {
   const { t } = useTranslation();
 
   return createPortal(
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()}>
+      <div className={`modal-content ${size === 'sm' ? 'modal-content--sm' : ''}`} onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <h3>{title}</h3>
           <CloseButton onClick={onClose} ariaLabel={t('a11y.closeModal')} />
