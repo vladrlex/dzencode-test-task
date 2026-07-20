@@ -13,13 +13,17 @@
     "productsCountLabel": "Products",
     "modalAddTitle": "Add New Order",
     "modalProductAddTitle": "Add New Product",
-    "modalProductEditTitle": "Edit Product"
+    "modalProductEditTitle": "Edit Product",
+    "noOrders": "No orders found",
+    "emptyText": "The orders list is currently empty.",
+    "noResultsText": "No orders match your search."
   },
   "products": {
     "title": "Products",
     "loading": "Loading products...",
     "noProducts": "No products found",
     "emptyText": "The products list is currently empty.",
+    "noResultsText": "No products match your search or filter.",
     "filterLabel": "Filter by type:",
     "allTypes": "All",
     "unknownOrder": "Unknown Order"

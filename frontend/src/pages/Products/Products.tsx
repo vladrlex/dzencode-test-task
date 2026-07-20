@@ -100,8 +100,13 @@ export default function Products() {
       return;
     }
 
+    if (!isNewSearch && totalPages > 0 && localPage > totalPages) {
+      setLocalPage(totalPages);
+      return;
+    }
+
     dispatch(fetchProducts({ search: searchQuery, type: selectedType, page: effectivePage, limit: localLimit }));
-  }, [dispatch, searchQuery, selectedType, localPage, localLimit]);
+  }, [dispatch, searchQuery, selectedType, localPage, localLimit, totalPages]);
 
   const handleDeleteProduct = (productId: number, productTitle: string) => {
     setProductToDelete({ id: productId, title: productTitle });
@@ -132,10 +137,13 @@ export default function Products() {
   }
 
   if (!products || products.length === 0) {
+    const isFiltered = Boolean(searchQuery) || selectedType !== 'All';
     return (
       <div className="products__empty">
         <h3 className="products__empty-title">{t('products.noProducts')}</h3>
-        <p className="products__empty-text">{t('products.emptyText')}</p>
+        <p className="products__empty-text">
+          {isFiltered ? t('products.noResultsText') : t('products.emptyText')}
+        </p>
       </div>
     );
   }

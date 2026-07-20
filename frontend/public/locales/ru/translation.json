@@ -13,13 +13,17 @@
     "productsCountLabel": "Продукты",
     "modalAddTitle": "Добавить новый приход",
     "modalProductAddTitle": "Добавить новый продукт",
-    "modalProductEditTitle": "Редактировать продукт"
+    "modalProductEditTitle": "Редактировать продукт",
+    "noOrders": "Приходы не найдены",
+    "emptyText": "Список приходов в данный момент пуст.",
+    "noResultsText": "Ничего не найдено по вашему запросу."
   },
   "products": {
     "title": "Продукты",
     "loading": "Загрузка продуктов...",
     "noProducts": "Продукты не найдены",
     "emptyText": "Список продуктов в данный момент пуст.",
+    "noResultsText": "Ничего не найдено по вашему запросу или фильтру.",
     "filterLabel": "Фильтр по типу:",
     "allTypes": "Все",
     "unknownOrder": "Неизвестный приход"

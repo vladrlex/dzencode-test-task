@@ -70,8 +70,13 @@ export default function Orders() {
       return;
     }
 
+    if (!isNewSearch && ordersTotalPages > 0 && page > ordersTotalPages) {
+      setPage(ordersTotalPages);
+      return;
+    }
+
     dispatch(fetchOrders({ search: searchQuery, page: effectivePage, limit }));
-  }, [dispatch, searchQuery, page, limit]);
+  }, [dispatch, searchQuery, page, limit, ordersTotalPages]);
 
   useEffect(() => {
     if (selectedOrderId) {
@@ -145,15 +150,24 @@ export default function Orders() {
 
       <div className="orders__content">
         <div className={`orders__list stagger-list ${selectedOrderId ? 'orders__list--shrink' : ''}`}>
-          {orders.map((order) => (
-            <OrderCard
-              key={order.id}
-              order={order}
-              isActive={selectedOrderId === order.id}
-              onSelect={() => setSelectedOrderId(order.id)}
-              onDelete={() => setDeleteTargetId(order.id)}
-            />
-          ))}
+          {orders.length === 0 ? (
+            <div className="orders__empty">
+              <h3 className="orders__empty-title">{t('orders.noOrders')}</h3>
+              <p className="orders__empty-text">
+                {searchQuery ? t('orders.noResultsText') : t('orders.emptyText')}
+              </p>
+            </div>
+          ) : (
+            orders.map((order) => (
+              <OrderCard
+                key={order.id}
+                order={order}
+                isActive={selectedOrderId === order.id}
+                onSelect={() => setSelectedOrderId(order.id)}
+                onDelete={() => setDeleteTargetId(order.id)}
+              />
+            ))
+          )}
 
           <Pagination
             page={ordersPage}

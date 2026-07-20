@@ -16,6 +16,26 @@
   margin: 0;
 }
 
+.orders__empty {
+  padding: 30px;
+  text-align: center;
+  color: var(--text);
+  background-color: var(--surface);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border);
+}
+
+.orders__empty-title {
+  margin: 0 0 10px 0;
+  color: var(--text-h);
+}
+
+.orders__empty-text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text);
+}
+
 .orders__add-btn {
   display: inline-flex;
   align-items: center;
