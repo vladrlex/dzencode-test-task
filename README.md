@@ -139,6 +139,16 @@ docker-compose up --build
 - Backend / Socket.io: `http://localhost:5000`
 - Login with `admin` / `Demo12345!` (seeded automatically on first boot)
 
+On first boot the backend auto-seeds a small demo set (a handful of orders/products) from `backend/data.json`. To load the same large demo dataset (1000 orders / 5000 products) shown in the live deployment and in the README screenshots, run this once the containers are up:
+
+```bash
+docker exec -i dzencode-mysql mysql --default-character-set=utf8mb4 -uroot -proot dzencode < backend/seed-large.sql
+```
+
+> The `--default-character-set=utf8mb4` flag is required — without it, the MySQL client falls back to `latin1` and corrupts the Cyrillic order/product titles in the file.
+
+This adds on top of the auto-seeded demo data rather than replacing it, so order/product counts will be a few more than exactly 1000/5000.
+
 ### Option 2 — Local development
 
 **Backend:**
