@@ -10,12 +10,16 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Legend,
 } from 'recharts';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import type { Map as LeafletMap, CircleMarker as LeafletCircleMarker } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { API_URL } from '../../config/config';
 import { SUPPLIER_LOCATIONS } from '../../data/supplierLocations';
+import StatTile from '../../components/StatTile/StatTile';
 import './Dashboard.css';
 
 interface SupplierCount {
@@ -23,12 +27,43 @@ interface SupplierCount {
   count: number;
 }
 
+interface TypeCount {
+  type: string;
+  count: number;
+}
+
+interface ConditionCounts {
+  new: number;
+  used: number;
+}
+
+interface OrderStats {
+  totalOrders: number;
+  totalProducts: number;
+  totalUsd: number;
+  totalUah: number;
+}
+
+const TYPE_COLORS = ['#2a78d6', '#e87ba4', '#eda100', '#1baf7a'];
+const TYPE_OTHER_COLOR = '#98a4b3';
+
 const truncate = (text: string, maxLength: number) =>
   text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
+
+function foldToTopFour(counts: TypeCount[], otherLabel: string) {
+  const sorted = [...counts].sort((a, b) => b.count - a.count);
+  const top = sorted.slice(0, 4);
+  const rest = sorted.slice(4);
+  const otherTotal = rest.reduce((sum, item) => sum + item.count, 0);
+  return otherTotal > 0 ? [...top, { type: otherLabel, count: otherTotal }] : top;
+}
 
 export default function Dashboard() {
   const { t } = useTranslation();
   const [supplierCounts, setSupplierCounts] = useState<SupplierCount[]>([]);
+  const [typeCounts, setTypeCounts] = useState<TypeCount[]>([]);
+  const [conditionCounts, setConditionCounts] = useState<ConditionCounts>({ new: 0, used: 0 });
+  const [orderStats, setOrderStats] = useState<OrderStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedSupplier, setSelectedSupplier] = useState<string | null>(null);
 
@@ -36,11 +71,20 @@ export default function Dashboard() {
   const markerRefs = useRef<Record<string, LeafletCircleMarker | null>>({});
 
   useEffect(() => {
-    axios
-      .get(`${API_URL}/api/products/meta/supplier-counts`)
-      .then((res) => setSupplierCounts(res.data))
-      .finally(() => setLoading(false));
+    Promise.all([
+      axios.get(`${API_URL}/api/products/meta/supplier-counts`).then((res) => setSupplierCounts(res.data)),
+      axios.get(`${API_URL}/api/products/meta/type-counts`).then((res) => setTypeCounts(res.data)),
+      axios.get(`${API_URL}/api/products/meta/condition-counts`).then((res) => setConditionCounts(res.data)),
+      axios.get(`${API_URL}/api/orders/meta/stats`).then((res) => setOrderStats(res.data)),
+    ]).finally(() => setLoading(false));
   }, []);
+
+  const otherLabel = t('dashboard.other');
+  const typeChartData = foldToTopFour(typeCounts, otherLabel);
+  const conditionChartData = [
+    { key: 'new', label: t('productCard.new'), count: conditionCounts.new, color: '#7cb342' },
+    { key: 'used', label: t('productCard.used'), count: conditionCounts.used, color: '#354052' },
+  ].filter((item) => item.count > 0);
 
   const maxSupplierCount = Math.max(1, ...supplierCounts.map((s) => s.count));
   const mapPoints = SUPPLIER_LOCATIONS.map((loc) => ({
@@ -69,7 +113,87 @@ export default function Dashboard() {
     <div className="container-fluid dashboard">
       <h2 className="dashboard__title">{t('dashboard.title')}</h2>
 
+      {orderStats && (
+        <div className="row g-4 dashboard__stats">
+          <div className="col-6 col-md-3">
+            <StatTile label={t('dashboard.totalOrders')} value={orderStats.totalOrders.toLocaleString('en-US')} />
+          </div>
+          <div className="col-6 col-md-3">
+            <StatTile label={t('dashboard.totalProducts')} value={orderStats.totalProducts.toLocaleString('en-US')} />
+          </div>
+          <div className="col-6 col-md-3">
+            <StatTile label={t('dashboard.totalValueUsd')} value={`$${orderStats.totalUsd.toLocaleString('en-US')}`} />
+          </div>
+          <div className="col-6 col-md-3">
+            <StatTile label={t('dashboard.totalValueUah')} value={`₴${orderStats.totalUah.toLocaleString('en-US')}`} />
+          </div>
+        </div>
+      )}
+
       <div className="row g-4">
+        <div className="col-12 col-lg-6">
+          <div className="card dashboard__card">
+            <div className="card-body">
+              <h5 className="card-title">{t('dashboard.productsByType')}</h5>
+              <ResponsiveContainer width="100%" height={320}>
+                <PieChart>
+                  <Pie
+                    data={typeChartData}
+                    dataKey="count"
+                    nameKey="type"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={55}
+                    outerRadius={95}
+                    paddingAngle={2}
+                    label={({ name, percent }) => `${truncate(String(name), 14)} ${Math.round((percent ?? 0) * 100)}%`}
+                  >
+                    {typeChartData.map((entry, index) => (
+                      <Cell
+                        key={entry.type}
+                        fill={entry.type === otherLabel ? TYPE_OTHER_COLOR : TYPE_COLORS[index]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-12 col-lg-6">
+          <div className="card dashboard__card">
+            <div className="card-body">
+              <h5 className="card-title">{t('dashboard.newVsUsed')}</h5>
+              <ResponsiveContainer width="100%" height={320}>
+                <PieChart>
+                  <Pie
+                    data={conditionChartData}
+                    dataKey="count"
+                    nameKey="label"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={55}
+                    outerRadius={95}
+                    paddingAngle={2}
+                    label={({ name, percent }) => `${name} ${Math.round((percent ?? 0) * 100)}%`}
+                  >
+                    {conditionChartData.map((entry) => (
+                      <Cell key={entry.key} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="row g-4 dashboard__row-spacer">
         <div className="col-12 col-lg-6">
           <div className="card dashboard__card">
             <div className="card-body">

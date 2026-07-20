@@ -36,6 +36,7 @@ export default function Orders() {
   const [productToEdit, setProductToEdit] = useState<Product | null>(null);
   const [page, setPageState] = useState(Number(searchParams.get('page')) || 1);
   const [limit, setLimitState] = useState(Number(searchParams.get('limit')) || 30);
+  const loadingDetailRef = useRef<HTMLDivElement>(null);
 
   const setPage = (newPage: number) => {
     setPageState(newPage);
@@ -75,6 +76,7 @@ export default function Orders() {
   useEffect(() => {
     if (selectedOrderId) {
       dispatch(fetchProducts({ order: selectedOrderId }));
+      loadingDetailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [dispatch, selectedOrderId]);
 
@@ -163,13 +165,14 @@ export default function Orders() {
 
         {selectedOrderId && selectedOrder && (
           productsLoading ? (
-            <div className="order-detail">
+            <div className="order-detail" ref={loadingDetailRef}>
               <div className="lazy-fallback-container">
                 <div className="lazy-spinner"></div>
               </div>
             </div>
           ) : (
             <OrderDetail
+              key={selectedOrderId}
               orderTitle={selectedOrder.title}
               products={orderProducts}
               onClose={() => setSelectedOrderId(null)}

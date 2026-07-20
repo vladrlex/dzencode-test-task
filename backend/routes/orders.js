@@ -58,6 +58,29 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/meta/stats', async (req, res) => {
+  try {
+    const [[orderStats]] = await pool.query('SELECT COUNT(*) as totalOrders FROM orders');
+    const [[productStats]] = await pool.query(
+      `SELECT
+        COUNT(DISTINCT p.id) as totalProducts,
+        COALESCE(SUM(CASE WHEN pc.symbol = 'USD' THEN pc.value END), 0) as totalUsd,
+        COALESCE(SUM(CASE WHEN pc.symbol = 'UAH' THEN pc.value END), 0) as totalUah
+      FROM products p
+      LEFT JOIN prices pc ON pc.product_id = p.id`
+    );
+    res.json({
+      totalOrders: Number(orderStats.totalOrders),
+      totalProducts: Number(productStats.totalProducts),
+      totalUsd: Number(productStats.totalUsd),
+      totalUah: Number(productStats.totalUah),
+    });
+  } catch (error) {
+    console.error('GET /api/orders/meta/stats error:', error);
+    res.status(500).json({ error: 'Failed to fetch order stats' });
+  }
+});
+
 router.post('/', async (req, res) => {
   try {
     const { title, description } = req.body;

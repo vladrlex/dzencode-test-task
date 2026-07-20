@@ -151,6 +151,33 @@ router.get('/meta/supplier-counts', async (req, res) => {
   }
 });
 
+router.get('/meta/type-counts', async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT type, COUNT(*) as count FROM products GROUP BY type ORDER BY count DESC`
+    );
+    res.json(rows.map((r) => ({ type: r.type, count: Number(r.count) })));
+  } catch (error) {
+    console.error('GET /api/products/meta/type-counts error:', error);
+    res.status(500).json({ error: 'Failed to fetch product type counts' });
+  }
+});
+
+router.get('/meta/condition-counts', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT isNew, COUNT(*) as count FROM products GROUP BY isNew');
+    const result = { new: 0, used: 0 };
+    for (const r of rows) {
+      if (r.isNew) result.new = Number(r.count);
+      else result.used = Number(r.count);
+    }
+    res.json(result);
+  } catch (error) {
+    console.error('GET /api/products/meta/condition-counts error:', error);
+    res.status(500).json({ error: 'Failed to fetch product condition counts' });
+  }
+});
+
 router.post('/', async (req, res) => {
   const conn = await pool.getConnection();
   try {
