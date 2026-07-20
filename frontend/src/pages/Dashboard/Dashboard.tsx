@@ -20,6 +20,7 @@ import 'leaflet/dist/leaflet.css';
 import { API_URL } from '../../config/config';
 import { SUPPLIER_LOCATIONS } from '../../data/supplierLocations';
 import StatTile from '../../components/StatTile/StatTile';
+import { useAppSelector } from '../../store/hooks';
 import './Dashboard.css';
 
 interface SupplierCount {
@@ -44,8 +45,41 @@ interface OrderStats {
   totalUah: number;
 }
 
-const TYPE_COLORS = ['#2a78d6', '#e87ba4', '#eda100', '#1baf7a'];
-const TYPE_OTHER_COLOR = '#98a4b3';
+const CHART_THEME = {
+  light: {
+    typeColors: ['#2a78d6', '#008300', '#e87ba4', '#eda100'],
+    otherColor: '#98a4b3',
+    conditionNew: '#7cb342',
+    conditionUsed: '#354052',
+    barDefault: '#7cb342',
+    barSelected: '#4f7a26',
+    gridStroke: '#e1e6eb',
+    axisTick: '#7f8fa4',
+    tooltipBg: '#ffffff',
+    tooltipBorder: '#e1e6eb',
+    tooltipText: '#354052',
+    legendText: '#354052',
+    tileUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    tileAttribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  },
+  dark: {
+    typeColors: ['#3987e5', '#008300', '#d55181', '#c98500'],
+    otherColor: '#6d7680',
+    conditionNew: '#7cb342',
+    conditionUsed: '#9aa4b0',
+    barDefault: '#7cb342',
+    barSelected: '#a5d76e',
+    gridStroke: '#33383e',
+    axisTick: '#9aa4b0',
+    tooltipBg: '#1f2226',
+    tooltipBorder: '#33383e',
+    tooltipText: '#e9ebee',
+    legendText: '#e9ebee',
+    tileUrl: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    tileAttribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  },
+} as const;
 
 const truncate = (text: string, maxLength: number) =>
   text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
@@ -60,6 +94,8 @@ function foldToTopFour(counts: TypeCount[], otherLabel: string) {
 
 export default function Dashboard() {
   const { t } = useTranslation();
+  const theme = useAppSelector((state) => state.theme.theme);
+  const c = CHART_THEME[theme];
   const [supplierCounts, setSupplierCounts] = useState<SupplierCount[]>([]);
   const [typeCounts, setTypeCounts] = useState<TypeCount[]>([]);
   const [conditionCounts, setConditionCounts] = useState<ConditionCounts>({ new: 0, used: 0 });
@@ -82,8 +118,8 @@ export default function Dashboard() {
   const otherLabel = t('dashboard.other');
   const typeChartData = foldToTopFour(typeCounts, otherLabel);
   const conditionChartData = [
-    { key: 'new', label: t('productCard.new'), count: conditionCounts.new, color: '#7cb342' },
-    { key: 'used', label: t('productCard.used'), count: conditionCounts.used, color: '#354052' },
+    { key: 'new', label: t('productCard.new'), count: conditionCounts.new, color: c.conditionNew },
+    { key: 'used', label: t('productCard.used'), count: conditionCounts.used, color: c.conditionUsed },
   ].filter((item) => item.count > 0);
 
   const maxSupplierCount = Math.max(1, ...supplierCounts.map((s) => s.count));
@@ -147,16 +183,17 @@ export default function Dashboard() {
                     outerRadius={95}
                     paddingAngle={2}
                     label={({ name, percent }) => `${truncate(String(name), 14)} ${Math.round((percent ?? 0) * 100)}%`}
+                    fill={c.tooltipText}
                   >
                     {typeChartData.map((entry, index) => (
                       <Cell
                         key={entry.type}
-                        fill={entry.type === otherLabel ? TYPE_OTHER_COLOR : TYPE_COLORS[index]}
+                        fill={entry.type === otherLabel ? c.otherColor : c.typeColors[index]}
                       />
                     ))}
                   </Pie>
-                  <Tooltip />
-                  <Legend />
+                  <Tooltip contentStyle={{ backgroundColor: c.tooltipBg, borderColor: c.tooltipBorder, color: c.tooltipText }} />
+                  <Legend wrapperStyle={{ color: c.legendText }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -179,13 +216,14 @@ export default function Dashboard() {
                     outerRadius={95}
                     paddingAngle={2}
                     label={({ name, percent }) => `${name} ${Math.round((percent ?? 0) * 100)}%`}
+                    fill={c.tooltipText}
                   >
                     {conditionChartData.map((entry) => (
                       <Cell key={entry.key} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip />
-                  <Legend />
+                  <Tooltip contentStyle={{ backgroundColor: c.tooltipBg, borderColor: c.tooltipBorder, color: c.tooltipText }} />
+                  <Legend wrapperStyle={{ color: c.legendText }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -200,16 +238,17 @@ export default function Dashboard() {
               <h5 className="card-title">{t('dashboard.productsBySupplier')}</h5>
               <ResponsiveContainer width="100%" height={360}>
                 <BarChart data={supplierCounts} layout="vertical" margin={{ left: 24 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type="number" allowDecimals={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={c.gridStroke} />
+                  <XAxis type="number" allowDecimals={false} tick={{ fill: c.axisTick }} stroke={c.gridStroke} />
                   <YAxis
                     type="category"
                     dataKey="supplier"
                     width={140}
-                    tick={{ fontSize: 11 }}
+                    tick={{ fontSize: 11, fill: c.axisTick }}
+                    stroke={c.gridStroke}
                     tickFormatter={(value: string) => truncate(value, 18)}
                   />
-                  <Tooltip />
+                  <Tooltip contentStyle={{ backgroundColor: c.tooltipBg, borderColor: c.tooltipBorder, color: c.tooltipText }} />
                   <Bar
                     dataKey="count"
                     radius={[0, 4, 4, 0]}
@@ -221,7 +260,7 @@ export default function Dashboard() {
                     {supplierCounts.map((entry) => (
                       <Cell
                         key={entry.supplier}
-                        fill={entry.supplier === selectedSupplier ? '#4f7a26' : '#7cb342'}
+                        fill={entry.supplier === selectedSupplier ? c.barSelected : c.barDefault}
                       />
                     ))}
                   </Bar>
@@ -242,10 +281,7 @@ export default function Dashboard() {
                 scrollWheelZoom={false}
                 style={{ height: 360, width: '100%', borderRadius: 4 }}
               >
-                <TileLayer
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
+                <TileLayer attribution={c.tileAttribution} url={c.tileUrl} />
                 {mapPoints.map((point) => (
                   <CircleMarker
                     key={point.supplier}
@@ -255,8 +291,8 @@ export default function Dashboard() {
                     center={[point.lat, point.lng]}
                     radius={6 + (point.count / maxSupplierCount) * 14}
                     pathOptions={{
-                      color: point.supplier === selectedSupplier ? '#4f7a26' : '#7cb342',
-                      fillColor: point.supplier === selectedSupplier ? '#4f7a26' : '#7cb342',
+                      color: point.supplier === selectedSupplier ? c.barSelected : c.barDefault,
+                      fillColor: point.supplier === selectedSupplier ? c.barSelected : c.barDefault,
                       fillOpacity: point.supplier === selectedSupplier ? 0.8 : 0.5,
                       weight: point.supplier === selectedSupplier ? 3 : 1,
                     }}

@@ -25,8 +25,8 @@
   padding: 0 16px;
   box-sizing: border-box;
   white-space: nowrap;
-  background-color: #8bc34a; 
-  color: #fff;
+  background-color: #8bc34a;
+  color: var(--text-white);
   border: none;
   border-radius: 4px;
   font-weight: 600;
@@ -61,7 +61,7 @@
 
 .order-detail {
   flex: 1;
-  background-color: var(--text-white);
+  background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: var(--spacing-lg);

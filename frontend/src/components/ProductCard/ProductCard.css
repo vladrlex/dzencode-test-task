@@ -3,7 +3,7 @@
   grid-template-columns: var(--grid-template);
   align-items: center;
   padding: 14px 20px;
-  background-color: var(--text-white);
+  background-color: var(--surface);
   border-bottom: 1px solid var(--border);
   gap: var(--spacing-md);
   box-sizing: border-box;
@@ -12,7 +12,7 @@
 }
 
 .product-card:hover {
-  background-color: #fcfcfc;
+  background-color: var(--hover-bg);
 }
 
 .product-card__status {
@@ -34,7 +34,7 @@
 }
 
 .product-card__icon-svg {
-  color: #a0aab5;
+  color: var(--icon-muted);
 }
 
 .product-card__info {

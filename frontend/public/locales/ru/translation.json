@@ -82,7 +82,9 @@
     "deleteProduct": "Удалить продукт",
     "delete": "Удалить",
     "settings": "Настройки",
-    "logout": "Выйти"
+    "logout": "Выйти",
+    "switchToDark": "Переключить на тёмную тему",
+    "switchToLight": "Переключить на светлую тему"
   },
   "dashboard": {
     "title": "Дашборд",
