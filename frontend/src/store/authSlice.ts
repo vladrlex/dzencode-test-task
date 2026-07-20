@@ -5,11 +5,17 @@ import { API_URL } from '../config/config';
 const TOKEN_STORAGE_KEY = 'auth_token';
 const USERNAME_STORAGE_KEY = 'auth_username';
 
+interface LoginError {
+  message: string;
+  retryAfterSeconds?: number;
+}
+
 interface AuthState {
   token: string | null;
   username: string | null;
   status: 'idle' | 'loading' | 'failed';
   error: string | null;
+  retryAfterSeconds: number | null;
   sessionChecked: boolean;
 }
 
@@ -18,23 +24,29 @@ const initialState: AuthState = {
   username: localStorage.getItem(USERNAME_STORAGE_KEY),
   status: 'idle',
   error: null,
+  retryAfterSeconds: null,
   sessionChecked: false,
 };
 
-export const login = createAsyncThunk(
-  'auth/login',
-  async (payload: { username: string; password: string }, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(`${API_URL}/api/auth/login`, payload);
-      return response.data as { token: string; username: string };
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        return rejectWithValue(error.response.data?.error || 'Login failed');
-      }
-      return rejectWithValue('Login failed');
+export const login = createAsyncThunk<
+  { token: string; username: string },
+  { username: string; password: string },
+  { rejectValue: LoginError }
+>('auth/login', async (payload, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/auth/login`, payload);
+    return response.data as { token: string; username: string };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      const retryAfter = error.response.headers['retry-after'];
+      return rejectWithValue({
+        message: error.response.data?.error || 'Login failed',
+        retryAfterSeconds: retryAfter ? Number(retryAfter) : undefined,
+      });
     }
+    return rejectWithValue({ message: 'Login failed' });
   }
-);
+});
 
 export const verifySession = createAsyncThunk('auth/verifySession', async () => {
   if (!localStorage.getItem(TOKEN_STORAGE_KEY)) return;
@@ -61,6 +73,7 @@ const authSlice = createSlice({
       .addCase(login.pending, (state) => {
         state.status = 'loading';
         state.error = null;
+        state.retryAfterSeconds = null;
       })
       .addCase(login.fulfilled, (state, action: PayloadAction<{ token: string; username: string }>) => {
         state.status = 'idle';
@@ -71,7 +84,8 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = (action.payload as string) || 'Login failed';
+        state.error = action.payload?.message || 'Login failed';
+        state.retryAfterSeconds = action.payload?.retryAfterSeconds ?? null;
       })
       .addCase(verifySession.fulfilled, (state) => {
         state.sessionChecked = true;

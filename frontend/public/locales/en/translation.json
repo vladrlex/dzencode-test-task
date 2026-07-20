@@ -100,6 +100,7 @@
     "loginBtn": "Sign in",
     "loggingIn": "Signing in...",
     "loginError": "Invalid username or password",
+    "tryAgainIn": "Try again in {{time}}",
     "logoutBtn": "Log out"
   }
 }

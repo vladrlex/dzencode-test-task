@@ -6,6 +6,7 @@ const baseState = {
   username: null as string | null,
   status: 'idle' as const,
   error: null as string | null,
+  retryAfterSeconds: null as number | null,
   sessionChecked: true,
 };
 
@@ -40,12 +41,26 @@ describe('authSlice', () => {
       new Error('Request failed'),
       'requestId',
       { username: 'admin', password: 'wrong' },
-      'Invalid username or password'
+      { message: 'Invalid username or password' }
     );
     const state = reducer(baseState, action);
 
     expect(state.status).toBe('failed');
     expect(state.error).toBe('Invalid username or password');
+    expect(state.retryAfterSeconds).toBeNull();
+  });
+
+  it('carries retryAfterSeconds through on a rate-limited login.rejected', () => {
+    const action = login.rejected(
+      new Error('Request failed'),
+      'requestId',
+      { username: 'admin', password: 'wrong' },
+      { message: 'Too many login attempts, please try again later', retryAfterSeconds: 300 }
+    );
+    const state = reducer(baseState, action);
+
+    expect(state.error).toBe('Too many login attempts, please try again later');
+    expect(state.retryAfterSeconds).toBe(300);
   });
 
   it('clears the token/username from state and localStorage on logout', () => {

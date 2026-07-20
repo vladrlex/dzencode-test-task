@@ -84,73 +84,11 @@
 }
 
 .layout__time-wrapper {
-  display: flex;
-  gap: 24px;
-  align-items: center;
   min-width: 220px;
-  justify-content: flex-end;
-}
-
-.layout__date {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-}
-
-.layout__date-weekday {
-  font-size: 12px;
-  color: var(--text);
-  text-transform: capitalize;
-}
-
-.layout__date-full {
-  font-weight: 600;
-  color: var(--text-h);
-  white-space: nowrap;
-}
-
-.layout__clock {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
-  color: #8bc34a;
-  min-width: 60px;
-  justify-content: flex-end;
 }
 
 .layout__lang-switcher {
-  display: flex;
-  gap: 4px;
-  align-items: center;
   min-width: 70px;
-  justify-content: flex-end;
-}
-
-.layout__lang-btn {
-  font-size: 13px;
-  font-weight: 600;
-  color: #a0aab5;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 2px 4px;
-  transition: color var(--transition-fast);
-}
-
-.layout__lang-btn:hover {
-  color: var(--text-h);
-}
-
-.layout__lang-btn--active {
-  color: #8bc34a;
-  cursor: default;
-}
-
-.layout__lang-divider {
-  color: var(--border);
-  font-weight: 300;
 }
 
 .layout__body {
@@ -316,11 +254,11 @@
     gap: 15px;
   }
 
-  .layout__date-weekday {
+  .clock__weekday {
     display: none;
   }
 
-  .layout__time-wrapper {
+  .clock.layout__time-wrapper {
     min-width: auto;
     gap: 12px;
   }
@@ -363,7 +301,7 @@
 }
 
 @media (max-width: 768px) {
-  .layout__time-wrapper {
+  .clock.layout__time-wrapper {
     display: none;
   }
 

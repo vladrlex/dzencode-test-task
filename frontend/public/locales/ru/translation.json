@@ -102,6 +102,7 @@
     "loginBtn": "Войти",
     "loggingIn": "Выполняется вход...",
     "loginError": "Неверный логин или пароль",
+    "tryAgainIn": "Повтор через {{time}}",
     "logoutBtn": "Выйти"
   }
 }
