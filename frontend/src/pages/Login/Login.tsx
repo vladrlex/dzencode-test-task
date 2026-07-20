@@ -50,9 +50,16 @@ export default function Login() {
   return (
     <div className="login">
       <div className="login__topbar">
-        <Clock className="login__clock" />
-        <LanguageSwitcher />
-        <ThemeToggle />
+        <div className="login__topbar-left">
+          <ShieldLogoIcon size={32} />
+          <span className="login__topbar-logo">INVENTORY</span>
+        </div>
+
+        <div className="login__topbar-right">
+          <Clock className="login__clock" />
+          <LanguageSwitcher />
+          <ThemeToggle />
+        </div>
       </div>
 
       <form className="login__card" onSubmit={handleSubmit}>
