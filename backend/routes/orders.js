@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('../db');
 const { toMySQLDateTime } = require('../utils/dateUtils');
+const { validateOrderCreate } = require('../utils/validateOrder');
 
 const router = express.Router();
 
@@ -83,6 +84,11 @@ router.get('/meta/stats', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+  const validationErrors = validateOrderCreate(req.body);
+  if (validationErrors.length) {
+    return res.status(400).json({ error: 'Invalid order data', details: validationErrors });
+  }
+
   try {
     const { title, description } = req.body;
     const date = toMySQLDateTime(new Date());
@@ -103,6 +109,9 @@ router.post('/', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const orderId = parseInt(req.params.id, 10);
+    if (Number.isNaN(orderId)) {
+      return res.status(400).json({ error: 'Invalid order id' });
+    }
     const [result] = await pool.query('DELETE FROM orders WHERE id = ?', [orderId]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Order not found' });

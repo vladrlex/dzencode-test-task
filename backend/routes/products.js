@@ -255,9 +255,13 @@ router.put('/:id', async (req, res) => {
     return res.status(400).json({ error: 'Invalid product data', details: validationErrors });
   }
 
+  const productId = parseInt(req.params.id, 10);
+  if (Number.isNaN(productId)) {
+    return res.status(400).json({ error: 'Invalid product id' });
+  }
+
   const conn = await pool.getConnection();
   try {
-    const productId = parseInt(req.params.id, 10);
     const {
       serialNumber,
       isNew,
@@ -339,6 +343,9 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const productId = parseInt(req.params.id, 10);
+    if (Number.isNaN(productId)) {
+      return res.status(400).json({ error: 'Invalid product id' });
+    }
     const [result] = await pool.query('DELETE FROM products WHERE id = ?', [productId]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Product not found' });
