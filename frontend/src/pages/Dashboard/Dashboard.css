@@ -17,3 +17,11 @@
   font-weight: 600;
   margin-bottom: var(--spacing-sm);
 }
+
+.dashboard__stats {
+  margin-bottom: var(--spacing-md);
+}
+
+.dashboard__row-spacer {
+  margin-top: var(--spacing-md);
+}

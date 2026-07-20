@@ -170,6 +170,7 @@ export default function Orders() {
             </div>
           ) : (
             <OrderDetail
+              key={selectedOrderId}
               orderTitle={selectedOrder.title}
               products={orderProducts}
               onClose={() => setSelectedOrderId(null)}

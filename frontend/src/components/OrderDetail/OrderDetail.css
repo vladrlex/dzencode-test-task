@@ -4,7 +4,10 @@
   border-radius: var(--border-radius);
   border: 1px solid var(--border);
   padding: var(--spacing-md);
-  position: relative;
+  position: sticky;
+  top: 0;
+  max-height: calc(100dvh - 80px);
+  overflow-y: auto;
   min-width: 0;
   margin-left: 10px;
 }

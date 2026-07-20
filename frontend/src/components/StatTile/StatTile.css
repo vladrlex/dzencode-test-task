@@ -1,0 +1,21 @@
+.stat-tile {
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  background: #fff;
+  padding: var(--spacing-md);
+  height: 100%;
+}
+
+.stat-tile__value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-h);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.stat-tile__label {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--text);
+}
