@@ -20,7 +20,8 @@ import 'leaflet/dist/leaflet.css';
 import { API_URL } from '../../config/config';
 import { SUPPLIER_LOCATIONS } from '../../data/supplierLocations';
 import StatTile from './StatTile/StatTile';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { addToast } from '../../store/uiSlice';
 import './Dashboard.css';
 
 interface SupplierCount {
@@ -94,6 +95,7 @@ function foldToTopFour(counts: TypeCount[], otherLabel: string) {
 
 export default function Dashboard() {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const theme = useAppSelector((state) => state.theme.theme);
   const c = CHART_THEME[theme];
   const [supplierCounts, setSupplierCounts] = useState<SupplierCount[]>([]);
@@ -112,8 +114,13 @@ export default function Dashboard() {
       axios.get(`${API_URL}/api/products/meta/type-counts`).then((res) => setTypeCounts(res.data)),
       axios.get(`${API_URL}/api/products/meta/condition-counts`).then((res) => setConditionCounts(res.data)),
       axios.get(`${API_URL}/api/orders/meta/stats`).then((res) => setOrderStats(res.data)),
-    ]).finally(() => setLoading(false));
-  }, []);
+    ])
+      .catch((error) => {
+        console.error('Failed to load dashboard data:', error);
+        dispatch(addToast(t('errors.dashboardLoadFailed')));
+      })
+      .finally(() => setLoading(false));
+  }, [dispatch, t]);
 
   const otherLabel = t('dashboard.other');
   const typeChartData = foldToTopFour(typeCounts, otherLabel);
