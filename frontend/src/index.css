@@ -196,9 +196,11 @@ code {
   text-align: left;
 }
 
-.dropdown-custom__item:hover {
+.dropdown-custom__item:hover,
+.dropdown-custom__item:focus-visible {
   background-color: var(--hover-bg);
   color: var(--primary-color);
+  outline: none;
 }
 
 .dropdown-custom__item--selected {
